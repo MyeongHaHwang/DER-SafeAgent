@@ -1,0 +1,11 @@
+# Conda environment for the CPU verification stack.
+# GPU users: after activating, additionally run `make setup-llm`
+# (torch/transformers/peft/accelerate/bitsandbytes) — see docs/EXPERIMENTS.md.
+name: der-safeagent
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - -r requirements.txt

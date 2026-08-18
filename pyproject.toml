@@ -1,0 +1,71 @@
+# DER-SafeAgent reproducibility package.
+#
+# NOTE ON LAYOUT: the research code lives in the repository-root package
+# `code/` (legacy name preserved so the configuration hashes recorded in the
+# frozen manifests stay valid; see README.md "Naming"). It is used by running
+# `python3 -m code.<module>` FROM THE REPOSITORY ROOT, not by installing it
+# into site-packages — installing a top-level package named `code` would
+# shadow the Python standard-library module of the same name. This file
+# therefore declares project metadata and dependencies only and deliberately
+# builds no importable distribution.
+
+[project]
+name = "der-safeagent"
+version = "1.0.0"
+description = "DER-SafeAgent: runtime-assurance architecture for safe LLM-assisted cyber-physical incident response in distributed energy resources (reproducibility package)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "DER-SafeAgent authors (anonymised for double-blind review)" }]
+keywords = [
+  "distributed energy resources", "cyber-physical security",
+  "runtime assurance", "LLM agents", "incident response",
+]
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering",
+]
+
+# Core CPU verification stack: tests, smoke, checksum verification, and
+# manuscript table/figure regeneration all run with these alone.
+dependencies = [
+  "numpy>=1.26,<3",
+  "pandas>=2.1",
+  "scipy>=1.11,<2",
+  "pyyaml>=6.0",
+  "matplotlib>=3.8,<4",
+  "pydantic>=2.6",
+  "scikit-learn>=1.4",
+  "click>=8.1",
+  "tqdm>=4.66",
+  "pytest>=8.0",
+]
+
+[project.optional-dependencies]
+# Full model-in-the-loop re-execution (GPU).
+llm = [
+  "torch>=2.4",
+  "transformers>=4.46,<5",
+  "peft>=0.13,<0.15",
+  "accelerate>=1.0,<2",
+  "bitsandbytes>=0.43; platform_system == 'Linux'",
+]
+# Static AC power-flow check.
+dss = ["opendssdirect.py>=0.8"]
+# LangGraph state-machine build of the five-agent loop (optional; the
+# evaluation drivers use the direct adapter path and do not require it).
+agents = ["langgraph>=0.2.50"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# Deliberately nothing to install; see the layout note above.
+py-modules = []
+packages = []
+
+[tool.pytest.ini_options]
+testpaths = ["code", "tests"]

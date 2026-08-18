@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+title: "DER-SafeAgent: A Runtime-Assurance Architecture for Safe LLM-Assisted Cyber-Physical Incident Response in Distributed Energy Resources"
+message: "If you use DER-SafeAgent in academic work, please cite the manuscript and this software repository."
+type: software
+authors:
+  - name: "Anonymous (under double-blind review)"
+abstract: >
+  DER-SafeAgent is a runtime-assurance architecture in which an untrusted
+  LLM advisory component (Qwen2.5-7B-Instruct or Llama-3.1-8B-Instruct with
+  locally served QLoRA adapters; vendor APIs deliberately excluded) is
+  bounded by deterministic mechanisms — an observable-evidence gate, a
+  safety-projection shield over a fixed mitigation registry, mandatory
+  escalation of irreversible actions, and a hash-chained audit record — that
+  translate intrusion-detection alerts into bounded, auditable cyber-physical
+  mitigation actions for DER-rich distribution networks. Deterministic
+  runtime-assurance mechanisms provide the containment guarantees; the LLM is
+  treated as an untrusted advisory component. This repository ships the
+  implementation, frozen experiment protocols, synthetic datasets, canonical
+  result files, and the scripts that regenerate the manuscript's tables and
+  figures.
+keywords:
+  - distributed energy resources
+  - critical energy infrastructure
+  - cyber-physical security
+  - operational technology
+  - runtime assurance
+  - large language model agents
+  - incident response
+license: MIT
+notes: >
+  Repository directories and Python package names retain the legacy system
+  name DER-SecAgent to preserve recorded configuration hashes.
+preferred-citation:
+  type: article
+  title: "DER-SafeAgent: A Runtime-Assurance Architecture for Safe LLM-Assisted Cyber-Physical Incident Response in Distributed Energy Resources"
+  authors:
+    - name: "Anonymous (under double-blind review)"
+  year: 2026
+  journal: "International Journal of Critical Infrastructure Protection"
+  notes: "Manuscript under review."

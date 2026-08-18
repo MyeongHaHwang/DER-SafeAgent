@@ -1,0 +1,44 @@
+# DER-SafeAgent — core CPU verification stack (direct dependencies).
+#
+# This is sufficient for: `make test`, `make smoke`, `make verify`,
+# `make reproduce-paper`, and every CPU experiment stage.
+# The complete resolved environment used for verification is pinned in
+# requirements-lock.txt. GPU / OpenDSS extras are listed at the bottom.
+#
+# No vendor LLM SDK (Anthropic/OpenAI/…) is used anywhere in this project.
+
+# Numerics / statistics
+numpy>=1.26,<3
+pandas>=2.1
+scipy>=1.11,<2
+scikit-learn>=1.4
+
+# Config / IO / schema
+pyyaml>=6.0
+pydantic>=2.6
+
+# Paper figures — pinned to the verified minor version: figure PNGs are
+# byte-identical to the manuscript reference only on the 3.10 rendering
+# stack (3.11 changes rendering details; tables are unaffected).
+matplotlib>=3.10,<3.11
+
+# CLI / progress
+click>=8.1
+tqdm>=4.66
+
+# Tests
+pytest>=8.0
+
+# ---------------------------------------------------------------------------
+# Optional extras (install on demand; see docs/EXPERIMENTS.md):
+#
+# Full model-in-the-loop re-execution (GPU, ~10 GB VRAM with 4-bit NF4):
+#   pip install "torch>=2.4" "transformers>=4.46,<5" "peft>=0.13,<0.15" \
+#               "accelerate>=1.0,<2" "bitsandbytes>=0.43"
+#
+# Static OpenDSS AC power-flow check:
+#   pip install "opendssdirect.py>=0.8"
+#
+# LangGraph build of the five-agent loop (not needed by the evaluation
+# drivers, which use the direct adapter path):
+#   pip install "langgraph>=0.2.50"
