@@ -1,5 +1,7 @@
 # DER-SafeAgent
 
+![DER-SafeAgent](./DER-SafeAgent_Logo.png)
+
 **A Runtime-Assurance Architecture for Safe LLM-Assisted Cyber-Physical
 Incident Response in Distributed Energy Resources.**
 
