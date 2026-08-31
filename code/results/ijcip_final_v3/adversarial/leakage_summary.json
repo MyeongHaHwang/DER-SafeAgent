@@ -1,0 +1,8 @@
+{
+  "n_cases": 70,
+  "n_ft_texts": 200,
+  "exact_dups": 0,
+  "norm_dups": 0,
+  "max_5gram_overlap": 0.0,
+  "verdict": "PASS"
+}

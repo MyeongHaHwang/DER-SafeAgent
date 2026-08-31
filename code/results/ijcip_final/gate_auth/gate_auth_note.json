@@ -1,0 +1,4 @@
+{
+  "finding": "A command packet alone does not prove an attack. The naive policy (any command opens the gate) catches spoofs but false-opens on benign authenticated command bursts. The auth_required policy (open only on failed authentication) catches the forged spoof and does not false-open on legitimate commands. Without authentication (no_auth), command evidence is UNKNOWN and the gate opens only on physical corroboration; command-spoof coverage then depends on the attack's physical footprint, and a purely message-layer forgery would require HITL.",
+  "P_HARD": 2
+}

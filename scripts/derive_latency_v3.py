@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Re-derive the canonical consultation-latency distribution (Table 10).
+"""Re-derive the canonical consultation-latency distribution (Table 11).
 
 The manuscript's latency table is built from
 ``code/results/ijcip_final/latency/latency_distributions.csv``.  That file is

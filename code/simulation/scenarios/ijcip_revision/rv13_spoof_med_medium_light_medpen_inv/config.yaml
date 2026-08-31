@@ -1,0 +1,44 @@
+name: rv13_spoof_med_medium_light_medpen_inv
+description: 'light load (600 kW): same relative deficit, different customer impact.'
+feeder: ../../ieee13_fdi_inverter/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '634'
+- '671'
+- '675'
+ders:
+- id: INV_634
+  type: pv
+  bus: '634'
+  max_kw: 200.0
+- id: BESS_675
+  type: bess
+  bus: '675'
+  max_kw: 150.0
+base_load_kw: 600.0
+attacks:
+- type: command_spoof
+  target: INV_634
+  start_s: 180
+  end_s: 300
+  forged_setpoint_kw: 30.0
+  period_s: 5.0
+ground_truth:
+  attack_class: command_spoof
+  affected_asset: INV_634
+  start_s: 180
+  end_s: 300
+revision_meta:
+  revision_tag: ijcip_revision_r1r2_20260805
+  attack_type: command_spoof
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: light
+  der_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  expected_safety_issue: absolute ENS scales with served load at fixed relative deficit
+  rationale: 'light load (600 kW): same relative deficit, different customer impact.'
+  is_calibration_control: false

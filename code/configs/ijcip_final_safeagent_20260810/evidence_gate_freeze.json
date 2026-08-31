@@ -1,0 +1,6 @@
+{
+  "frozen_at": "2026-08-10",
+  "dev_attacks": "code/configs/ijcip_revision_r1r2_20260805/scenario_manifest.csv",
+  "rule": "thresholds are selected on the dev split only and frozen in evidence_gate_frozen.json BEFORE any run on the test set",
+  "test_manifest_sha256": "fa0099acd4d2021b0843e624d81f389f0c9d1c0b6a7fb62cebfe25f204ee1d5f"
+}

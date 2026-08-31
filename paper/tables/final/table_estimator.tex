@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering\small
+\caption{P0 Energy-Impact estimator repair: counterfactual validation of the
+legacy 60\,s estimator (E60) and the horizon-aware estimator (EH) on the
+development library (25 configurations) and the frozen causally-distinct
+holdout (12 configurations). Top-1 counts an action optimal iff its realised
+regret $\le 0.01$\,kWh-eq. EMH (multi-horizon marginal) is numerically
+identical to EH on both splits and is omitted. The rollout oracle never
+consults the estimator under evaluation.}
+\label{tab:estimator}
+\begin{tabular}{llcccccc}
+\toprule
+Estimator & Split & Top-1 & Kendall $\tau$ & Med.\ regret & Mean regret &
+p95 regret & Curt.\ MAE \\
+ & & & & (kWh-eq) & (kWh-eq) & (kWh-eq) & (kWh) \\
+\midrule
+E60 & dev & 0.32 & 0.53 & 90.32 & 83.22 & 191.2 & 28.4 \\
+EH & dev & 1.00 & 1.00 & 0.00 & 0.00 & 0.0 & 22.9 \\
+E60 & holdout & 0.33 & 0.51 & 14.91 & 76.34 & 226.2 & 31.6 \\
+EH & holdout & 1.00 & 1.00 & 0.00 & 0.00 & 0.0 & 26.3 \\
+\bottomrule
+\end{tabular}
+\end{table}

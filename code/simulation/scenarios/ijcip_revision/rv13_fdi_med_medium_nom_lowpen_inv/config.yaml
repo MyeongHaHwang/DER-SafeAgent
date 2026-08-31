@@ -1,0 +1,44 @@
+name: rv13_fdi_med_medium_nom_lowpen_inv
+description: Checks that class-aware avoidance is principled, not just cost-driven.
+feeder: ../../ieee13_fdi_inverter/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '634'
+- '671'
+- '675'
+ders:
+- id: INV_634
+  type: pv
+  bus: '634'
+  max_kw: 100.0
+- id: BESS_675
+  type: bess
+  bus: '675'
+  max_kw: 75.0
+base_load_kw: 1000.0
+attacks:
+- type: fdi
+  target: INV_634
+  start_s: 180
+  end_s: 300
+  bias_kw: 30.0
+ground_truth:
+  attack_class: fdi
+  affected_asset: INV_634
+  start_s: 180
+  end_s: 300
+revision_meta:
+  revision_tag: ijcip_revision_r1r2_20260805
+  attack_type: fdi
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: nominal
+  der_penetration: low
+  affected_asset: INV_634
+  affected_bus: '634'
+  expected_safety_issue: "low-penetration FDI: small unit, isolate is cheap \u2014\
+    \ tests whether avoidance still holds"
+  rationale: Checks that class-aware avoidance is principled, not just cost-driven.
+  is_calibration_control: false

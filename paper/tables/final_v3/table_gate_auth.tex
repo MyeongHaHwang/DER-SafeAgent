@@ -1,0 +1,13 @@
+\begin{table}[t]\centering\small
+\caption{Command evidence requires authentication. Gate-open outcome for command-spoof attacks (forged, failed authentication) and benign \emph{legitimate authenticated command bursts}, under three command-evidence policies (three configurations each, any-episode aggregation). Only requiring a failed-authentication check both detects the forgery and does not false-open on legitimate commands; treating any command as an attack, or having no authentication (command evidence UNKNOWN, so only physical corroboration counts --- here the duplicate-payload of repeated legitimate commands), false-opens.}
+\label{tab:gate-auth}
+\begin{tabular}{lcc}
+\toprule
+Command-evidence policy & Spoof gate-open & Benign false-open \\
+\midrule
+Any command $=$ attack & 3/3 & 2/2 \\
+Require failed auth. & 3/3 & 0/2 \\
+Unauthenticated (UNKNOWN) & 3/3 & 2/2 \\
+\bottomrule
+\end{tabular}
+\end{table}

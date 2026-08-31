@@ -1,0 +1,49 @@
+\section{Conclusion}
+\label{sec:conclusion}
+We asked whether an unverified language model can be consulted safely
+inside a cyber-physical incident-response path for distributed energy
+resources, and answered with \ours: a runtime-assurance architecture in
+which a deterministic Evidence Gate authorizes response when observable
+evidence meets its frozen thresholds, a deterministic shield decides what may
+execute, a model-proposed irreversible action is never auto-executed (vetoed
+or escalated to a human), and a
+validated horizon-aware estimator ranks the bounded fallback set --- while the
+model contributes only bounded, auditable advice.
+
+What the evidence supports: on a hash-frozen held-out set of configurations and a
+canonical 70-case adversarial suite, all under a runtime-safe path that reads no
+attack ground truth, deterministic projection contained unsafe autonomous
+execution. The model is consulted on the large majority of adversarial cases, yet
+the shielded architecture executed no autonomous irreversible action for either
+backbone, compared with $61/70$ for the unshielded Qwen adviser and $18/70$ for
+the unshielded Llama adviser; an exhaustive enumeration of the modelled decision
+space ($40{,}824$ states) found no violation of the tested invariants, and
+guard-removal mutations produced violations. The gate reduced benign-day false
+mitigation while cutting the model's exposure to attacker-supplied prompt
+content. The evaluated LLM advisers did not improve physical outcomes: the
+projection arms show no statistically detectable difference from the
+deterministic fast path, while a ground-truth-class oracle yielded only a modest
+improvement (95\% CI excluding zero but not surviving multiplicity correction)
+that the LLMs did not reproduce. The contribution is the execution boundary and
+evidence discipline, not the model.
+
+What it does not demonstrate: no formal guarantee, no real-feeder or utility
+deployment, no human-operator study, and no robustness beyond the tested suite.
+Gate detection remains limited by observability, authentication, and small
+sample size; the zeros are suite-bounded estimates over the modelled space, not
+proofs; wire-observable evidence stays forgeable where authentication or
+redundant sensing is absent; and a within-capacity false-data-injection attack is
+not detectable here without redundant sensing.
+
+The lesson we believe outlives this system is twofold. First,
+architectural: attacker-influenceable model output must relax no
+constraint in either direction --- neither authorising an irreversible
+action nor vetoing an evidenced incident --- and an LLM's place in
+critical-energy-infrastructure response is inside a deterministic
+envelope that makes its errors operationally cheap. Second,
+methodological: in a simulation-based security study the decisive audit
+is of \emph{where every runtime feature comes from}, because a feature
+sourced from ground truth can make an architecture appear to solve a
+problem it has not. The defensible contribution is the bounded action
+surface and the evidence discipline around it, not the model that
+proposes within it.

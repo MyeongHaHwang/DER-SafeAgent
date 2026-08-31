@@ -1,0 +1,58 @@
+# Canonical action-policy export - GENERATED, do not edit by hand.
+# Source of truth: code/Multi_AI_Agent/safety_projection.py
+# Regenerate: python3 scripts/export_action_policy.py
+# Verified against the runtime constants by tests/test_action_policy.py
+
+registry: [no_op, freeze_setpoint, throttle_ramp, request_ied_revalidation, isolate_inverter]
+irreversible: [isolate_inverter]
+severity_action_threshold: 0.3
+confidence_floor: 0.4
+irreversible_confidence_floor: 0.7
+invariants:
+  I3_irreversible_escalation: model-proposed irreversible actions always escalate to a human; never auto-executed
+  I4_inaction_veto: model no_op cannot veto an incident established by deterministic protocol evidence
+  I5_deadline: a late or failed model call leaves the deterministic fast-path action in force
+classes:
+  command_spoof:
+    autonomous: [no_op, freeze_setpoint, throttle_ramp]
+    escalation_only: [isolate_inverter]
+    removed:
+      request_ied_revalidation: ineffective against command_spoof
+    deterministic_fallback_order: [freeze_setpoint, throttle_ramp, no_op]
+  replay:
+    autonomous: [no_op, freeze_setpoint, throttle_ramp, request_ied_revalidation]
+    escalation_only: []
+    removed:
+      isolate_inverter: class-inappropriate for replay
+    deterministic_fallback_order: [request_ied_revalidation, freeze_setpoint, no_op]
+  dos:
+    autonomous: [no_op, freeze_setpoint]
+    escalation_only: [isolate_inverter]
+    removed:
+      throttle_ramp: ineffective against dos
+      request_ied_revalidation: ineffective against dos
+    deterministic_fallback_order: [request_ied_revalidation, freeze_setpoint, no_op]
+  fdi:
+    autonomous: [no_op, freeze_setpoint, request_ied_revalidation]
+    escalation_only: []
+    removed:
+      throttle_ramp: ineffective against fdi
+      isolate_inverter: class-inappropriate for fdi
+    deterministic_fallback_order: [freeze_setpoint, request_ied_revalidation, no_op]
+  none:
+    autonomous: [no_op]
+    escalation_only: []
+    removed:
+      freeze_setpoint: class-inappropriate for none
+      throttle_ramp: class-inappropriate for none
+      request_ied_revalidation: class-inappropriate for none
+      isolate_inverter: class-inappropriate for none
+    deterministic_fallback_order: [no_op]
+testbed_action_semantics:
+  no_op: monitor only
+  freeze_setpoint: hold last validated setpoint (testbed: pin to 70% of rated kW); persists for the episode remainder
+  throttle_ramp: restrict ramping toward nominal (OpenDSS: InvControl RiseFallLimit=1.667, the IEEE 1547 minimum)
+  request_ied_revalidation: re-attestation request; no physical effect
+  isolate_inverter: disable the generator element (absorbing: output stays removed until operator restoration)
+recovery: No automatic release is modelled: mitigations persist for the episode remainder; isolation is absorbing and requires operator restoration. Stand-down of the response requires the Evidence Gate's sustained-evidence condition to clear AND an operator or DERMS resume; model output alone can neither authorise an irreversible action (I3) nor stand the response down (I4).
+basis: Author-specified policy, motivated by the class mechanism (a telemetry-layer compromise must not be answered by disconnecting a healthy asset) and by counterfactual rollouts (throttle/revalidate are physically equivalent to no_op against a forced-zero DoS outage). The evaluation establishes conformance to this policy, not its independent operational validation.

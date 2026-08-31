@@ -1,0 +1,30 @@
+\begin{table}[t]
+\centering\small
+\caption{Incident Evidence Gate on the frozen 32-configuration test set
+(16 benign incl.\ 8 near-boundary, 16 attacks incl.\ near-boundary cases;
+thresholds frozen on the development split before any test run). Benign
+false-action rate = fraction of benign configurations on which any
+mitigation executed. FA normal/susp splits benign-normal from
+benign-suspicious conditions; the residual G1 false actions are exactly the
+three benign historian-echo configurations, where protocol-level evidence is
+genuinely ambiguous. The final-architecture rows show the corrected
+projection: the stand-down veto answers the echo cases with a
+freeze-at-nominal (0\,kWh cost), and without the gate its escalation rule
+floods the operator (614 HITL escalations from benign transients; 0 with
+the gate).}
+\label{tab:gate}
+\begin{tabular}{lcccccc}
+\toprule
+System & Benign FA & FA norm/susp & Attack cov. & Attack ENS & Benign LLM
+& HITL \\
+ & rate & & & (kWh) & calls & \\
+\midrule
+Deterministic, no gate (G0) & 1.000 & 1.00/1.00 & 1.000 & 0.00 & 0 & 0 \\
+Deterministic + gate (G1) & 0.188 & 0.00/0.38 & 1.000 & 0.31 & 0 & 0 \\
+Qwen K=1, class-override, no gate (G0) & 0.000 & 0.00/0.00 & 0.438 & 4.19 & 36 & 0 \\
+Qwen K=1, class-override + gate (G1) & 0.000 & 0.00/0.00 & 0.562 & 4.25 & 6 & 0 \\
+\textbf{Final arch.} (proj.+veto), no gate (G0) & 0.188 & 0.00/0.38 & 0.438 & 2.04 & 36 & 614 \\
+\textbf{Final arch.} (proj.+veto) + gate (G1) & 0.188 & 0.00/0.38 & 0.562 & 0.85 & 6 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}

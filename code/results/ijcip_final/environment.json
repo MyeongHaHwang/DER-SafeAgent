@@ -1,0 +1,23 @@
+{
+  "date": "2026-08-12",
+  "python": "3.12.3",
+  "platform": "Linux-6.17.0-29-generic-x86_64-with-glibc2.39",
+  "torch": "2.6.0+cu124",
+  "cuda": true,
+  "gpu": "NVIDIA GeForce RTX 3080",
+  "git": "not installed",
+  "transformers": "4.57.6",
+  "peft": "0.14.0",
+  "opendssdirect": "0.9.4",
+  "scipy": "1.17.1",
+  "pandas": "3.0.2",
+  "numpy": "2.4.3",
+  "adapters": {
+    "qwen2_5_7b": "0c9dec242e2f",
+    "llama3_1_8b": "9a2b8436ce9c"
+  },
+  "frozen_hashes": {
+    "gate_v3_params": "c4cb2ee11b6b",
+    "holdout_v3_manifest": "df918691d162"
+  }
+}

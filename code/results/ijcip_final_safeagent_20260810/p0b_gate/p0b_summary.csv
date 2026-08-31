@@ -1,0 +1,7 @@
+system,n_benign,n_attack,benign_false_action_rate,benign_FA_normal,benign_FA_suspicious,specificity,unnecessary_curt_kwh,benign_llm_calls,attack_coverage,attack_miss_rate,attack_mitigated,attack_ens_kwh_mean,attack_t_first_mean_s,attack_llm_calls,hitl_total,step_p95_ms_mean
+D0-G0,16,16,1.0,1.0,1.0,0.0,0.0,0,1.0,0.0,1.0,0.0036,23.0625,0,0,0.2316
+D0-G1,16,16,0.1875,0.0,0.375,0.8125,0.0,0,1.0,0.0,1.0,0.3056,250.4375,0,0,0.2785
+Q1-G0,16,16,0.0,0.0,0.0,1.0,0.0,36,0.4375,0.5625,0.4375,4.1858,176.7143,86,0,0.1279
+Q1-G1,16,16,0.0,0.0,0.0,1.0,0.0,6,0.5625,0.4375,0.5625,4.2487,181.0,48,0,0.2776
+QP-G0,16,16,0.1875,0.0,0.375,0.8125,0.0,36,0.4375,0.5625,0.5,2.0387,181.875,82,614,0.1329
+QP-G1,16,16,0.1875,0.0,0.375,0.8125,0.0,6,0.5625,0.4375,0.5,0.8475,189.375,36,0,0.2852

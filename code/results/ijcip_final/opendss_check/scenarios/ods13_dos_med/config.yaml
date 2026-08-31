@@ -1,0 +1,30 @@
+name: ods13_dos_med
+description: Forced-zero outage of the PV unit on a real solve.
+feeder: code/simulation/scenarios/ieee13_fdi_inverter/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '634'
+- '671'
+- '675'
+ders:
+- id: INV_634
+  type: pv
+  bus: '634'
+  max_kw: 200.0
+- id: BESS_675
+  type: bess
+  bus: '675'
+  max_kw: 150.0
+attacks:
+- type: dos
+  target: INV_634
+  start_s: 180
+  end_s: 300
+ground_truth:
+  attack_class: dos
+  affected_asset: INV_634
+  start_s: 180
+  end_s: 300
+opendss_init_commands: []

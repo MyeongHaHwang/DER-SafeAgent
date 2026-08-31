@@ -1,0 +1,46 @@
+name: rv13_spoof_med_medium_nom_medpen_bess
+description: 'Asset-type variation: BESS nominal 105 kW; drop to 10 kW gives deficit
+  just below the ENS threshold, separating curtailment-aware from ENS-only policies.'
+feeder: ../../ieee13_fdi_inverter/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '634'
+- '671'
+- '675'
+ders:
+- id: INV_634
+  type: pv
+  bus: '634'
+  max_kw: 200.0
+- id: BESS_675
+  type: bess
+  bus: '675'
+  max_kw: 150.0
+base_load_kw: 1000.0
+attacks:
+- type: command_spoof
+  target: BESS_675
+  start_s: 180
+  end_s: 300
+  forged_setpoint_kw: 10.0
+  period_s: 5.0
+ground_truth:
+  attack_class: command_spoof
+  affected_asset: BESS_675
+  start_s: 180
+  end_s: 300
+revision_meta:
+  revision_tag: ijcip_revision_r1r2_20260805
+  attack_type: command_spoof
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: nominal
+  der_penetration: med
+  affected_asset: BESS_675
+  affected_bus: '675'
+  expected_safety_issue: "storage asset target; deficit 0.39 \u2014 borderline sub-threshold"
+  rationale: 'Asset-type variation: BESS nominal 105 kW; drop to 10 kW gives deficit
+    just below the ENS threshold, separating curtailment-aware from ENS-only policies.'
+  is_calibration_control: false

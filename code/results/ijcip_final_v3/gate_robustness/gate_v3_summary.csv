@@ -1,0 +1,9 @@
+group,k,n,rate,ci_lo,ci_hi,mean_t_open_s
+benign_false_open,4,16,0.25,0.07266203825288216,0.5237708198961273,
+gateopen_command_spoof,4,4,1.0,0.3976353643835253,1.0,2.75
+gateopen_dos,4,4,1.0,0.3976353643835253,1.0,3.0
+gateopen_fdi,3,4,0.75,0.19412044968324338,0.9936905367902902,1.0
+gateopen_fdi_high,1,1,1.0,0.025,1.0,1.0
+gateopen_fdi_low,0,1,0.0,0.0,0.975,
+gateopen_fdi_med,0,1,0.0,0.0,0.975,
+gateopen_replay,4,4,1.0,0.3976353643835253,1.0,1.0

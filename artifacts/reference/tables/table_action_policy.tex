@@ -1,0 +1,36 @@
+\begin{table}[t]
+\centering\small
+\caption{Frozen class-aware action policy of the shield (source of truth:
+\texttt{safety\_projection.py}; machine-readable export
+\texttt{code/configs/action\_policy.yaml}, verified by
+\texttt{tests/test\_action\_policy.py}). Actions: N = \textsc{no\_op},
+F = \textsc{freeze\_setpoint}, T = \textsc{throttle\_ramp}, R =
+\textsc{request\_ied\_revalidation}, I = \textsc{isolate\_inverter}
+(irreversible). \emph{Autonomous} actions may execute without a human; a
+model-proposed I is never auto-executed --- escalated to a human where the
+class admits it (I3), vetoed with deterministic fallback where it does not
+--- and the deterministic fallback never selects it. Non-N actions require
+severity $\geq 0.30$; honouring a model choice requires stated confidence
+$\geq 0.40$. Removals: inappr.\ = class-inappropriate, ineff.\ =
+mechanism-ineffective. Testbed semantics: F holds the last validated
+setpoint (70\% of rated kW) for the episode remainder; T restricts ramping
+to the IEEE\,1547 minimum; I is absorbing and requires operator
+restoration. No automatic release is modelled: stand-down requires the
+gate's sustained evidence to clear and an operator/DERMS resume, never
+model output alone (I4). The policy is author-specified, motivated by the
+class mechanism and counterfactual rollouts; the evaluation establishes
+conformance to it, not its independent operational validation.}
+\label{tab:action-policy}
+\footnotesize\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lllll}
+\toprule
+Evidence class & Autonomous & Escalation-only & Removed & Fallback \\
+\midrule
+Command spoof & N, F, T & I & R\,(ineff.) & F$\rightarrow$T$\rightarrow$N \\
+Replay & N, F, T, R & --- & I\,(inappr.) & R$\rightarrow$F$\rightarrow$N \\
+DoS & N, F & I & T,R\,(ineff.) & F$\rightarrow$N \\
+FDI (rating residual) & N, F, R & --- & T\,(ineff.); I\,(inappr.) & F$\rightarrow$R$\rightarrow$N \\
+No evidence / benign & N & --- & F,T,R,I\,(inappr.) & N \\
+\bottomrule
+\end{tabular}
+\end{table}

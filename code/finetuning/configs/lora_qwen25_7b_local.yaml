@@ -1,0 +1,37 @@
+# QLoRA SFT recipe (Qwen2.5-7B-Instruct, local weights, 4-bit, RTX 3080).
+# This config is what the IJCIP submission actually trains with; the
+# `lora_qwen25_7b.yaml` sibling is the original HF-hub recipe.
+model: Qwen/Qwen2.5-7B-Instruct
+seed: 0
+max_len: 512
+quantization: "4bit"
+bf16: true
+
+data:
+  train: ../finetuning_dataset/processed/train.jsonl
+  val:   ../finetuning_dataset/processed/val.jsonl
+  test:  ../finetuning_dataset/processed/test.jsonl
+
+lora:
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  bias: none
+  task_type: CAUSAL_LM
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+training:
+  num_train_epochs: 3
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 8
+  learning_rate: 2.0e-4
+  lr_scheduler_type: cosine
+  warmup_ratio: 0.03
+  weight_decay: 0.0
+  logging_steps: 5
+  eval_strategy: epoch
+  save_strategy: epoch
+  save_total_limit: 1
+  gradient_checkpointing: true
+  optim: "paged_adamw_8bit"

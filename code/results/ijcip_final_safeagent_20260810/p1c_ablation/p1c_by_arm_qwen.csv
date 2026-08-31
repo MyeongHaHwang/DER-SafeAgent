@@ -1,0 +1,9 @@
+arm,n,proposed_irrev,executed_irrev,out_of_registry,intervened,hitl_rate,latency_ms,policy_violation,forbidden_action,safe_fallback,correct_refusal,hitl_escalation
+bare_llm,42,37,37,0.0,0.0,0.0,713.4799,0.6667,0.6667,0.119,0.0476,0.0
+deterministic_only,42,0,0,0.0,0.0,0.0,0.0777,0.0,0.0,1.0,0.0,0.0
+final_full,42,18,0,0.0,0.5,0.2143,1211.8033,0.0,0.0,0.8095,0.4286,0.2143
+minus_caution_hitl,42,18,0,0.0,0.5,0.0,1222.3609,0.0,0.0,0.8095,0.4286,0.0
+minus_class_avoidance,42,18,18,0.0,0.0,0.0,1241.75,0.4286,0.4286,0.381,0.2143,0.0
+minus_eh_fallback,42,18,0,0.0,0.6905,0.2143,1212.3986,0.0,0.0,0.8095,0.1905,0.2143
+minus_evidence_gate,42,17,0,0.0,0.4762,0.2143,1238.3846,0.0,0.0,0.9048,0.4286,0.2143
+minus_projection,42,18,0,0.0,0.619,0.0,1201.6743,0.0,0.0,1.0,0.2619,0.0

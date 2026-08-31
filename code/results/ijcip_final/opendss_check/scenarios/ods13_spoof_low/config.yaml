@@ -1,0 +1,33 @@
+name: ods13_spoof_low
+description: "Spoofed setpoint 100.0 kW vs 140 kW nominal \u2014 magnitude axis on\
+  \ a real power flow."
+feeder: code/simulation/scenarios/ieee13_fdi_inverter/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '634'
+- '671'
+- '675'
+ders:
+- id: INV_634
+  type: pv
+  bus: '634'
+  max_kw: 200.0
+- id: BESS_675
+  type: bess
+  bus: '675'
+  max_kw: 150.0
+attacks:
+- type: command_spoof
+  target: INV_634
+  start_s: 180
+  end_s: 300
+  forged_setpoint_kw: 100.0
+  period_s: 5.0
+ground_truth:
+  attack_class: command_spoof
+  affected_asset: INV_634
+  start_s: 180
+  end_s: 300
+opendss_init_commands: []

@@ -1,0 +1,54 @@
+\section*{Code and Data Availability}
+\begingroup\sloppy
+The reproducibility package for this study is public at
+\url{https://github.com/MyeongHaHwang/DER-SafeAgent} (release tag
+\texttt{v1.1.0} is the version of record for the numbers reported here; the
+repository's \texttt{CHANGELOG.md} and \texttt{RELEASE\_AUDIT.md} record the
+verified state). The package contains the complete \ours{} implementation
+--- the runtime-safe feature view, Evidence Gate, safety-projection shield,
+estimators, fixed mitigation registry, and hash-chained audit record
+(\texttt{code/Multi\_AI\_Agent/}), the strict local QLoRA serving layer
+(\texttt{code/llm\_serving/}), the StubFeeder/OpenDSS simulation harness
+with attack injectors (\texttt{code/simulation/}), baselines, and the
+evaluation drivers (\texttt{code/evaluation/final\_safeagent\_v3/} is the
+canonical pipeline) --- together with the safety-invariant and provenance
+test suite, the machine-readable action-policy export behind
+Table~\ref{tab:action-policy} (\texttt{code/configs/action\_policy.yaml}),
+the hash-frozen experiment protocols (the 49-configuration end-to-end
+holdout, the 32-configuration Evidence-Gate test set, the 12-configuration
+estimator holdout, the development manifests, and the frozen gate operating
+point), the canonical raw and processed result files behind every reported
+table and figure, and the manuscript LaTeX source. Every released
+configuration, dataset, adapter, and result artifact is identified by a
+SHA-256 digest in the package manifests
+(\texttt{data/manifests/}), an included verification script re-checks all
+digests, and \texttt{docs/PAPER\_ARTIFACT\_MAP.md} maps each table and
+figure to its source data and generation script; a claim-by-claim audit of
+the reported numbers is kept in \texttt{docs/CLAIM\_LEDGER.md}. The numeric
+tables and figures of this paper regenerate from the canonical result files
+on a CPU-only machine with a single command (\texttt{make reproduce-paper}),
+without re-running any model inference.
+
+The synthetic v0.1 fine-tuning corpus (200 examples; 161/21/18
+train/val/test split) is released under
+\texttt{code/finetuning\_dataset/processed/} with per-row SHA-256 hashes,
+alongside the leakage-controlled evaluation corpus and the generator of the
+70-case adversarial suite. The QLoRA adapters used in all experiments are
+released (via Git LFS) with their training configurations, prompt hashes,
+and adapter checksums; the Qwen2.5-7B-Instruct and Llama-3.1-8B-Instruct
+base weights are not redistributed and must be obtained separately under
+their original licenses. Full model-in-the-loop re-execution requires a
+single NVIDIA GPU ($\geq$10\,GB VRAM with 4-bit quantization) and the
+software environment documented in the package; CPU-only commands cover the
+safety tests, artifact integrity verification, and regeneration of the
+reported tables and figures. The UNSW-MG24 and TON\_IoT datasets and per-run
+holdout trace dumps are not redistributed; loader code, a synthetic mock
+fixture, and acquisition instructions are included, and every emitted result
+row records its \texttt{result\_source} so mock- and production-derived rows
+cannot be conflated. All DER measurements and attack scenarios in this study
+are synthetic or simulation-derived (StubFeeder episodes and static IEEE
+13/34-bus OpenDSS power-flow snapshots); no personal data and no operational
+utility credentials are included. A naming note: the system was renamed from
+\textsc{DER-SecAgent} to \ours{}; package and result directories retain the
+legacy name to preserve the recorded configuration hashes.
+\par\endgroup

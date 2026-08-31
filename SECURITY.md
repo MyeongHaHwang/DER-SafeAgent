@@ -26,8 +26,8 @@ If you find a security-relevant defect (e.g. a way for model output or
 attacker-controlled telemetry to bypass the Evidence Gate, the
 safety-projection shield, the irreversible-action escalation, or the audit
 hash chain), please open a GitHub issue marked `security`, or contact the
-maintainers through the repository's contact channel once the repository is
-de-anonymised. Reports that include a failing test case in the style of
+maintainer listed in the README's Contact section. Reports that include a
+failing test case in the style of
 `code/Multi_AI_Agent/test_runtime_safe_gate.py` are especially welcome —
 the safety-invariant test suite is the contract this project maintains.
 

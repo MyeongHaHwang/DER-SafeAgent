@@ -1,0 +1,18 @@
+{
+  "path": "code/simulation/scenarios/ieee34_command_spoof_derms/feeder.dss",
+  "sha256": "792039e7fdd4a403f04c8ed29d19a02639a00bfded13fc07b10c6001a4073141",
+  "line_count": 48,
+  "non_comment_preview": [
+    "Clear",
+    "New Circuit.IEEE34Sim",
+    "~ basekv=24.9 phases=3 bus1=SOURCEBUS pu=1.05 angle=0 frequency=60 mvasc3=200000",
+    "New Line.L_800_802   bus1=SOURCEBUS bus2=802 length=2.58 units=km r1=0.45 x1=0.6 c1=0",
+    "New Line.L_802_806   bus1=802 bus2=806 length=1.73 units=km r1=0.45 x1=0.6 c1=0",
+    "New Line.L_806_808   bus1=806 bus2=808 length=9.82 units=km r1=0.45 x1=0.6 c1=0",
+    "New Line.L_808_812   bus1=808 bus2=812 length=11.43 units=km r1=0.45 x1=0.6 c1=0",
+    "New Line.L_812_814   bus1=812 bus2=814 length=9.06 units=km r1=0.45 x1=0.6 c1=0",
+    "New Line.L_814_850   bus1=814 bus2=850 length=0.05 units=km r1=0.1 x1=0.3 c1=0",
+    "New Line.L_850_824   bus1=850 bus2=824 length=3.10 units=km r1=0.45 x1=0.6 c1=0"
+  ],
+  "recorded_at": "2026-05-05T16:09:36.436915+00:00"
+}

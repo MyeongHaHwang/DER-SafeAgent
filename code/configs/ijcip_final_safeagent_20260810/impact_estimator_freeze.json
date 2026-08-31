@@ -1,0 +1,8 @@
+{
+  "frozen_at": "2026-08-10",
+  "rule": "holdout manifest, configs and EH/EMH duration prior frozen BEFORE any of E60/EH/EMH was evaluated on the holdout; the prior uses DEV ground-truth durations only",
+  "n_dev": 25,
+  "n_holdout": 12,
+  "manifest_sha256": "890696129f021344a2ba4d047249042aaff1faba3a48cf94f47ade3522ca3ca0",
+  "prior_sha256": "ac06d181944e9e66b50c16bce66ea25fddb8f34d390029b669a44ece84680b14"
+}

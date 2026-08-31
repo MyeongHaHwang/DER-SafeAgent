@@ -1,0 +1,28 @@
+{
+  "frozen_at": "2026-08-11",
+  "tag": "ijcip_final_v3",
+  "purpose": "end-to-end system evaluation ONLY; causally distinct from the 25-config development library and the component holdouts",
+  "n_configurations": 49,
+  "n_attack": 33,
+  "n_benign": 16,
+  "n_episodes_per_config": 3,
+  "episode_seeds": [
+    1301,
+    1302,
+    1303
+  ],
+  "feeders": [
+    "ieee13",
+    "ieee34"
+  ],
+  "ieee123": "UNAVAILABLE in repository; not substituted (documented reduced feeder scope)",
+  "attack_families": [
+    "fdi",
+    "command_spoof",
+    "replay",
+    "dos",
+    "fleet(multi-asset)"
+  ],
+  "manifest_sha256": "df918691d1620edb5cb9b0f56727c1b4483376dab6152b56ce233e25398e8ea9",
+  "rule": "frozen BEFORE any model/policy executed on it; runtime path is runtime_safe (no tampered oracle); ground truth used only by the offline evaluator after action selection"
+}

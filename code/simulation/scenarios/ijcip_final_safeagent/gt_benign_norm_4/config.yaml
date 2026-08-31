@@ -1,0 +1,35 @@
+name: gt_benign_norm_4
+description: test benign-normal variant 4
+feeder: ../../ieee13_fdi_inverter/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '634'
+- '671'
+- '675'
+ders:
+- id: INV_634
+  type: pv
+  bus: '634'
+  max_kw: 180.0
+- id: BESS_675
+  type: bess
+  bus: '675'
+  max_kw: 135.0
+base_load_kw: 1100.0
+attacks: []
+ground_truth:
+  attack_class: none
+  affected_asset: null
+  start_s: 0
+  end_s: 0
+stub_params:
+  episode_seed: 204
+  load_sigma: 0.09
+  pv_cloud_rate: 0.005
+  meas_noise_kw: 1.0
+revision_meta:
+  revision_tag: ijcip_final_safeagent_20260810
+  split: evidence_gate
+  condition_kind: benign_normal

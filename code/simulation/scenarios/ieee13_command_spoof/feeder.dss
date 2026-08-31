@@ -1,0 +1,31 @@
+! Simplified IEEE-13-bus-style feeder for pipeline validation.
+! NOT the official EPRI IEEE 13-bus testcase — replace with the upstream
+! IEEETestCases/13Bus/IEEE13Nodeckt.dss for production runs.
+! This file emulates the topology and DER placement we exercise in §5.
+
+Clear
+
+New Circuit.IEEE13Sim
+~ basekv=4.16 phases=3 bus1=SOURCEBUS pu=1.00 angle=0 frequency=60 mvasc3=200000
+
+! lines (radial trunk)
+New Line.L_650_632   bus1=SOURCEBUS bus2=632 length=0.4 units=km r1=0.1 x1=0.3 c1=0
+New Line.L_632_671   bus1=632 bus2=671 length=0.6 units=km r1=0.1 x1=0.3 c1=0
+New Line.L_632_633   bus1=632 bus2=633 length=0.2 units=km r1=0.1 x1=0.3 c1=0
+New Line.L_633_634   bus1=633 bus2=634 length=0.2 units=km r1=0.1 x1=0.3 c1=0
+New Line.L_671_675   bus1=671 bus2=675 length=0.5 units=km r1=0.1 x1=0.3 c1=0
+New Line.L_671_692   bus1=671 bus2=692 length=0.05 units=km r1=0.1 x1=0.3 c1=0
+
+! loads
+New Load.L634   bus1=634 phases=3 kV=4.16 kW=160 kvar=110 model=1
+New Load.L671   bus1=671 phases=3 kV=4.16 kW=400 kvar=290 model=1
+New Load.L675   bus1=675 phases=3 kV=4.16 kW=480 kvar=190 model=1
+New Load.L692   bus1=692 phases=3 kV=4.16 kW=170 kvar=151 model=1
+
+! DER assets — these IDs match scenarios/ieee13_fdi_inverter/config.yaml
+New Generator.INV_634 phases=3 bus1=634 kV=4.16 kW=140 kVA=200 model=1 conn=wye
+New Generator.BESS_675 phases=3 bus1=675 kV=4.16 kW=100 kVA=150 model=1 conn=wye
+
+Set voltagebases=[4.16]
+CalcVoltageBases
+Solve

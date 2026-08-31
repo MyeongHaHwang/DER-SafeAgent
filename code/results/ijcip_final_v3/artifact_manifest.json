@@ -1,0 +1,22 @@
+{
+  "tag": "ijcip_final_v3",
+  "generated": "2026-08-12",
+  "artifacts": {
+    "code/results/ijcip_final_v3/holdout_e2e/holdout_e2e_raw.csv": "2eb70ccdce8a2340abea6f1706d8044e8bf7e6e0df3a47e03850ea692790822f",
+    "code/results/ijcip_final_v3/adversarial/adversarial_raw_qwen.csv": "af41c2501a344531018024dd6ef9f0a8023cb14e29593fcdc8a64a2c71f7271d",
+    "code/results/ijcip_final_v3/adversarial/adversarial_raw_llama.csv": "7d65c4a716757931e6b713636d881b9b039e9776fb473c1fc7c13b8809855efe",
+    "code/results/ijcip_final_v3/eh_robustness/eh_robustness.csv": "2d1939cfd7ce67ac87365e170d8958caff3e6a8640f513f5a14b59a689b6e8b7",
+    "code/results/ijcip_final_v3/p0_forensics/p0a_result.json": "6ed2941699bc05ebe88dbe91258691a877dbe568c08762e45f92bf7cd0aa2b93",
+    "code/results/ijcip_final_v3/p0_forensics/p0bcd_result.json": "033ba4390083f3652de979e1d3a66464ee210ca0cb5edda6688c07f2219f2a13",
+    "code/results/ijcip_final_v3/property_tests/property_test_result.json": "20da6b57df0dd01e3d967049d9dc623ed3d1786591c05d5facbc63db8fd3c883",
+    "code/results/ijcip_final_v3/experiment_registry.json": "47fdcf6d03fd811a03329abdb631625e556b1daf113a811757984fb8f355712a",
+    "code/results/ijcip_final_v3/environment.json": "62261456a41c0a915ce563d7f15fade04b7dcdb9244e610ac38bb37bd6ba7044",
+    "code/configs/ijcip_final_v3/holdout_v3_manifest.csv": "df918691d1620edb5cb9b0f56727c1b4483376dab6152b56ce233e25398e8ea9",
+    "code/configs/ijcip_final_v3/evidence_gate_v3_frozen.json": "c4cb2ee11b6bc8b5de3028821d4e6c560014928f7835a92c3be37e18689277ff",
+    "paper/main.pdf": "e91d3d3d82e2992945b91de5072a428fdbfb05d4b2f7e37f33c587eb72378ace",
+    "code/evaluation/ijcip_final_v3/p0a_gate_forensics.py": "f2307c439e9ebb2dfefe76a736c69dd121a96c4db0de4c67b90f9760203c8920",
+    "code/evaluation/ijcip_final_v3/p0_forensics.py": "56909643a560d03069205f3a7739e2688758548c651de5f40abc9730e371af45",
+    "code/evaluation/ijcip_final_v3/property_safety_tests.py": "89685bc76848a66dee65b9aea65861c619477783708dfbf57e78938aa7b8faae",
+    "code/evaluation/ijcip_final_v3/consistency_check.py": "1805b510859a9523c1dab0ce1232035f7232913c3dc2349f56880fbdb2fe8573"
+  }
+}

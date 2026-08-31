@@ -1,0 +1,9 @@
+Hint for tree-of-thought reasoning before producing JSON:
+
+Generate three candidate (attack_class, mitigation) pairs. For each, briefly
+estimate (a) likelihood given evidence and (b) expected energy impact if
+acted on. Pick the candidate with the highest likelihood-weighted impact
+reduction at the smallest curtailment energy. Tie-break toward less-irreversible
+mitigations.
+
+Do not include the candidates in the final response — only the final JSON.

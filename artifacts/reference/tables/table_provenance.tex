@@ -1,0 +1,45 @@
+% Table 3: trust boundary and evidence provenance.
+% Page-breaking xltabular so the tall table never overflows into the page footer.
+{\footnotesize
+\begin{xltabular}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.19\textwidth}
+ >{\raggedright\arraybackslash}p{0.22\textwidth}
+ >{\raggedright\arraybackslash}p{0.13\textwidth}
+ >{\raggedright\arraybackslash}X@{}}
+\caption{Evidence provenance and trust boundary for the runtime FeatureView.
+Every runtime feature is computed from wire-observable telemetry/packets or
+the defender's grid model; generator ground-truth flags are excluded by design
+(last row). Wire-observable is not authenticated: an attacker able to inject
+unauthenticated traffic can forge much of this evidence, so it is robust to a
+compromised model but not a compromised network. ``Attacker influence'' is the
+attacker's ability to forge or suppress the feature.}\label{tab:provenance}\\
+\toprule
+Feature & Observable source & Attacker influence & Runtime use / failure mode \\
+\midrule
+\endfirsthead
+\multicolumn{4}{@{}l}{\emph{Table~\ref{tab:provenance} (continued)}}\\[2pt]
+\toprule
+Feature & Observable source & Attacker influence & Runtime use / failure mode \\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r@{}}{\emph{continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+Command-packet count & DNP3/IEC-61850 command frame on the wire & Can forge command frames & Opens gate; forged commands indistinguishable from legitimate ones absent authentication (benign-command discrimination is a stated limit) \\
+\addlinespace[2pt]
+Duplicate-payload signature & Repeated identical frame payloads & Can inject duplicates & Replay/echo signature; benign historian echo is an irreducible ambiguity \\
+\addlinespace[2pt]
+Staleness (non-advancing timestamp) & Frame reported-time field & Can freeze/replay timestamps & DoS/replay signature; a re-timestamped replay evades it (caught instead by sequence regression) \\
+\addlinespace[2pt]
+Sequence regression & IEC-61850 sqNum / DNP3 sequence vs.\ running high-water mark & Cannot lower a delivered seq without detection unless it also spoofs the counter end-to-end & Replay signature; observable, not authenticated \\
+\addlinespace[2pt]
+Integrity residual & Reported power vs.\ rated capacity (defender grid model) & Bounded: a value above capacity is physically impossible & High-magnitude FDI; \emph{sub-capacity FDI is not observable here} (documented miss) \\
+\addlinespace[2pt]
+Persistent freeze & $\ge$10 consecutive zero-power samples & Can force zero output & DoS signature \\
+\addlinespace[2pt]
+Per-asset z-score, voltage band & Reported power / bus voltage & Can bias reported power (soft) & Soft evidence; not separable from benign transients, so not used to open the gate alone \\
+\midrule
+\textbf{Excluded by design:} any generator ground-truth flag & \emph{e.g.\ an injector \texttt{tampered} bit} & \emph{fully attacker-/generator-set; an oracle} & \textbf{Never read by the runtime}; unit tests confirm no such field enters a feature \\
+\end{xltabular}
+\par}

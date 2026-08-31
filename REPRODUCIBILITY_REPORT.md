@@ -1,10 +1,17 @@
-# Reproducibility Report — DER-SafeAgent public release 1.0.0
+# Reproducibility Report — DER-SafeAgent public release 1.1.0
 
-Verification record for this release, prepared 2026-08-16; re-verified
-2026-08-17 on E1 after making the entry-point scripts honor the `PY`
-interpreter override (`make test` 172 passed / 2 skipped, `make smoke`
-all 4 stages, `make verify` 227 checks / 0 failed, `make reproduce-paper`
-13 comparisons passed, manuscript rebuild 49 pp clean). Environments:
+Verification record. Originally prepared 2026-08-16 (release 1.0.0),
+re-verified 2026-08-17 (1.0.1, `PY` interpreter override), and fully
+re-audited 2026-08-29 for release 1.1.0: claim-by-claim manuscript audit
+(`docs/CLAIM_LEDGER.md`), amended Table 9 statistics protocol (shared
+resampling draws; see CHANGELOG), manuscript source tracked under `paper/`
+(claim-consistency tests now execute instead of skipping), action-policy
+single-source export, and repository hygiene gate. 1.1.0 verification on
+E1: `make test` 179 passed / 0 skipped; `make smoke` all 4 stages;
+`make verify` 236 checks / 0 failed; `make reproduce-paper` 14 comparisons
+passed (8 tables + 3 figure PNGs byte-identical, 3 statistics CSVs
+hash-identical); `make hygiene` clean; manuscript rebuild 52 pp, no
+undefined references. Environments:
 
 - **E1 (reference)**: the machine that produced the canonical results —
   Linux 6.17, Python 3.12.3, RTX 3080 (10 GiB), CUDA 12.4, torch
@@ -25,17 +32,17 @@ computation was not re-executed for this release.
 | Component | Command | Environment | Status | Evidence | Limitation |
 |---|---|---|---|---|---|
 | Dependency install (CPU core) | `pip install -r requirements.txt` | E2 | PASS | clean venv resolved and installed; all subsequent E2 rows ran on it | GPU extras (`make setup-llm`) not installed in E2 |
-| Full test suite (172 tests) | `make test` | E1 + E2 | PASS | `172 passed, 2 skipped` in both; the 2 skips are manuscript-text checks that skip when `paper/` is absent (by design) | — |
+| Full test suite (179 tests) | `make test` | E1 + E2 | PASS | 1.1.0 (E1): `179 passed, 0 skipped` — the manuscript-text checks now execute against the tracked `paper/` source, plus the 5 new action-policy tests. (1.0.0 E2 baseline: 172 passed, 2 skipped) | — |
 | Smoke test | `make smoke` | E1 + E2 | PASS | all 4 stages green (`SMOKE TEST PASSED`) | — |
-| Artifact checksum verification | `make verify` | E1 + E2 | PASS | `227 artifact checks passed, 1 skipped, 0 failed`; the 1 skip is `paper/main.pdf` (journal-distributed, not in this repo) | adapter LFS objects must be fetched (`git lfs install`) or `--no-lfs` reports them SKIPPED |
-| Manuscript tables regeneration (Tables 3–5, 7–10) | `make reproduce-paper` | E1 + E2 | PASS | all 7 generated `.tex` files **byte-identical** to `artifacts/reference/tables/` | Tables 1–2 have no numeric content; Table 6 is hand-typeset from a released, regenerable CSV (see below) |
+| Artifact checksum verification | `make verify` | E1 + E2 | PASS | 1.1.0: `236 artifact checks passed, 1 skipped, 0 failed` (manifests now also pin `action_policy.yaml`, the e7 groundedness CSVs, and the Table 3 reference); the 1 skip is the untracked compiled `paper/main.pdf` | adapter LFS objects must be fetched (`git lfs install`) or `--no-lfs` reports them SKIPPED |
+| Manuscript tables regeneration (Tables 3–6, 8–11) | `make reproduce-paper` | E1 + E2 | PASS | all 8 generated `.tex` files **byte-identical** to `artifacts/reference/tables/` (Table 3 via `scripts/export_action_policy.py`) | Tables 1–2 have no numeric content; Table 7 is hand-typeset from a released, regenerable CSV (see below) |
 | Manuscript figures regeneration (Figures 2–4) | `make reproduce-paper` | E1 + E2 | PASS | all 3 PNGs (300 dpi) **byte-identical**; PDFs identical modulo embedded timestamps | figure PNG byte-identity requires matplotlib 3.10.x (pinned); mpl 3.11 renders differently (caught by the comparison, verified) |
-| Statistics regeneration (Table 8 inputs) | `make reproduce-stats` | E1 + E2 | PASS | `F1_physical.csv`, `F2_adversarial.csv`, `F3_gate.csv` regenerate **hash-identically** (fixed RNG 20260811, 20k permutations / 10k bootstrap) | numpy/scipy major-version drift would be flagged by the digest comparison, not silently accepted |
-| Latency summary derivation (Table 10) | `make derive-latency` | E1 + E2 | PASS | value-identical re-derivation from the 4 archived `predictions.jsonl` runs | the underlying latency measurements are E1 hardware-specific |
+| Statistics regeneration (Table 9 inputs) | `make reproduce-stats` | E1 + E2 | PASS | `F1_physical.csv`, `F2_adversarial.csv`, `F3_gate.csv` regenerate **hash-identically** (fixed RNG 20260811, 20k permutations / 10k bootstrap; resampling draws shared across contrasts — protocol amended 2026-08-29, see CHANGELOG) | numpy/scipy major-version drift would be flagged by the digest comparison, not silently accepted |
+| Latency summary derivation (Table 11) | `make derive-latency` | E1 + E2 | PASS | value-identical re-derivation from the 4 archived `predictions.jsonl` runs | the underlying latency measurements are E1 hardware-specific |
 | Evidence-Gate one-shot evaluation | `make gate-evaluate` | E2 | PASS | regenerated `gate_v3_raw.csv` / `gate_v3_summary.csv` **byte-identical** to canonical (verified by `make verify` after re-run) | — |
 | EH estimator robustness | `make eh-robustness` | E2 | PASS | regenerated outputs byte-identical to canonical | — |
 | Deadline / SLO re-analysis | `make deadline` | E2 | PASS | regenerated outputs byte-identical to canonical | — |
-| Command-authentication sub-study (Table 6 data) | `make gate-auth` | E2 | PASS | regenerated `gate_auth_{raw,summary}.csv` byte-identical to canonical | the Table 6 `.tex` itself is hand-typeset from this CSV (checksummed reference; no TeX generator existed for the submitted file) |
+| Command-authentication sub-study (Table 7 data) | `make gate-auth` | E2 | PASS | regenerated `gate_auth_{raw,summary}.csv` byte-identical to canonical | the Table 7 `.tex` itself is hand-typeset from this CSV (checksummed reference; no TeX generator existed for the submitted file) |
 | Holdout, deterministic + oracle arms | `make holdout-cpu` | E2 | PASS | re-simulated D0/OPROJ from scratch; all 1,176 rows of the merged raw CSV **value-identical** to canonical (byte digest changes because the CSV is rewritten — documented in docs/EXPERIMENTS.md) | — |
 | Structural enumeration + mutation guards | `make property-tests` | E2 | PASS | regenerated result JSON content-identical: 40,824 states / 0 violations; mutations caught with 1008 / 144 / 3930 violations | — |
 | Ground-truth leakage / runtime-safe invariants | `pytest code/Multi_AI_Agent/test_runtime_safe_gate.py` | E1 + E2 | PASS | 8/8 including the flip-all-`tampered`-flags invariance test | OPROJ oracle arm is the single labelled exception (upper bound), by design |
@@ -48,7 +55,9 @@ computation was not re-executed for this release.
 | Supplementary-material tables/figures | legacy builders in `code/evaluation/` | — | NOT RE-RUN | canonical inputs (`lora_eval/…`) shipped + checksummed; builders ship | regeneration of supplementary items not re-verified for this release; main-text principal results were |
 | Docker image | `docker build -t der-safeagent .` | — | NOT RUN | Dockerfile provided (python:3.12-slim + core requirements + verification ladder as CMD); contents mirror the E2 procedure that passed | Docker is not installed on the release-preparation machine, so the image build itself is unverified |
 | CI workflow | `.github/workflows/ci.yml` | — | NOT RUN | workflow mirrors the E2 ladder exactly (checkout with LFS, install, compileall, pytest, smoke, verify, derive-latency, reproduce-paper) | cannot execute before the repository exists on GitHub |
-| Manuscript build with revised availability section | `tectonic main.tex` | E1 | PASS | `main.pdf` builds (49 pp); `Code and Data Availability` appears exactly once; no undefined refs/citations; no placeholder URL/TODO/absolute path in body text; no overfull boxes in the new section | built with tectonic (XeTeX), the same engine as the submitted PDF |
+| Manuscript build (tracked source, de-anonymized, URL-bearing availability) | `make latex` | E1 | PASS | `main.pdf` builds from `paper/` (52 pp, 2026-08-29); `Code and Data Availability` appears exactly once and cites the verified repository URL; no undefined refs/citations; no placeholder markers or machine-local absolute paths in body text | built with tectonic (XeTeX); page count grew from 49 to 52 with the author block, Table 3, and the Related-Work additions |
+| Action-policy single source of truth | `make policy-export` + `pytest tests/test_action_policy.py` | E1 | PASS | YAML + Table 3 regenerate byte-identically from `safety_projection.py`; exhaustive sweep confirms a model-proposed irreversible primitive never executes in any exported class | policy is author-specified; conformance, not operational validation |
+| Repository hygiene | `make hygiene` | E1 | PASS | 0 findings over 680+ files (secrets, stale anonymization wording, oversize non-LFS files, absolute paths outside the 7 documented frozen CSVs) | — |
 
 ## Known unresolved reproducibility limitations (honest list)
 
@@ -65,7 +74,7 @@ computation was not re-executed for this release.
    adapter copies; the release ships the one matching the digest recorded
    in every run manifest (`0c9dec242e2f…`). See `docs/MODEL_PROVENANCE.md`.
 4. **Two manuscript tables are not script-generated** (Table 2 descriptive;
-   Table 6 hand-typeset from a released, byte-reproducible CSV). Shipped as
+   Table 7 hand-typeset from a released, byte-reproducible CSV). Shipped as
    checksummed references; see `docs/PAPER_ARTIFACT_MAP.md`.
 5. **Per-run holdout traces (463 MB) are not in the git tree**; the
    aggregated raw CSV and the forensics computed from the traces are.

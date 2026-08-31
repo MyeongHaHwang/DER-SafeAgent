@@ -1,0 +1,36 @@
+name: h_replay_lowpen_13
+description: replay low penetration
+feeder: ../../ieee13_fdi_inverter/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '634'
+- '671'
+- '675'
+ders:
+- id: INV_634
+  type: pv
+  bus: '634'
+  max_kw: 100.0
+- id: BESS_675
+  type: bess
+  bus: '675'
+  max_kw: 75.0
+base_load_kw: 1000.0
+attacks:
+- type: replay
+  target: INV_634
+  start_s: 160
+  end_s: 400
+  capture_window_s: 30.0
+ground_truth:
+  attack_class: replay
+  affected_asset: INV_634
+  start_s: 160
+  end_s: 400
+stub_params: {}
+revision_meta:
+  tag: ijcip_final_v3
+  split: end_to_end_holdout
+  feeder_family: ieee13

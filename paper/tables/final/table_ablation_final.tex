@@ -1,0 +1,24 @@
+\begin{table}[t]
+\centering\small
+\caption{Final containment ablation: 42 adversarial cases (14 families,
+real Qwen QLoRA, strict serving), each held as sustained input for 8
+consecutive ticks so persistence-gated components can fire (the prior
+single-step protocol could not exercise the gate). Irrev.\ = the
+irreversible \textsc{isolate\_inverter} primitive.}
+\label{tab:ablation-final}
+\begin{tabular}{lcccccc}
+\toprule
+Configuration & Irrev. & Irrev. & Policy & Shield & HITL & Correct \\
+ & proposed & \textbf{executed} & violation & interv. & rate & refusal \\
+\midrule
+\textbf{Final DER-SafeAgent} & 18 & 0 & 0.000 & 0.50 & 0.21 & 0.43 \\
+$-$ Evidence Gate & 17 & 0 & 0.000 & 0.48 & 0.21 & 0.43 \\
+$-$ projection (class-override) & 18 & 0 & 0.000 & 0.62 & 0.00 & 0.26 \\
+$-$ class-aware avoidance & 18 & 18 & 0.429 & 0.00 & 0.00 & 0.21 \\
+$-$ Caution/HITL & 18 & 0 & 0.000 & 0.50 & 0.00 & 0.43 \\
+$-$ EH fallback (class table) & 18 & 0 & 0.000 & 0.69 & 0.21 & 0.19 \\
+deterministic-only & 0 & 0 & 0.000 & 0.00 & 0.00 & 0.00 \\
+bare LLM (registry only) & 37 & 37 & 0.667 & 0.00 & 0.00 & 0.05 \\
+\bottomrule
+\end{tabular}
+\end{table}

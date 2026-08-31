@@ -1,0 +1,98 @@
+{
+  "P0B_call_counts": {
+    "unit": "Table 8 LLM-calls = sum over 33 attack configs of the per-config MEAN calls (episodes averaged). A sustained incident re-consults across ticks, so calls/incident > 1; 49x3 does not bound calls.",
+    "per_arm": {
+      "Q1": {
+        "table8_calls_sum_of_perconfig_means": 167.3,
+        "raw_sum_over_99_attack_rows": 502,
+        "mean_calls_per_attack_episode": 5.07,
+        "attack_configs_with_ge1_call": 32
+      },
+      "L1": {
+        "table8_calls_sum_of_perconfig_means": 167.3,
+        "raw_sum_over_99_attack_rows": 502,
+        "mean_calls_per_attack_episode": 5.07,
+        "attack_configs_with_ge1_call": 32
+      },
+      "QPROJ": {
+        "table8_calls_sum_of_perconfig_means": 143.3,
+        "raw_sum_over_99_attack_rows": 430,
+        "mean_calls_per_attack_episode": 4.34,
+        "attack_configs_with_ge1_call": 32
+      },
+      "LPROJ": {
+        "table8_calls_sum_of_perconfig_means": 143.3,
+        "raw_sum_over_99_attack_rows": 430,
+        "mean_calls_per_attack_episode": 4.34,
+        "attack_configs_with_ge1_call": 32
+      },
+      "bareQ": {
+        "table8_calls_sum_of_perconfig_means": 66.0,
+        "raw_sum_over_99_attack_rows": 198,
+        "mean_calls_per_attack_episode": 2.0,
+        "attack_configs_with_ge1_call": 33
+      },
+      "bareL": {
+        "table8_calls_sum_of_perconfig_means": 66.0,
+        "raw_sum_over_99_attack_rows": 198,
+        "mean_calls_per_attack_episode": 2.0,
+        "attack_configs_with_ge1_call": 33
+      }
+    }
+  },
+  "P0C_hitl_asymmetry": {
+    "root_cause": "Escalation is triggered by irreversible (isolate) proposals under projection mode. Qwen proposes isolate far more than Llama, and only projection arms route irreversible proposals to HITL; class-override arms (Q1/L1) overwrite the proposal, so they never escalate. Burden is backbone- AND mode-dependent; no human study, so no acceptability claim.",
+    "per_arm": {
+      "QPROJ": {
+        "total_hitl": 132,
+        "esc_per_attack_config_mean": 1.333,
+        "attack_configs_escalated": 6,
+        "benign_configs_escalated": 0
+      },
+      "LPROJ": {
+        "total_hitl": 0,
+        "esc_per_attack_config_mean": 0.0,
+        "attack_configs_escalated": 0,
+        "benign_configs_escalated": 0
+      },
+      "Q1": {
+        "total_hitl": 0,
+        "esc_per_attack_config_mean": 0.0,
+        "attack_configs_escalated": 0,
+        "benign_configs_escalated": 0
+      },
+      "L1": {
+        "total_hitl": 0,
+        "esc_per_attack_config_mean": 0.0,
+        "attack_configs_escalated": 0,
+        "benign_configs_escalated": 0
+      }
+    },
+    "adversarial_irreversible_proposal": {
+      "qwen": {
+        "bare_isolate_proposed": 61,
+        "n": 70
+      },
+      "llama": {
+        "bare_isolate_proposed": 18,
+        "n": 70
+      }
+    }
+  },
+  "P0D_bare_lineage": {
+    "finding": "bareQ and bareL are byte-identical physically because both execute ZERO actions: the ungated arm polls the LLM on a fixed 600 s cadence that misses the short attack window, so the model returns no_op and the feeder evolves as the unmitigated attack, independent of backbone. Genuine, not reuse: adapters/prompts/outputs differ and are logged.",
+    "distinct_adapters": {
+      "bareQ": [
+        "0c9dec242e2f"
+      ],
+      "bareL": [
+        "9a2b8436ce9c"
+      ]
+    },
+    "episodes_with_identical_timeseries": 99,
+    "of_which_identical_executed_actions": 99,
+    "LINEAGE_ASSERTION_violations": 0,
+    "PASS": true,
+    "caveat": "Holdout bare arm is a no-effective-response baseline (coarse polling), NOT a demonstration of unsafe execution; the latter is the adversarial suite."
+  }
+}

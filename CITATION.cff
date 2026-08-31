@@ -3,7 +3,22 @@ title: "DER-SafeAgent: A Runtime-Assurance Architecture for Safe LLM-Assisted Cy
 message: "If you use DER-SafeAgent in academic work, please cite the manuscript and this software repository."
 type: software
 authors:
-  - name: "Anonymous (under double-blind review)"
+  - family-names: "Hwang"
+    given-names: "Myeong-Ha"
+    affiliation: "Korea Electric Power Research Institute (KEPRI)"
+  - family-names: "Kim"
+    given-names: "Kyungmin"
+    affiliation: "Chungnam National University (CNU)"
+  - family-names: "Kim"
+    given-names: "Hyeongu"
+    affiliation: "Chungnam National University (CNU)"
+  - family-names: "Kwon"
+    given-names: "Yoojin"
+    affiliation: "Korea Electric Power Research Institute (KEPRI)"
+  - family-names: "Lee"
+    given-names: "Sungho"
+    affiliation: "Chungnam National University (CNU)"
+repository-code: "https://github.com/MyeongHaHwang/DER-SafeAgent"
 abstract: >
   DER-SafeAgent is a runtime-assurance architecture in which an untrusted
   LLM advisory component (Qwen2.5-7B-Instruct or Llama-3.1-8B-Instruct with
@@ -26,7 +41,7 @@ keywords:
   - runtime assurance
   - large language model agents
   - incident response
-license: MIT
+license: Apache-2.0
 notes: >
   Repository directories and Python package names retain the legacy system
   name DER-SecAgent to preserve recorded configuration hashes.
@@ -34,7 +49,16 @@ preferred-citation:
   type: article
   title: "DER-SafeAgent: A Runtime-Assurance Architecture for Safe LLM-Assisted Cyber-Physical Incident Response in Distributed Energy Resources"
   authors:
-    - name: "Anonymous (under double-blind review)"
+    - family-names: "Hwang"
+      given-names: "Myeong-Ha"
+    - family-names: "Kim"
+      given-names: "Kyungmin"
+    - family-names: "Kim"
+      given-names: "Hyeongu"
+    - family-names: "Kwon"
+      given-names: "Yoojin"
+    - family-names: "Lee"
+      given-names: "Sungho"
   year: 2026
   journal: "International Journal of Critical Infrastructure Protection"
-  notes: "Manuscript under review."
+  notes: "Manuscript under review (single-anonymized)."

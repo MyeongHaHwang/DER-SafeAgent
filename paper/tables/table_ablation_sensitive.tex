@@ -1,0 +1,14 @@
+\begin{tabular}{lrrrrr}
+\toprule
+Ablation & action\_acc & correct\_refusal & safe\_fallback & policy\_viol. & ttm (ms) \\
+\midrule
+deterministic\_only & 0.750 & 0.125 & 1.000 & 0.000 & 0.085 \\
+full & 0.875 & 0.125 & 1.000 & 0.000 & 0.728 \\
+no\_caution\_agent & 0.875 & 0.125 & 1.000 & 0.000 & 0.488 \\
+no\_class\_aware\_avoidance & 0.750 & 0.000 & 1.000 & 0.000 & 0.541 \\
+no\_energy\_impact\_agent & 0.875 & 0.125 & 1.000 & 0.000 & 0.525 \\
+no\_hitl\_fallback & 0.875 & 0.125 & 1.000 & 0.000 & 0.846 \\
+no\_incident\_memory & 0.875 & 0.125 & 1.000 & 0.000 & 0.861 \\
+no\_self\_consistency & 0.875 & 0.125 & 1.000 & 0.000 & 0.502 \\
+\bottomrule
+\end{tabular}

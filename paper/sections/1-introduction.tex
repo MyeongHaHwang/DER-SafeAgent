@@ -1,0 +1,135 @@
+\section{Introduction}
+\label{sec:intro}
+
+Distribution networks with high penetrations of Distributed Energy
+Resources (DERs) --- rooftop photovoltaics, battery storage, controllable
+loads --- are part of critical national energy infrastructure, and the
+cyber surface that orchestrates them is broad: DER management systems
+(DERMS) issue dispatch commands, inverters and intelligent electronic
+devices report telemetry over IEC~61850, DNP3, Modbus/TCP and SunSpec, and
+aggregator platforms federate fleets across utility
+boundaries~\cite{CaballeroPena2022_DER_DN,Zografopoulos2023_DER_CybersecurityOutlook}.
+The U.S. Department of Energy projects that DER growth will make this
+surface a grid-operations problem within the
+decade~\cite{DOE_CESER_DER2022}, and current standards work --- IEEE
+1547.3-2023 for DER cybersecurity~\cite{IEEE15473_2023}, NERC CIP-015-1
+for monitoring inside the OT perimeter~\cite{NERC_CIP015_2024}, NIST SP
+800-82r3 and SP 800-61r3 for OT security and incident
+response~\cite{NIST80082r3,NIST80061r3} --- consistently stops at
+\emph{guidance}: none of it prescribes the run-time mechanism that turns a
+detected DER incident into a safe physical mitigation.
+
+That gap is where large language models are now being proposed. LLM-based
+SOC automation promises to close the triage-to-response distance, but it
+imports failure modes that operational technology cannot absorb by
+default: hallucinated commands, prompt injection through
+attacker-controlled log lines, non-deterministic reasoning, and
+schema-violating outputs~\cite{Yao2024_LLM_SecPrivacy,MITRE_ATLAS}. In an
+IT SOC these are quality problems; in a feeder control path they are
+physical hazards, because a wrong action --- isolating a healthy inverter,
+say --- sheds real generation. We therefore ask a narrower question than
+whether an LLM \emph{improves} DER incident response:
+
+\begin{quote}
+\emph{Can an unverified LLM be consulted safely at all inside a
+cyber-physical incident-response path --- and which mechanisms actually
+carry the safety when it is?}
+\end{quote}
+
+This paper answers with a runtime-assurance architecture,
+\ours{}, in the
+lineage of the Simplex construction~\cite{Sha2001Simplex} and shielded
+decision-making~\cite{Alshiekh2018Shielding}: the language model is an
+\emph{untrusted advisory component}, and a small deterministic layer owns
+the executable action surface. Concretely, a deterministic FeatureView
+summarises telemetry and protocol evidence; an \emph{Incident Evidence
+Gate} authorizes response --- and decides whether the model is consulted at
+all --- when prespecified observable protocol evidence satisfies its frozen
+persistence thresholds; a QLoRA-adapted
+open-weights model (Qwen2.5-7B or Llama-3.1-8B) proposes a hypothesis and
+an action; and a runtime-assurance shield --- a fixed five-primitive
+registry, class-aware removals, a rule that a model-proposed irreversible
+action never auto-executes (it is vetoed or escalated to a human;
+Table~\ref{tab:action-policy}), and a counterfactually validated
+horizon-aware impact estimator that ranks the admissible candidate set on
+fallback ---
+bounds what can execute. A deterministic fast path answers immediately in
+parallel; the model path runs under an explicit latency budget.
+
+Everything we claim is measured with the real model in the loop, under
+serving assertions that abort any run in which a fallback, a wrong
+adapter, or missing provenance would otherwise masquerade as an LLM
+result, and with every runtime feature computed only from wire-observable
+telemetry --- a provenance discipline we audit feature by feature
+(\S\ref{sec:method-featureview}). The evaluation is
+organised around four research questions: whether adversarial or incorrect
+model output reaches an unsafe executable action (RQ1); whether the
+Evidence Gate reduces unnecessary benign response while retaining
+independently evidenced incidents (RQ2); what physical cost remains after
+containment on a held-out set of configurations (RQ3); and whether
+the safety boundary holds under realistic latency, fallback, and
+escalation (RQ4). It spans a canonical 70-case leakage-controlled
+adversarial suite, a runtime-safe gate robustness evaluation, a
+hash-frozen held-out 49-configuration end-to-end set, and
+a counterfactual estimator validation --- all with the configuration, not
+the seed, as the unit of inference.
+
+The findings are deliberately asymmetric. The evaluated LLM advisers do not
+improve physical outcomes: with the shield in place, the projection arms show no
+statistically detectable difference from the deterministic fast path (holdout
+mean ENS $0.54$/$0.75$\,kWh for Qwen/Llama versus $0.35$; both Holm $p=1.0$), and
+a ground-truth-class oracle yields only a \emph{modest} improvement
+($-0.29$\,kWh, 95\% CI $[-0.69,-0.05]$, not surviving multiplicity correction)
+that the LLMs do not reproduce. What the architecture buys is \emph{containment}:
+against the adversarial suite the model is consulted on the majority of cases yet
+the shielded architecture executes an unsafe irreversible action zero times,
+against $61/70$ (unshielded Qwen) and $18/70$ (unshielded Llama); an ablation
+localises this in the class-aware avoidance, and an exhaustive enumeration of
+$40{,}824$ modelled decision states finds no invariant violation while
+guard-removal mutations do. We also report results we did not want: a
+within-capacity false-data-injection attack has no observable hard signature and
+is not separable from benign operation without redundant sensing; and two shield
+designs were falsified by our own evaluation --- gating an irreversible action on
+model-stated confidence was \emph{worse than no shield}, and honouring a model
+\textsc{no\_op} let a denial-of-service outage run unmitigated --- together, the
+reason model output must gate neither action nor inaction.
+\ours{} does not establish that an LLM improves DER incident response; it
+establishes an execution boundary under which an LLM adviser can be evaluated
+without granting it direct physical authority.
+
+\paragraph{Contributions}
+\begin{enumerate}
+  \item \textbf{A deterministic runtime-assurance architecture, and its
+    safety invariants, for bounded LLM-assisted DER incident response}
+    (\S\ref{sec:architecture}). Evidence-threshold response authorization, action
+    bounding, irreversible-action escalation, and the symmetric rule that model
+    output may gate neither action nor inaction are deterministic and each
+    stated as a directly testable invariant; every evidence feature is
+    computed from wire-observable telemetry and audited against a provenance
+    table that records each feature's source and the attacker's influence
+    over it.
+  \item \textbf{A proposal-versus-execution adversarial evaluation plus
+    exhaustive structural verification} (\S\ref{sec:rq1}, \S\ref{sec:rq4}). A
+    leakage-controlled 70-case suite with per-decision provenance separates
+    proposal from execution; an exhaustive enumeration of $40{,}824$ modelled
+    decision states with guard-removal mutation tests shows the safety
+    invariants are load-bearing; and two falsified designs ---
+    confidence-gated autonomy and honoured stand-down --- show why
+    attacker-influenceable model output must not relax constraints in either
+    direction.
+  \item \textbf{Independent cyber-physical, gate, estimator, and timing
+    validation with configuration-level inference}
+    (\S\ref{sec:rq2}--\S\ref{sec:rq4}). A hash-frozen held-out 49-configuration end-to-end set of
+    configurations drawn from prespecified axes, a runtime-safe gate robustness
+    evaluation reporting the honest per-family detectability the observable-only
+    feature set exposes, a counterfactually validated estimator
+    stress-tested under horizon and execution perturbations, and a
+    deadline-aware latency analysis.
+\end{enumerate}
+
+Section~\ref{sec:background} states the setting, threat model, and trust
+boundary; Section~\ref{sec:relatedwork} positions the work;
+Section~\ref{sec:architecture} describes \ours{} and its invariants;
+Section~\ref{sec:eval} reports the experiments around four research
+questions; Section~\ref{sec:discussion} discusses what does and does not
+provide safety; Section~\ref{sec:conclusion} concludes.

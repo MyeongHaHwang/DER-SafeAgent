@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "reproducibility-release-*"]
+  pull_request:
+
+jobs:
+  verify:
+    name: CPU verification ladder
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true          # fetch QLoRA adapter objects so their SHA-256 is verified
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install core CPU stack
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Syntax check
+        run: python -m compileall -q code tests scripts
+
+      - name: Unit + safety-invariant tests
+        run: python -m pytest code/ tests/ -q
+
+      - name: Smoke test
+        run: bash scripts/smoke_test.sh
+
+      - name: Artifact checksum verification
+        run: python scripts/verify_artifacts.py
+
+      - name: Latency re-derivation check
+        run: python scripts/derive_latency_v3.py
+
+      - name: Regenerate manuscript artifacts and compare
+        run: bash scripts/reproduce_paper_artifacts.sh
+
+      - name: Repository hygiene (secrets, stale wording, large files)
+        run: python scripts/repo_hygiene.py
+
+  latex:
+    name: Manuscript builds from tracked source
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - name: Install tectonic
+        uses: wtfjoke/setup-tectonic@v3
+      - name: Build manuscript
+        run: cd paper && tectonic main.tex
+
+  # The full model-in-the-loop experiments (six LLM holdout arms, the 70-case
+  # adversarial suite on both backbones) need an NVIDIA GPU, the base model
+  # weights obtained under their own licenses, and many hours of runtime.
+  # They are NOT run in CI; execute locally per docs/EXPERIMENTS.md:
+  #   make setup-llm && make holdout-llm && make adversarial

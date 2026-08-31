@@ -1,0 +1,47 @@
+! Simplified IEEE-34-bus-style feeder for pipeline validation.
+! NOT the official EPRI IEEE 34-bus testcase — replace with the upstream
+! IEEETestCases/34Bus/Master.dss for production runs (see INSTALL_FEEDER.md).
+! This file emulates the long radial topology (24.9 kV) and DER placement
+! we exercise in §5 for a longer feeder than IEEE-13.
+
+Clear
+
+New Circuit.IEEE34Sim
+~ basekv=24.9 phases=3 bus1=SOURCEBUS pu=1.05 angle=0 frequency=60 mvasc3=200000
+
+! Long radial trunk (highly resistive — characteristic of IEEE-34)
+New Line.L_800_802   bus1=SOURCEBUS bus2=802 length=2.58 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_802_806   bus1=802 bus2=806 length=1.73 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_806_808   bus1=806 bus2=808 length=9.82 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_808_812   bus1=808 bus2=812 length=11.43 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_812_814   bus1=812 bus2=814 length=9.06 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_814_850   bus1=814 bus2=850 length=0.05 units=km r1=0.1 x1=0.3 c1=0
+New Line.L_850_824   bus1=850 bus2=824 length=3.10 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_824_852   bus1=824 bus2=852 length=11.23 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_852_832   bus1=852 bus2=832 length=0.05 units=km r1=0.1 x1=0.3 c1=0
+New Line.L_832_858   bus1=832 bus2=858 length=1.49 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_858_834   bus1=858 bus2=834 length=1.78 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_834_860   bus1=834 bus2=860 length=0.62 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_860_836   bus1=860 bus2=836 length=0.83 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_836_840   bus1=836 bus2=840 length=0.26 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_834_842   bus1=834 bus2=842 length=0.09 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_842_844   bus1=842 bus2=844 length=0.41 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_844_846   bus1=844 bus2=846 length=1.10 units=km r1=0.45 x1=0.6 c1=0
+New Line.L_846_848   bus1=846 bus2=848 length=0.16 units=km r1=0.45 x1=0.6 c1=0
+
+! Loads distributed along the feeder (representative)
+New Load.L_802  bus1=802  phases=3 kV=24.9 kW=120  kvar=70  model=1
+New Load.L_808  bus1=808  phases=3 kV=24.9 kW=80   kvar=45  model=1
+New Load.L_824  bus1=824  phases=3 kV=24.9 kW=170  kvar=125 model=1
+New Load.L_834  bus1=834  phases=3 kV=24.9 kW=210  kvar=145 model=1
+New Load.L_840  bus1=840  phases=3 kV=24.9 kW=130  kvar=85  model=1
+New Load.L_848  bus1=848  phases=3 kV=24.9 kW=100  kvar=55  model=1
+
+! DER assets — IDs match config.yaml
+New Generator.INV_840 phases=3 bus1=840 kV=24.9 kW=180 kVA=240 model=1 conn=wye
+New Generator.BESS_848 phases=3 bus1=848 kV=24.9 kW=120 kVA=180 model=1 conn=wye
+New Generator.INV_824 phases=3 bus1=824 kV=24.9 kW=200 kVA=260 model=1 conn=wye
+
+Set voltagebases=[24.9]
+CalcVoltageBases
+Solve

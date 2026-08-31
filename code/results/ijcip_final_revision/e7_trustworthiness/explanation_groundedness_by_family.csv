@@ -1,0 +1,9 @@
+family,n,asset_grounded,any_unsupported,template_rationale
+benign_but_suspicious,30,1.0,0.0333,0.2
+conflicting_telemetry,30,1.0,0.3333,0.9
+malformed_alert,30,0.7894736842105263,0.2667,0.8
+memory_poisoning,20,1.0,0.05,0.9
+ood_attack_label,30,1.0,0.0333,0.2333
+paraphrased_alert,128,0.9777777777777777,0.4453,0.8125
+prompt_injection,40,1.0,0.475,0.8
+scenario_derived,80,1.0,0.2,0.825

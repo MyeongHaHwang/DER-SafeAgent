@@ -1,0 +1,164 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{What actually provides the safety}
+\label{sec:disc-safety}
+Across every experiment, deterministic mechanisms decide whether an unsafe action
+reaches the feeder: the Evidence Gate decides whether anything may act, the
+class-aware removals decide what may act, and the never-auto-execute rule
+keeps a model-proposed irreversible primitive from executing autonomously. The ablation
+localises containment almost entirely in the class-aware avoidance; components
+that improve the \emph{model's} behaviour leave the \emph{system's} safety
+unchanged, because safety was never delegated to the model. The trust boundary is
+placed so the model's error rate multiplies into operator workload and advisory
+quality, not physical consequence.
+
+\subsection{What the LLM contributes --- and does not}
+\label{sec:disc-llm}
+The evaluated LLM advisers do not improve physical outcomes. The projection arms
+show no statistically detectable difference from the deterministic fast path on
+ENS and curtailment ($+0.19$ and $+0.40$\,kWh versus D0, both Holm $p=1.0$); of
+the class-override arms, ClassOnly-L is worse after correction (Holm $p=0.041$)
+while ClassOnly-Q is worse in point estimate but not significant (Holm
+$p=0.107$); and the advisory path alone misses attacks the deterministic path
+catches --- its in-loop classification is far below the deterministic evidence
+mapping.
+Crucially, the ground-truth-class oracle through the same shield \emph{is}
+modestly better than the deterministic path ($-0.29$\,kWh, 95\% CI
+$[-0.69, -0.05]$, excluding zero; raw $p=0.015$ but Holm-adjusted
+$p=0.11$, so not significant after multiplicity correction). Two things
+follow. There is a small amount of headroom that a \emph{correct}
+classifier could capture, concentrated in the DoS cases where the
+deterministic EH ranking already recovers most of it; and the evaluated
+LLMs do not reach even that modest headroom. The result is not that
+advisory quality is irrelevant, but that runtime projection contains
+unsafe execution while leaving the model's contribution to physical
+performance small and, for the models we tested, unrealised. What the model does
+contribute is structured hypotheses, rationales for escalation, and an interface
+for operator interrogation. The present evaluation establishes \emph{containment}
+of the advisory model, not its operational utility: these outputs may support
+operator-facing workflows, but their effect on operator accuracy, workload,
+response time, and trust was not evaluated, and our groundedness audit
+(70--73\% templated rationales, 23--30\% asserting evidence absent from the
+input) shows the rationales are imperfect. Those benefits therefore remain
+hypotheses for future human-subject study. The defensible conclusion is that
+consultation can be isolated from direct execution authority within the tested
+architecture; whether that consultation is operationally worthwhile remains
+unestablished.
+
+\subsection{Why model output must gate neither action nor inaction}
+\label{sec:disc-confidence}
+The two sharpest negative results are mirror images. A shield variant that
+auto-executed an irreversible action on the model's stated confidence was worse
+than no shield, because injection payloads manufacture exactly the
+high-confidence prediction the gate keyed on; and a projection that honoured the
+model's \textsc{no\_op} stood down a deterministically evidenced DoS, because the
+attack shows the model a frozen copy of \emph{normal} telemetry --- the most
+plausible input for ``no incident.'' In both directions the attacker does not
+defeat the shield; it feeds the model. The rule is symmetric and, we believe,
+load-bearing for any LLM-in-the-loop runtime assurance: \emph{no
+attacker-influenceable quantity may relax a constraint on an irreversible action
+or stand down a deterministically evidenced incident}. Confidence, rationale,
+memory, predicted class, and proposed inaction all fail this test; protocol-level
+evidence computed outside the model passes it.
+
+\subsection{What the estimator episode teaches}
+\label{sec:disc-estimator}
+Counterfactual validation showed a plausible 60-second Energy Impact estimator
+selected a tie-optimal action in only about a third of configurations, because it
+was calibrated over a window on which the five primitives are nearly
+indistinguishable while their true costs diverge over the incident horizon. The
+repair needed no learning: the same physical priors, integrated over a
+dev-calibrated estimate of the \emph{remaining incident duration} with
+restoration-horizon accounting, rank optimally on the (small) held-out set. The
+lesson is that impact estimators in response systems must be validated against
+branched counterfactual rollouts \emph{at the horizon on which their decisions
+bind}. A second point: decision-time identifiability limits matter less than they
+appear --- replay and DoS cannot be distinguished when the whole telemetry
+sample is stale, but the minimax action (\textsc{freeze\_setpoint}) is
+optimal under one hypothesis and free under the other, so the ambiguity
+need not be resolved to act well.
+
+\subsection{What the evidence-provenance audit taught us}
+\label{sec:disc-provenance}
+A methodological point underlies the FDI result and generalises. A
+tempting way to detect false-data injection in a simulator is to consult a
+per-event flag that the attack generator itself sets; such a flag is
+categorical and perfectly reliable, and it makes a gate look stronger than
+any detector limited to observable evidence could be. We forbid it: every gate feature is
+computed only from wire-observable telemetry (Table~\ref{tab:provenance}).
+Under that discipline three families keep genuine protocol signatures
+(command packets, sequence regression, timestamp staleness), but a
+within-capacity FDI --- a reading that is wrong yet not physically
+impossible --- has no observable hard signature, and we report FDI coverage
+by magnitude and name redundant sensing as the missing ingredient. The
+general lesson is that in a simulation-based security evaluation the
+decisive audit is of \emph{where every runtime feature comes from}: a
+feature sourced from generator ground truth can make an architecture appear
+to solve a problem it has not. The runtime path uses no simulator attack labels
+or generator ground truth; its wire-observable evidence nonetheless remains
+forgeable wherever authentication or redundant sensing is absent, so we do not
+claim the detector is as strong as its clean-signal coverage suggests.
+
+\subsection{Can this run under realistic OT timing?}
+\label{sec:disc-timing}
+Yes, with a specific division of labour. The deterministic path ---
+FeatureView, gate, shield --- adds sub-millisecond per-tick cost and
+responds within one control tick of sustained evidence
+(${\approx}5$\,s with the frozen persistence thresholds). Model
+consultation costs ${\approx}5.5$\,s ($K{=}1$) on a consumer GPU, so it
+lands within a 10\,s SLO and is skipped under tighter deadlines with no
+loss of containment; $K{=}3$ ($\approx$17\,s) is not the default because
+it misses even a 15\,s SLO. The gate also rations the model's exposure: relative to the ungated model-only
+arms, benign-day consultations fall by more than 80\% (a descriptive comparison
+of consultation counts on the 16 benign holdout configurations), saving inference
+budget and reducing the model's exposure to attacker-controllable prompt content.
+Under DoS the response is honest rather than flattering: the ungated pipeline's
+apparent immunity in that family came from benign-day false freezes that happened
+to pre-mitigate later attacks; the gated system pays a small measured ENS cost
+for not false-acting
+on every benign day.
+
+\subsection{Limitations}
+\label{sec:disc-limitations}
+\begin{enumerate}
+\item \textbf{Benchmark and simulation scope.} All cyber-physical
+  results come from a StubFeeder co-simulation and static OpenDSS
+  snapshot solves on IEEE 13/34-node feeders; no dynamic time-series
+  study, no real feeder, no utility deployment. The StubFeeder's
+  physics (nominal-dispatch rule, ENS threshold) is exactly the
+  structure EH exploits; real-feeder EH would inherit real model error.
+\item \textbf{Model and data scope.} One adapter pair (Qwen2.5-7B,
+  Llama-3.1-8B) fine-tuned on one 200-example synthetic corpus;
+  evaluation prompts are scenario-derived rather than human-annotated;
+  results may not transfer to other backbones or corpora.
+\item \textbf{Detection-layer scope, and the FDI observability limit.}
+  The gate's observable protocol signatures (forged command packets, sequence
+  regression, staleness, rating-plausibility residual) presuppose an
+  instrumented protocol layer, and --- absent authentication --- are forgeable
+  by a network attacker rather than hard proof of an attack. Under the observable-only feature set, a
+  \emph{within-capacity} false-data-injection attack has no observable
+  hard signature and is not separable from benign operation without a
+  redundant measurement channel, which this simulator does not model;
+  such FDI is missed (gate-open $0/1$ at medium and low magnitude).
+  Benign protocol quirks (historian echo) remain unresolvable by the gate
+  alone, and a stealthy attacker who forges \emph{internally consistent}
+  protocol evidence is outside the evaluated threat suite.
+\item \textbf{Empirical, not formal, assurance.} Zero-execution results
+  are suite-bounded (95\% Clopper--Pearson upper bound $0.051$ on 70
+  cases); the invariants are deterministic and directly testable but not
+  formally proved, and an adaptive white-box adversary is not modelled.
+\item \textbf{Human factors.} HITL operators are deterministic
+  stand-ins. The observed escalation burden was strongly
+  backbone-dependent (SafeProj-Q escalated 6 of 33 attack configurations,
+  SafeProj-L none, because Qwen proposes the irreversible primitive far more
+  often than Llama), but the available evaluation was not designed to establish
+  the cause or the operational acceptability of that difference, and says
+  nothing about real operator workload, fatigue, or trust.
+\item \textbf{Auditability scope.} The audit chain provides append-only
+  integrity verified by tamper tests, not cryptographic timestamping or
+  a signature scheme.
+\item \textbf{Drift and lifecycle.} Adapters, thresholds and the frozen
+  gate calibration are point-in-time; concept drift, fleet
+  reconfiguration, and adversary adaptation over time are unevaluated.
+\end{enumerate}

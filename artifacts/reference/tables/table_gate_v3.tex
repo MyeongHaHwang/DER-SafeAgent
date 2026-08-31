@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering\small
+\caption{Evidence Gate detector-side coverage: per-group gate-open and benign
+false-open on the hash-frozen 32-configuration test set plus per-magnitude FDI
+probes, using only observable evidence. Thresholds calibrated on development
+data and frozen before this evaluation. Two-sided Clopper--Pearson 95\%
+intervals. Sub-capacity FDI (medium/low) has no observable hard signature and
+is reported as a coverage miss.}
+\label{tab:gate-v3}
+\begin{tabular}{lccc}
+\toprule
+Group & $k/n$ & Rate & 95\% CI \\
+\midrule
+Benign false-open & 4/16 & 0.25 & [0.07, 0.52] \\
+Gate-open command-spoof & 4/4 & 1.00 & [0.40, 1.00] \\
+Gate-open DoS & 4/4 & 1.00 & [0.40, 1.00] \\
+Gate-open FDI (high) & 1/1 & 1.00 & [0.03, 1.00] \\
+Gate-open FDI (low) & 0/1 & 0.00 & [0.00, 0.97] \\
+Gate-open FDI (med) & 0/1 & 0.00 & [0.00, 0.97] \\
+Gate-open replay & 4/4 & 1.00 & [0.40, 1.00] \\
+\bottomrule
+\end{tabular}
+\end{table}

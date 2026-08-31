@@ -1,0 +1,95 @@
+\appendix
+\section{Prompts and Agent Schemas}
+% Reviewer hooks: R2.C5, R3.C7
+%
+% This appendix reproduces verbatim every prompt used in the paper, so the
+% study is fully reproducible. Each listing prints its file path, byte
+% length, and SHA-256 hash; the same hashes are recorded in run manifests
+% per docs/reproducibility.md.
+
+\paragraph{Reproducibility note}
+The hashes printed beneath each listing are the values produced by
+``sha256sum'' on the file contents at submission time. Runs will refuse
+to start if the runtime hash does not match the manifest hash, so any
+post-submission editing of these prompts can be detected automatically.
+
+\subsection*{A.1 Single-LLM baseline prompt}
+\label{ssec:prompt-single-llm}
+File: \texttt{code/baselines/single\_llm/prompt.txt} \\
+SHA-256: {\small\texttt{49fff5dcd3b3b12ec71bdb4b85de01f23de777802895ad0acbe1ea4b963e79ac}}
+\begin{small}
+\verbatiminput{listings/single_llm_prompt.txt}
+\end{small}
+
+\subsection*{A.2 Hypothesis Agent prompt (DER-SecAgent)}
+\label{ssec:prompt-hypothesis}
+File: \texttt{code/Multi\_AI\_Agent/prompts/hypothesis.txt} \\
+SHA-256: {\small\texttt{b3012fae512e7deafd3e0fecb007c0ac76b22620c27c186191c8f47ffdf0501f}}
+\begin{small}
+\verbatiminput{listings/hypothesis.txt}
+\end{small}
+
+\subsection*{A.3 Energy Impact Agent prompt}
+\label{ssec:prompt-energy}
+File: \texttt{code/Multi\_AI\_Agent/prompts/energy\_estimator.txt} \\
+SHA-256: {\small\texttt{6bb31180b347b65812a4d69abe5b84ddb8e122695ee3cc51ac70be8ff28529d0}}
+\begin{small}
+\verbatiminput{listings/energy_estimator.txt}
+\end{small}
+
+\subsection*{A.4 Caution Agent prompt}
+\label{ssec:prompt-caution}
+File: \texttt{code/Multi\_AI\_Agent/prompts/caution.txt} \\
+SHA-256: {\small\texttt{798d1148b24985b37527c8dd5d28290db7a117482cf4f62c55d04fc88edbd17b}}
+\begin{small}
+\verbatiminput{listings/caution.txt}
+\end{small}
+
+\subsection*{A.5 Coordinator (Critic) Agent prompt}
+\label{ssec:prompt-coordinator}
+File: \texttt{code/Multi\_AI\_Agent/prompts/coordinator.txt} \\
+SHA-256: {\small\texttt{a8cf8133cb0c6300a318f372a573ce10be91bb1617512cad388398fac7907114}}
+\begin{small}
+\verbatiminput{listings/coordinator.txt}
+\end{small}
+
+\subsection*{A.6 Report Agent prompt and JSON schema}
+\label{ssec:prompt-report}
+File: \texttt{code/Multi\_AI\_Agent/prompts/report.txt} \\
+SHA-256: {\small\texttt{d68d2778d4d3f27b33659d84459a27515b9fc6470bb3b7a8be91a47e96c0270b}}
+\begin{small}
+\verbatiminput{listings/report.txt}
+\end{small}
+
+\subsection*{A.7 Strategy hint templates}
+\label{ssec:prompt-strategy}
+\paragraph{Chain-of-Thought hint}
+File: \texttt{code/Multi\_AI\_Agent/prompts/cot.txt} \\
+SHA-256: {\small\texttt{2536b39f42c9524ec019f372c34d5b5b0dd9ff6ae3bc24a2b96635a6b62043ce}}
+\begin{small}
+\verbatiminput{listings/cot.txt}
+\end{small}
+
+\paragraph{Tree-of-Thought hint}
+File: \texttt{code/Multi\_AI\_Agent/prompts/tot.txt} \\
+SHA-256: {\small\texttt{3371065aeae55cf62554b4c115648bfd730b38d755e0db6b8035832af2956e86}}
+\begin{small}
+\verbatiminput{listings/tot.txt}
+\end{small}
+
+\paragraph{Few-shot exemplars}
+The four held-in exemplars used by the Few-shot variant are
+\texttt{syn-00000}, \texttt{syn-00001}, \texttt{syn-00002}, and
+\texttt{syn-00009} from the train split of the v0.1 corpus
+(SHA-256 of \texttt{train.jsonl}:
+\texttt{9de44c2780c9a8ab2baffa8517faab4ac9350797b9aa36734730deb3257b4845};
+see Data Card). Each is a one-turn (user, assistant) pair conforming
+to the Hypothesis Agent schema.
+
+\subsection*{A.8 Judge prompt and scoring rubric}
+\label{ssec:prompt-judge}
+File: \texttt{code/Multi\_AI\_Agent/prompts/judge.txt} \\
+SHA-256: {\small\texttt{c19f0fc249000222aa18525edaf4d997f3682c7079940154cae7426eb209e270}}
+\begin{small}
+\verbatiminput{listings/judge.txt}
+\end{small}

@@ -1,0 +1,80 @@
+{
+  "split": "holdout",
+  "n_configurations": 12,
+  "eps_tie_kwh": 0.01,
+  "estimators": {
+    "E60": {
+      "n_configurations": 12,
+      "top1_eps": 0.3333333333333333,
+      "top1_eps_ci95": [
+        0.08333333333333333,
+        0.5833333333333334
+      ],
+      "top1_strict_legacy": 0.0,
+      "top2_recall": 0.75,
+      "spearman_mean": 0.4220412585204983,
+      "kendall_tau_mean": 0.511904761904762,
+      "mae_curtailment_kwh": 31.587811342592655,
+      "mae_ens_kwh": 13.782174119647891,
+      "mean_regret": 76.340170929483,
+      "median_regret": 14.911805555555244,
+      "median_regret_ci95": [
+        0.0,
+        154.95089285714343
+      ],
+      "p95_regret": 226.1954405929046,
+      "zero_regret_frac": 0.3333333333333333,
+      "realised_ens_kwh_mean": 13.651518940909723,
+      "realised_curt_kwh_mean": 32.324936342592636
+    },
+    "EH": {
+      "n_configurations": 12,
+      "top1_eps": 1.0,
+      "top1_eps_ci95": [
+        1.0,
+        1.0
+      ],
+      "top1_strict_legacy": 1.0,
+      "top2_recall": 1.0,
+      "spearman_mean": 0.7851569519421178,
+      "kendall_tau_mean": 1.0,
+      "mae_curtailment_kwh": 26.25616666666673,
+      "mae_ens_kwh": 14.680742713752174,
+      "mean_regret": 0.0,
+      "median_regret": 0.0,
+      "median_regret_ci95": [
+        0.0,
+        0.0
+      ],
+      "p95_regret": 0.0,
+      "zero_regret_frac": 1.0,
+      "realised_ens_kwh_mean": 0.18642456982793118,
+      "realised_curt_kwh_mean": 23.310237268518602
+    },
+    "EMH": {
+      "n_configurations": 12,
+      "top1_eps": 1.0,
+      "top1_eps_ci95": [
+        1.0,
+        1.0
+      ],
+      "top1_strict_legacy": 1.0,
+      "top2_recall": 1.0,
+      "spearman_mean": 0.7851569519421178,
+      "kendall_tau_mean": 1.0,
+      "mae_curtailment_kwh": 26.25616666666673,
+      "mae_ens_kwh": 14.680742713752174,
+      "mean_regret": 0.0,
+      "median_regret": 0.0,
+      "median_regret_ci95": [
+        0.0,
+        0.0
+      ],
+      "p95_regret": 0.0,
+      "zero_regret_frac": 1.0,
+      "realised_ens_kwh_mean": 0.18642456982793118,
+      "realised_curt_kwh_mean": 23.310237268518602
+    }
+  },
+  "note": "prior frozen from dev before holdout evaluation; rollouts never consult any estimator"
+}

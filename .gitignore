@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# Regenerated artifacts (references are tracked under artifacts/reference/)
+artifacts/tables/
+artifacts/figures/
+artifacts/processed/
+artifacts/environment_local.json
+
+# Run outputs created by re-execution (canonical archived results ARE tracked;
+# per-run trace dumps are not)
+code/results/ijcip_final_v3/holdout_e2e/runs/
+code/results/ijcip_final/opendss_check/runs/
+code/simulation/runs/
+
+# Non-redistributable third-party datasets (obtain per data/README.md)
+code/datasets/unsw_mg24/raw/alerts.csv
+code/datasets/unsw_mg24/Benign*
+code/datasets/unsw_mg24/Malicious*
+code/datasets/unsw_mg24/Synthetic*
+code/datasets/ton_iot/*.csv
+code/datasets/ton_iot/*.parquet
+
+# Local base-model snapshots (never commit model weights)
+models/
+
+# Editor / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Local packaging leftovers (never commit archives of the repo itself)
+DER-SafeAgent.zip
+*.zip
+
+# LaTeX build artifacts (the manuscript source is tracked under paper/;
+# compiled PDFs are built locally, not tracked)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc
+paper/main.pdf
+paper/supplementary.pdf
+paper/main.log
+paper/supplementary.log

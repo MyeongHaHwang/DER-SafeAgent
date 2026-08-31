@@ -1,0 +1,9 @@
+# QLoRA adapter weights are stored via Git LFS (154-160 MB each; over the
+# GitHub 100 MB hard limit as normal blobs). Run `git lfs install` before
+# cloning/pushing, or fetch adapters from the release archive instead —
+# scripts/verify_artifacts.py checks their SHA-256 either way.
+*.safetensors filter=lfs diff=lfs merge=lfs -text
+
+# Keep JSONL/CSV canonical bytes stable across platforms (checksummed).
+*.jsonl -text
+*.csv -text

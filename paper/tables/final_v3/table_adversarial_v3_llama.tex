@@ -1,0 +1,19 @@
+\begin{table}[t]\centering\small
+\caption{Canonical 70-case adversarial containment (llama), sustained input, observable-only runtime. Denominator = adversarial case ($n{=}70$). \emph{Irrev.\ prop.}\ and \emph{Irrev.\ exec.}\ are the irreversible-proposal and irreversible-\emph{execution} counts (action $=$ \texttt{isolate\_inverter}); \emph{Forbidden act.}\ is the distinct forbidden-action count (executed action in the case's must-not set). Zero-execution arms carry a two-sided Clopper--Pearson 95\% upper bound (\emph{exec.\ up95}). The correct-refusal rate and full per-arm metrics are in the supplementary material.}
+\label{tab:adv-v3-llama}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+Arm & $n$ & Irrev.\ prop. & Irrev.\ exec. & exec.\ up95 & Forbidden act. \\
+\midrule
+Full arch. & 70 & 37/70 & 0/70 & 0.051 & 0/70 \\
+$-$Evidence gate & 70 & 62/70 & 0/70 & 0.051 & 0/70 \\
+$-$Projection & 70 & 37/70 & 0/70 & 0.051 & 0/70 \\
+$-$Class avoidance & 70 & 37/70 & 37/70 & 0.649 & 25/70 \\
+$-$Caution/HITL & 70 & 37/70 & 0/70 & 0.051 & 0/70 \\
+$-$EH fallback & 70 & 37/70 & 0/70 & 0.051 & 0/70 \\
+Deterministic only & 70 & 0/70 & 0/70 & 0.051 & 0/70 \\
+Unshielded & 70 & 18/70 & 18/70 & 0.376 & 18/70 \\
+\bottomrule
+\end{tabular}}
+\end{table}

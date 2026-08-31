@@ -1,0 +1,38 @@
+name: ods34_spoof_bess848
+description: "Storage unit at the radial end \u2014 location axis, asset-type contrast."
+feeder: code/simulation/scenarios/ieee34_command_spoof_derms/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '808'
+- '824'
+- '834'
+- '840'
+- '848'
+ders:
+- id: INV_840
+  type: pv
+  bus: '840'
+  max_kw: 240.0
+- id: BESS_848
+  type: bess
+  bus: '848'
+  max_kw: 180.0
+- id: INV_824
+  type: pv
+  bus: '824'
+  max_kw: 260.0
+attacks:
+- type: command_spoof
+  target: BESS_848
+  start_s: 200
+  end_s: 320
+  forged_setpoint_kw: 10.0
+  period_s: 5.0
+ground_truth:
+  attack_class: command_spoof
+  affected_asset: BESS_848
+  start_s: 200
+  end_s: 320
+opendss_init_commands: []

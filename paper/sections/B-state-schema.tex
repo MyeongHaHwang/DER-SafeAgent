@@ -1,0 +1,56 @@
+\section{LangGraph State Schema and Inter-Agent Contract}
+\label{sec:appendix-state}
+% Reviewer hooks: R3.C7
+%
+% Reproduces the TypedDict schema used to pass state between the five
+% agents (plus the post-hoc Report Agent). The source of truth is
+% code/Multi_AI_Agent/states.py; this appendix is a verbatim listing.
+
+\paragraph{Source}
+The schema is defined as a Python \texttt{TypedDict} in
+\texttt{code/Multi\_AI\_Agent/states.py}; the verbatim listing follows.
+Inter-agent communication is by mutation of a single
+\texttt{AgentState} dictionary, which both keeps the LangGraph
+state-machine declarative and lets the harness persist a complete decision
+record per invocation.
+
+\begin{small}
+\verbatiminput{listings/states.py}
+\end{small}
+
+\paragraph{Field ownership}
+The 2026 v2 fields added on top of the 2025 schema are owned by exactly
+one agent each, so a transcript of the state at any node boundary is
+sufficient to attribute every value to a producer:
+
+\begin{tabular}{lll}
+\toprule
+Field & Producer & Consumers \\
+\midrule
+\texttt{feature\_view}        & Telemetry Analyst & Hypothesis, Energy, Coordinator \\
+\texttt{hypothesis}           & Hypothesis Agent  & Caution, Coordinator \\
+\texttt{attack\_class}        & Hypothesis Agent  & Caution, Coordinator, harness \\
+\texttt{confidence}           & Hypothesis Agent  & Caution, Coordinator, harness \\
+\texttt{proposed\_action}     & Hypothesis Agent  & Caution, Coordinator (informational) \\
+\texttt{expected\_impact\_tier}& Hypothesis Agent & Caution \\
+\texttt{impact\_estimates}    & Energy Impact Ag. & Coordinator \\
+\texttt{caution}              & Caution Agent     & Coordinator \\
+\texttt{caution\_reason}      & Caution Agent     & Coordinator, audit \\
+\texttt{final\_action}        & Coordinator       & harness, audit \\
+\texttt{final\_action\_target}& Coordinator       & harness, audit \\
+\texttt{final\_impact\_tier}  & Coordinator       & audit \\
+\texttt{coordinator\_decision}& Coordinator       & harness (HITL routing) \\
+\texttt{coordinator\_reason}  & Coordinator       & audit \\
+\texttt{chosen\_for\_hitl}    & Coordinator       & HITL operator \\
+\texttt{decision\_id}         & Hypothesis Agent  & Report, audit \\
+\texttt{report}               & Report Agent      & audit (hash-chain) \\
+\bottomrule
+\end{tabular}
+
+\paragraph{Topology}
+The LangGraph topology is built in
+\texttt{code/Multi\_AI\_Agent/build\_graph.py}; the v2 pipeline runs as
+\textsc{Telemetry Analyst} $\to$ \textsc{Hypothesis} $\to$
+\textsc{Energy Impact} $\to$ \textsc{Caution} $\to$
+\textsc{Coordinator} $\to$ END, with the Report Agent invoked
+post-hoc per resolved incident.

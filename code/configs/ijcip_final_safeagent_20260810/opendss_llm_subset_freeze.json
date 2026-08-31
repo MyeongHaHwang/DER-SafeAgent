@@ -1,0 +1,6 @@
+{
+  "frozen_at": "2026-08-10",
+  "rule": "subset selected & frozen BEFORE any model execution",
+  "n": 12,
+  "manifest_sha256": "853f67dfbe8929aa69b0b0ab706663e5b797257978ea104695775cad1d80ec7d"
+}

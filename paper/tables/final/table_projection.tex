@@ -1,0 +1,27 @@
+\begin{table}[t]
+\centering\small
+\caption{Final-architecture cyber-physical outcomes over the frozen
+25-configuration library $\times$ 3 genuine stochastic episodes (75 runs per
+arm; configuration is the inference unit and episode means are aggregated
+per configuration). All arms run behind the frozen Evidence Gate. Q1/L1 use
+the class-override shield; QPROJ/LPROJ the corrected safety projection
+(model-proposed irreversible primitives always escalate; EH ranks the safe
+set on fallback); OPROJ feeds the ground-truth class through the same
+projection logic. Proposal-honoured / fallback / override columns count
+decision-steps --- the deterministic layers re-evaluate every triggered
+tick --- not incidents.}
+\label{tab:projection}
+\begin{tabular}{lccccccc}
+\toprule
+Arm & ENS & Curt. & LLM & Proposal & Det. & Safety & HITL \\
+ & (kWh) & (kWh) & calls & honoured & fallback & override & \\
+\midrule
+D0 & 0.28 & 10.55 & 0 & 0 & 0 & 0 & 0 \\
+Q1 & 3.16 & 12.61 & 216 & 0 & 0 & 0 & 0 \\
+L1 & 3.86 & 13.01 & 216 & 0 & 0 & 0 & 0 \\
+QPROJ & 0.16 & 10.97 & 156 & 1002 & 5154 & 0 & 0 \\
+LPROJ & 1.79 & 11.76 & 160 & 573 & 5689 & 0 & 0 \\
+OPROJ & 0.16 & 10.97 & 0 & 0 & 9654 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}

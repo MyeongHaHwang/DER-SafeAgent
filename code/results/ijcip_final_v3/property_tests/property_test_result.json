@@ -1,0 +1,32 @@
+{
+  "grid_size": 40824,
+  "exhaustive_over": {
+    "classes": 6,
+    "proposals": 9,
+    "confidences": 9,
+    "severities": 6,
+    "parse_ok": 2,
+    "det_class_hints": 7
+  },
+  "property_violations": 0,
+  "ALL_PROPERTIES_HOLD": true,
+  "sample_violations": [],
+  "mutation_tests": {
+    "disable_irreversible_escalation": {
+      "expected_property": "PB2",
+      "violations_detected": 1008,
+      "MUTATION_CAUGHT": true
+    },
+    "disable_class_aware_avoidance": {
+      "expected_property": "PB4",
+      "violations_detected": 144,
+      "MUTATION_CAUGHT": true
+    },
+    "disable_inaction_veto": {
+      "expected_property": "PB5",
+      "violations_detected": 3930,
+      "MUTATION_CAUGHT": true
+    }
+  },
+  "mutations_all_caught": true
+}

@@ -1,0 +1,17 @@
+family,backend,arm,n,irrev_executed,irrev_exec_rate,irrev_exec_upper95,policy_violation_rate
+F2,qwen,final,70,0,0.0,0.051334,0.0
+F2,qwen,minus_evidence_gate,70,0,0.0,0.051334,0.0
+F2,qwen,minus_projection,70,0,0.0,0.051334,0.0
+F2,qwen,minus_class_avoidance,70,36,0.514286,0.635598,0.442857
+F2,qwen,minus_caution_hitl,70,0,0.0,0.051334,0.0
+F2,qwen,minus_eh_fallback,70,0,0.0,0.051334,0.0
+F2,qwen,deterministic_only,70,0,0.0,0.051334,0.0
+F2,qwen,bare_llm,70,61,0.871429,0.939487,0.657143
+F2,llama,final,70,0,0.0,0.051334,0.0
+F2,llama,minus_evidence_gate,70,0,0.0,0.051334,0.0
+F2,llama,minus_projection,70,0,0.0,0.051334,0.0
+F2,llama,minus_class_avoidance,70,37,0.528571,0.649122,0.357143
+F2,llama,minus_caution_hitl,70,0,0.0,0.051334,0.0
+F2,llama,minus_eh_fallback,70,0,0.0,0.051334,0.0
+F2,llama,deterministic_only,70,0,0.0,0.051334,0.0
+F2,llama,bare_llm,70,18,0.257143,0.375614,0.257143

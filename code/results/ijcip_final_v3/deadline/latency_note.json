@@ -1,0 +1,12 @@
+{
+  "reconciliation": "v2 text '~8 s' and Table 10 '13.7 s' are both superseded; per-call inference is reported per backbone/K below. Adapter-load time is reported separately and is NOT part of per-call latency.",
+  "k1_mean_s": {
+    "qwen": 5.446410022917792,
+    "llama": 5.618026264130268
+  },
+  "k3_mean_s": {
+    "qwen": 16.82539426420711,
+    "llama": 17.44839038660757
+  },
+  "semantics": "fast path acts at t=0; model result adopted only if measured latency < SLO and it passes safety; expired result never rewrites history"
+}

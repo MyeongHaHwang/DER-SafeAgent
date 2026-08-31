@@ -1,0 +1,332 @@
+{
+  "primary_family_holdout_ENS_vs_D0": [
+    {
+      "contrast": "L1-D0",
+      "mean_diff_kwh": 4.3976,
+      "ci95": [
+        2.0283,
+        7.0443
+      ],
+      "d_z": 0.574,
+      "n_cfg": 33,
+      "p_raw": 0.0039,
+      "p_holm": 0.0346,
+      "holm_significant": true
+    },
+    {
+      "contrast": "LPROJ-D0",
+      "mean_diff_kwh": 0.3983,
+      "ci95": [
+        -0.4831,
+        1.6069
+      ],
+      "d_z": 0.126,
+      "n_cfg": 33,
+      "p_raw": 0.7291,
+      "p_holm": 1.0,
+      "holm_significant": false
+    },
+    {
+      "contrast": "OPROJ-D0",
+      "mean_diff_kwh": -0.285,
+      "ci95": [
+        -0.6881,
+        -0.0504
+      ],
+      "d_z": -0.269,
+      "n_cfg": 33,
+      "p_raw": 0.0156,
+      "p_holm": 0.1057,
+      "holm_significant": false
+    },
+    {
+      "contrast": "Q1-D0",
+      "mean_diff_kwh": 3.6543,
+      "ci95": [
+        1.3588,
+        6.3443
+      ],
+      "d_z": 0.491,
+      "n_cfg": 33,
+      "p_raw": 0.0151,
+      "p_holm": 0.1057,
+      "holm_significant": false
+    },
+    {
+      "contrast": "QPROJ-D0",
+      "mean_diff_kwh": 0.1859,
+      "ci95": [
+        -0.6217,
+        1.3286
+      ],
+      "d_z": 0.063,
+      "n_cfg": 33,
+      "p_raw": 1.0,
+      "p_holm": 1.0,
+      "holm_significant": false
+    },
+    {
+      "contrast": "bareL-D0",
+      "mean_diff_kwh": 8.1328,
+      "ci95": [
+        4.2834,
+        12.5257
+      ],
+      "d_z": 0.661,
+      "n_cfg": 33,
+      "p_raw": 0.0006,
+      "p_holm": 0.0072,
+      "holm_significant": true
+    },
+    {
+      "contrast": "bareQ-D0",
+      "mean_diff_kwh": 8.1328,
+      "ci95": [
+        4.2483,
+        12.4997
+      ],
+      "d_z": 0.661,
+      "n_cfg": 33,
+      "p_raw": 0.0006,
+      "p_holm": 0.0072,
+      "holm_significant": true
+    }
+  ],
+  "adversarial_containment": {
+    "qwen": {
+      "final": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "minus_evidence_gate": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "minus_projection": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "minus_class_avoidance": {
+        "n": 70,
+        "irrev_executed": 36,
+        "irrev_exec_rate": 0.5143,
+        "irrev_exec_cp_upper95": 0.6356,
+        "forbidden_action_rate": 0.4429
+      },
+      "minus_caution_hitl": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "minus_eh_fallback": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "deterministic_only": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "bare_llm": {
+        "n": 70,
+        "irrev_executed": 61,
+        "irrev_exec_rate": 0.8714,
+        "irrev_exec_cp_upper95": 0.9395,
+        "forbidden_action_rate": 0.6571
+      }
+    },
+    "llama": {
+      "final": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "minus_evidence_gate": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "minus_projection": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "minus_class_avoidance": {
+        "n": 70,
+        "irrev_executed": 37,
+        "irrev_exec_rate": 0.5286,
+        "irrev_exec_cp_upper95": 0.6491,
+        "forbidden_action_rate": 0.3571
+      },
+      "minus_caution_hitl": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "minus_eh_fallback": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "deterministic_only": {
+        "n": 70,
+        "irrev_executed": 0,
+        "irrev_exec_rate": 0.0,
+        "irrev_exec_cp_upper95": 0.0513,
+        "forbidden_action_rate": 0.0
+      },
+      "bare_llm": {
+        "n": 70,
+        "irrev_executed": 18,
+        "irrev_exec_rate": 0.2571,
+        "irrev_exec_cp_upper95": 0.3756,
+        "forbidden_action_rate": 0.2571
+      }
+    }
+  },
+  "gate_detector_side": {
+    "benign_false_open": {
+      "k": 4,
+      "n": 16,
+      "rate": 0.25,
+      "ci95": [
+        0.0727,
+        0.5238
+      ]
+    },
+    "gateopen_command_spoof": {
+      "k": 4,
+      "n": 4,
+      "rate": 1.0,
+      "ci95": [
+        0.3976,
+        1.0
+      ]
+    },
+    "gateopen_dos": {
+      "k": 4,
+      "n": 4,
+      "rate": 1.0,
+      "ci95": [
+        0.3976,
+        1.0
+      ]
+    },
+    "gateopen_fdi": {
+      "k": 3,
+      "n": 4,
+      "rate": 0.75,
+      "ci95": [
+        0.1941,
+        0.9937
+      ]
+    },
+    "gateopen_fdi_high": {
+      "k": 1,
+      "n": 1,
+      "rate": 1.0,
+      "ci95": [
+        0.025,
+        1.0
+      ]
+    },
+    "gateopen_fdi_low": {
+      "k": 0,
+      "n": 1,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.975
+      ]
+    },
+    "gateopen_fdi_med": {
+      "k": 0,
+      "n": 1,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.975
+      ]
+    },
+    "gateopen_replay": {
+      "k": 4,
+      "n": 4,
+      "rate": 1.0,
+      "ci95": [
+        0.3976,
+        1.0
+      ]
+    }
+  },
+  "notes": "Configuration is the inference unit; episodes averaged within configuration. Paired sign-flip permutation + paired bootstrap 95% CI + Cohen's d_z, Holm within family. OPROJ-D0 CI excludes zero but Holm p=0.106 (not significant).",
+  "gate_authentication": [
+    {
+      "policy": "naive",
+      "metric": "spoof_gate_open",
+      "k": 3,
+      "n": 3,
+      "rate": 1.0
+    },
+    {
+      "policy": "naive",
+      "metric": "benign_false_open",
+      "k": 2,
+      "n": 2,
+      "rate": 1.0
+    },
+    {
+      "policy": "auth_required",
+      "metric": "spoof_gate_open",
+      "k": 3,
+      "n": 3,
+      "rate": 1.0
+    },
+    {
+      "policy": "auth_required",
+      "metric": "benign_false_open",
+      "k": 0,
+      "n": 2,
+      "rate": 0.0
+    },
+    {
+      "policy": "no_auth",
+      "metric": "spoof_gate_open",
+      "k": 3,
+      "n": 3,
+      "rate": 1.0
+    },
+    {
+      "policy": "no_auth",
+      "metric": "benign_false_open",
+      "k": 2,
+      "n": 2,
+      "rate": 1.0
+    }
+  ]
+}

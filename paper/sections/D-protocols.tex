@@ -1,0 +1,35 @@
+\section{Byte-Level Worked Examples on Modbus and DNP3}
+\label{sec:appendix-protocols}
+
+This appendix reproduces the register-level / object-group
+details of the two byte-stable end-to-end traces summarised in
+\S\ref{sec:method-protocols}. Both traces are checked in at
+\texttt{code/Multi\_AI\_Agent/examples/} for byte-level
+reproducibility.
+
+\paragraph{Modbus example
+(\texttt{01\_modbus\_command\_spoof.json}).}
+A function-code-6 single-register write targets register~$40031$
+(the SunSpec Common Block \textit{P-set} point) of
+\texttt{INV\_634}, forcing the inverter's dispatch from $140$\,kW
+to $25$\,kW. The Telemetry Analyst flags
+\texttt{dominant\_signal=command}; the Hypothesis Agent classifies
+the event as \texttt{command\_spoof} with $\hat{c}=0.75$; the
+Coordinator's class-specific override emits
+\texttt{freeze\_setpoint}. The terminal-ready mitigation issued by
+the StackStorm adapter is
+\texttt{iec61850-cli --device INV\_634 control DPCSO1.SetPoint
+--mode freeze --restore-from last\_validated}.
+
+\paragraph{DNP3 example (\texttt{02\_dnp3\_fdi\_inverter.json}).}
+A DNP3 outstation reports an analog input (object group~30,
+variation~5) at index~12 carrying a $200$\,kW reading while the
+physical truth is $140$\,kW --- a $+60$\,kW FDI bias on the same
+inverter. The Telemetry Analyst flags
+\texttt{dominant\_signal=tampered}; the Hypothesis Agent classifies
+as \texttt{fdi}; the Coordinator's class-aware avoidance set drops
+\texttt{isolate\_inverter} and emits \texttt{freeze\_setpoint}.
+The mitigation script is identical to the Modbus case, which is
+the intended substation-side abstraction: protocol-specific
+intrusion evidence converges into a protocol-agnostic IEC~61850
+control primitive.

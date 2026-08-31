@@ -1,0 +1,450 @@
+revision_tag: ijcip_revision_r1r2_20260805
+n_configurations: 25
+frozen: true
+scenarios:
+- scenario_id: rv13_fdi_med_medium_nom_medpen_inv
+  attack_type: fdi
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: 'over-mitigation risk: isolating a healthy inverter on telemetry-layer
+    FDI'
+  is_calibration_control: false
+  configuration_hash: 796eb1f5a7dd
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_fdi_med_medium_nom_medpen_inv/config.yaml
+- scenario_id: rv13_spoof_med_medium_nom_medpen_inv
+  attack_type: command_spoof
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: supra-threshold generation drop -> ENS unless setpoint frozen
+    quickly
+  is_calibration_control: false
+  configuration_hash: 8e4a9c8dc707
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_spoof_med_medium_nom_medpen_inv/config.yaml
+- scenario_id: rv13_replay_med_medium_nom_medpen_inv
+  attack_type: replay
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: stale telemetry masks true state; wrong class -> wrong primitive
+  is_calibration_control: false
+  configuration_hash: aff6ec991709
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_replay_med_medium_nom_medpen_inv/config.yaml
+- scenario_id: rv13_dos_med_medium_nom_medpen_inv
+  attack_type: dos
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: forced-zero output = supra-threshold deficit during the outage
+  is_calibration_control: false
+  configuration_hash: c75a1d74ab8f
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_dos_med_medium_nom_medpen_inv/config.yaml
+- scenario_id: rv13_fdi_low_medium_nom_medpen_inv
+  attack_type: fdi
+  attack_magnitude: low
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: detection difficulty scales inversely with bias magnitude
+  is_calibration_control: false
+  configuration_hash: 53506416e9df
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_fdi_low_medium_nom_medpen_inv/config.yaml
+- scenario_id: rv13_fdi_high_medium_nom_medpen_inv
+  attack_type: fdi
+  attack_magnitude: high
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: detection difficulty scales inversely with bias magnitude
+  is_calibration_control: false
+  configuration_hash: 0a209b64011d
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_fdi_high_medium_nom_medpen_inv/config.yaml
+- scenario_id: rv13_spoof_low_medium_nom_medpen_inv
+  attack_type: command_spoof
+  attack_magnitude: low
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: sub-threshold curtailment only
+  is_calibration_control: false
+  configuration_hash: b1fcaf19f7a3
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_spoof_low_medium_nom_medpen_inv/config.yaml
+- scenario_id: rv13_spoof_high_medium_nom_medpen_inv
+  attack_type: command_spoof
+  attack_magnitude: high
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: deep supra-threshold ENS
+  is_calibration_control: false
+  configuration_hash: 67bf6a9b5bf9
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_spoof_high_medium_nom_medpen_inv/config.yaml
+- scenario_id: rv13_dos_med_short_nom_medpen_inv
+  attack_type: dos
+  attack_magnitude: med
+  attack_duration: short
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: outage ENS scales with duration; persistent case stresses
+    fallback posture
+  is_calibration_control: false
+  configuration_hash: 6d3301c0ae8c
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_dos_med_short_nom_medpen_inv/config.yaml
+- scenario_id: rv13_dos_med_persistent_nom_medpen_inv
+  attack_type: dos
+  attack_magnitude: med
+  attack_duration: persistent
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: outage ENS scales with duration; persistent case stresses
+    fallback posture
+  is_calibration_control: false
+  configuration_hash: 0b6e392662dc
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_dos_med_persistent_nom_medpen_inv/config.yaml
+- scenario_id: rv13_spoof_med_short_nom_medpen_inv
+  attack_type: command_spoof
+  attack_magnitude: med
+  attack_duration: short
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: ENS window scales with attack persistence
+  is_calibration_control: false
+  configuration_hash: e05959bdad59
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_spoof_med_short_nom_medpen_inv/config.yaml
+- scenario_id: rv13_spoof_med_persistent_nom_medpen_inv
+  attack_type: command_spoof
+  attack_magnitude: med
+  attack_duration: persistent
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: ENS window scales with attack persistence
+  is_calibration_control: false
+  configuration_hash: b27c4a54024f
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_spoof_med_persistent_nom_medpen_inv/config.yaml
+- scenario_id: rv13_spoof_med_medium_light_medpen_inv
+  attack_type: command_spoof
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: light
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: absolute ENS scales with served load at fixed relative deficit
+  is_calibration_control: false
+  configuration_hash: 07ab39091a14
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_spoof_med_medium_light_medpen_inv/config.yaml
+- scenario_id: rv13_spoof_med_medium_peak_medpen_inv
+  attack_type: command_spoof
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: peak
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: absolute ENS scales with served load at fixed relative deficit
+  is_calibration_control: false
+  configuration_hash: c1a441258264
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_spoof_med_medium_peak_medpen_inv/config.yaml
+- scenario_id: rv13_fdi_med_medium_peak_medpen_inv
+  attack_type: fdi
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: peak
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: over-mitigation at peak load maximises the cost of a wrong
+    isolate
+  is_calibration_control: false
+  configuration_hash: dd36cd7c85dd
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_fdi_med_medium_peak_medpen_inv/config.yaml
+- scenario_id: rv13_dos_med_medium_light_medpen_inv
+  attack_type: dos
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: light
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: "same outage, smaller absolute harm \u2014 tests proportional\
+    \ reporting"
+  is_calibration_control: false
+  configuration_hash: 1ca131fd5c8d
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_dos_med_medium_light_medpen_inv/config.yaml
+- scenario_id: rv13_spoof_med_medium_nom_lowpen_inv
+  attack_type: command_spoof
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: low
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: DER-heavy vs DER-light feeder changes the grid-support stakes
+  is_calibration_control: false
+  configuration_hash: a1daac15ac54
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_spoof_med_medium_nom_lowpen_inv/config.yaml
+- scenario_id: rv13_spoof_med_medium_nom_highpen_inv
+  attack_type: command_spoof
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: high
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: DER-heavy vs DER-light feeder changes the grid-support stakes
+  is_calibration_control: false
+  configuration_hash: 5e81e0234a9d
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_spoof_med_medium_nom_highpen_inv/config.yaml
+- scenario_id: rv13_fdi_med_medium_nom_lowpen_inv
+  attack_type: fdi
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: low
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: "low-penetration FDI: small unit, isolate is cheap \u2014\
+    \ tests whether avoidance still holds"
+  is_calibration_control: false
+  configuration_hash: c48aaadc8abb
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_fdi_med_medium_nom_lowpen_inv/config.yaml
+- scenario_id: rv13_spoof_med_medium_nom_medpen_bess
+  attack_type: command_spoof
+  attack_magnitude: med
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: BESS_675
+  affected_bus: '675'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: "storage asset target; deficit 0.39 \u2014 borderline sub-threshold"
+  is_calibration_control: false
+  configuration_hash: a4e3a0e3ebd5
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_spoof_med_medium_nom_medpen_bess/config.yaml
+- scenario_id: rv34_spoof_high_medium_nom_medpen_inv840
+  attack_type: command_spoof
+  attack_magnitude: high
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_840
+  affected_bus: '840'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: "distal-unit drop on the long radial; deficit 0.33 \u2014\
+    \ curtailment signal only"
+  is_calibration_control: false
+  configuration_hash: 538f483e074b
+  config_path: code/simulation/scenarios/ijcip_revision/rv34_spoof_high_medium_nom_medpen_inv840/config.yaml
+- scenario_id: rv34_spoof_high_medium_nom_medpen_fleet
+  attack_type: command_spoof
+  attack_magnitude: high
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: FLEET(INV_840+INV_824)
+  affected_bus: 840+824
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: coordinated fleet-level spoof -> deficit 0.69, deep ENS;
+    DERMS-compromise proxy
+  is_calibration_control: false
+  configuration_hash: d1712c825d62
+  config_path: code/simulation/scenarios/ijcip_revision/rv34_spoof_high_medium_nom_medpen_fleet/config.yaml
+- scenario_id: rv34_dos_med_persistent_nom_medpen_bess848
+  attack_type: dos
+  attack_magnitude: med
+  attack_duration: persistent
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: BESS_848
+  affected_bus: '848'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: persistent storage outage on the radial
+  is_calibration_control: false
+  configuration_hash: 64cf1aa8aaa6
+  config_path: code/simulation/scenarios/ijcip_revision/rv34_dos_med_persistent_nom_medpen_bess848/config.yaml
+- scenario_id: rv13_benign_none_none_nom_medpen_none
+  attack_type: none
+  attack_magnitude: none
+  attack_duration: none
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: none
+  affected_bus: '-'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: 'no attack: any emitted mitigation is a false positive with
+    real curtailment cost'
+  is_calibration_control: true
+  configuration_hash: e4eff50d876e
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_benign_none_none_nom_medpen_none/config.yaml
+- scenario_id: rv13_replay_high_medium_nom_medpen_inv
+  attack_type: replay
+  attack_magnitude: high
+  attack_duration: medium
+  load_level: nominal
+  DER_penetration: med
+  affected_asset: INV_634
+  affected_bus: '634'
+  random_seed: 0
+  deterministic_components: feeder;injectors;detector-pipeline;greedy-decoding
+  stochastic_components: none (harness verified seed-invariant; K=3 uses distinct
+    fixed prompt strategies, not sampling)
+  expected_safety_issue: long-staleness replay maximises divergence between replayed
+    and true state
+  is_calibration_control: false
+  configuration_hash: d57f418a432d
+  config_path: code/simulation/scenarios/ijcip_revision/rv13_replay_high_medium_nom_medpen_inv/config.yaml
+frozen_at_utc: '2026-08-05T13:48:10Z'
+freeze_note: Frozen after smoke validation (D0/H0/RID over 5 configs; D0/H0 over all
+  25). No configuration may be added, removed, or altered after this point; K3_SUBSET
+  in run_llm_in_loop.py was pre-registered before any K=3 run.
+scenario_manifest_sha256: fc6aed5f6f92e9d7f6bd6884a54850e423413e56ef5e2c4c1d3dca7b9bd7f896
+preregistered_llm_subset:
+  declared_at_utc: '2026-08-05T14:29:14Z'
+  declared_before_any_real_llm_cyber_physical_result: true
+  reason: GPU driver unavailable on the evaluation host; CPU inference of the 7-8B
+    adapters costs minutes per call, so the full 25-configuration matrix x 2 models
+    x 2 K settings is unreachable in the revision window. The subset spans every attack
+    type, all magnitude and duration levels, both feeders, the fleet-level target,
+    peak load, and high DER penetration.
+  llm_subset_n: 12
+  llm_subset:
+  - rv13_fdi_med_medium_nom_medpen_inv
+  - rv13_fdi_high_medium_nom_medpen_inv
+  - rv13_spoof_med_medium_nom_medpen_inv
+  - rv13_spoof_low_medium_nom_medpen_inv
+  - rv13_spoof_high_medium_nom_medpen_inv
+  - rv13_spoof_med_short_nom_medpen_inv
+  - rv13_spoof_med_persistent_nom_medpen_inv
+  - rv13_spoof_med_medium_peak_medpen_inv
+  - rv13_spoof_med_medium_nom_highpen_inv
+  - rv13_replay_med_medium_nom_medpen_inv
+  - rv13_dos_med_medium_nom_medpen_inv
+  - rv34_spoof_high_medium_nom_medpen_fleet
+  k3_subset_n: 6
+  k3_subset:
+  - rv13_fdi_med_medium_nom_medpen_inv
+  - rv13_spoof_med_medium_nom_medpen_inv
+  - rv13_replay_med_medium_nom_medpen_inv
+  - rv13_dos_med_medium_nom_medpen_inv
+  - rv13_spoof_med_medium_peak_medpen_inv
+  - rv34_spoof_high_medium_nom_medpen_fleet

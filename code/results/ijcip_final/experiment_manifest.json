@@ -1,0 +1,89 @@
+{
+  "tag": "ijcip_final",
+  "date": "2026-08-12",
+  "environment": "code/results/ijcip_final/environment.json",
+  "metric_dictionary": "code/results/ijcip_final/metric_dictionary.yaml",
+  "adapters": {
+    "qwen": "0c9dec242e2f",
+    "llama": "9a2b8436ce9c"
+  },
+  "experiments": [
+    {
+      "id": "adversarial_70case",
+      "status": "EXECUTED",
+      "backends": [
+        "qwen",
+        "llama"
+      ],
+      "n_cases": 70,
+      "arms": 8,
+      "raw": "ijcip_final_v3/adversarial/adversarial_raw_*.csv",
+      "cmd": "DER_LLM_STRICT=1 python3 -m code.evaluation.final_safeagent_v3.run_adversarial_v3 --backend {qwen,llama}"
+    },
+    {
+      "id": "holdout_e2e_49config",
+      "status": "EXECUTED",
+      "arms": 8,
+      "n_config": 49,
+      "episodes": 3,
+      "raw": "ijcip_final_v3/holdout_e2e/holdout_e2e_raw.csv",
+      "manifest_sha": "df918691d1620edb",
+      "cmd": "python3 -m code.evaluation.final_safeagent_v3.run_holdout_e2e --arms D0,OPROJ; DER_LLM_STRICT=1 ... --arms Q1,QPROJ (etc.)"
+    },
+    {
+      "id": "gate_robustness",
+      "status": "EXECUTED",
+      "n_config": 32,
+      "raw": "ijcip_final_v3/gate_robustness/gate_v3_summary.csv",
+      "cmd": "python3 -m code.evaluation.final_safeagent_v3.run_gate_robustness --calibrate; --evaluate"
+    },
+    {
+      "id": "gate_authentication",
+      "status": "EXECUTED",
+      "raw": "ijcip_final/gate_auth/gate_auth_summary.csv",
+      "cmd": "python3 -m code.evaluation.final_safeagent_v3.run_gate_auth"
+    },
+    {
+      "id": "eh_robustness",
+      "status": "EXECUTED",
+      "conditions": 10,
+      "raw": "ijcip_final_v3/eh_robustness/eh_robustness.csv",
+      "cmd": "python3 -m code.evaluation.final_safeagent_v3.run_eh_robustness"
+    },
+    {
+      "id": "latency",
+      "status": "EXECUTED",
+      "conditions": 4,
+      "min_calls": 48,
+      "raw": "ijcip_final/latency/latency_distributions.csv"
+    },
+    {
+      "id": "opendss_check",
+      "status": "EXECUTED",
+      "arms": [
+        "D0",
+        "OPROJ"
+      ],
+      "n_config": 12,
+      "nonconverged": 0,
+      "raw": "ijcip_final/opendss_check/opendss_check_summary.csv",
+      "cmd": "python3 -m code.evaluation.final_safeagent_v3.run_opendss_check"
+    },
+    {
+      "id": "opendss_realQLoRA",
+      "status": "EXECUTED (prior tag, non-runtime-safe arms)",
+      "note": "real QLoRA through OpenDSS on 12-config subset; supplementary",
+      "raw": "ijcip_final_safeagent_20260810/p1a_opendss/p1a_raw.csv"
+    },
+    {
+      "id": "gate_full_protocol_state_machine",
+      "status": "NOT EXECUTED",
+      "reason": "full DNP3/IEC-61850 reset/wrap/retry/session state machine is a large simulator extension; authentication flag + sequence-reset-aware replay implemented; remainder scoped as future work"
+    },
+    {
+      "id": "opendss_QSTS_dynamic_all_arms",
+      "status": "NOT EXECUTED",
+      "reason": "quasi-static time-series across all holdout configs x 8 arms is compute-heavy; static IEEE-13/34 solves done for D0/OPROJ; dynamic study is future work"
+    }
+  ]
+}

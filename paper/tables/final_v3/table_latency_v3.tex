@@ -1,0 +1,20 @@
+\begin{table}[t]
+\centering\small
+\caption{Per-backbone, per-$K$ consultation-latency distribution, from the
+146-call ($K{=}1$) / 48-call ($K{=}3$) measurements; single-call ($K{=}1$)
+inference is $\approx$5.5\,s on both backbones. All latency values in the paper
+are regenerated from this measurement file. Adapter load is a one-off startup
+cost, not part of per-call latency.}
+\label{tab:latency-v3}
+\begin{tabular}{llccccccc}
+\toprule
+Backend & $K$ & $n$ & mean & median & s.d. & p95 & p99 & max \\
+ & & & (s) & (s) & (s) & (s) & (s) & (s) \\
+\midrule
+Qwen & $K{=}1$ & 146 & 5.45 & 5.51 & 0.90 & 6.22 & 8.60 & 11.76 \\
+Qwen & $K{=}3$ & 48 & 16.82 & 17.41 & 1.47 & 18.32 & 19.06 & 19.14 \\
+Llama & $K{=}1$ & 146 & 5.62 & 5.60 & 0.57 & 6.56 & 7.03 & 8.34 \\
+Llama & $K{=}3$ & 48 & 17.45 & 17.54 & 1.65 & 20.25 & 22.28 & 23.60 \\
+\bottomrule
+\end{tabular}
+\end{table}

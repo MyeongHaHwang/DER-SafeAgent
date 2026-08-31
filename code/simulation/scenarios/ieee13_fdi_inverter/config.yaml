@@ -1,0 +1,37 @@
+name: ieee13_fdi_inverter
+description: |
+  IEEE 13-bus distribution feeder with one PV inverter at BUS_634.
+  False Data Injection biases the inverter's reported P upward by +60 kW for
+  120 s starting at t=180 s. Ground-truth power is unchanged; only the
+  telemetry seen by the agent is tampered.
+
+# Path is relative to this config file.
+feeder: feeder.dss
+
+dt_s: 1.0
+duration_s: 600
+
+monitored_buses: [SOURCEBUS, "634", "671", "675"]
+
+ders:
+  - id: INV_634
+    type: pv
+    bus: "634"
+    max_kw: 200.0
+  - id: BESS_675
+    type: bess
+    bus: "675"
+    max_kw: 150.0
+
+attacks:
+  - type: fdi
+    target: INV_634
+    start_s: 180
+    end_s: 300
+    bias_kw: 60.0
+
+ground_truth:
+  attack_class: fdi
+  affected_asset: INV_634
+  start_s: 180
+  end_s: 300

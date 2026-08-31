@@ -87,4 +87,4 @@ RTX 3080 (10 GiB), CUDA 12.4, torch 2.6.0+cu124, transformers 4.57.6,
 peft 0.14.0, bitsandbytes 0.49.2 — archived in
 `code/results/ijcip_final_v3/environment.json`. One backbone is loaded at a
 time (~10 GB VRAM with 4-bit NF4); a K=1 call is ≈5.5 s on this card
-(Table 10).
+(Table 11).

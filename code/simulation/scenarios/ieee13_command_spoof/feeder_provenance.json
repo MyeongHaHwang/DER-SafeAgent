@@ -1,0 +1,18 @@
+{
+  "path": "code/simulation/scenarios/ieee13_command_spoof/feeder.dss",
+  "sha256": "2c328db655e128d2554837a68a1d0b33b694e770c62968709eb77b682e099a91",
+  "line_count": 32,
+  "non_comment_preview": [
+    "Clear",
+    "New Circuit.IEEE13Sim",
+    "~ basekv=4.16 phases=3 bus1=SOURCEBUS pu=1.00 angle=0 frequency=60 mvasc3=200000",
+    "New Line.L_650_632   bus1=SOURCEBUS bus2=632 length=0.4 units=km r1=0.1 x1=0.3 c1=0",
+    "New Line.L_632_671   bus1=632 bus2=671 length=0.6 units=km r1=0.1 x1=0.3 c1=0",
+    "New Line.L_632_633   bus1=632 bus2=633 length=0.2 units=km r1=0.1 x1=0.3 c1=0",
+    "New Line.L_633_634   bus1=633 bus2=634 length=0.2 units=km r1=0.1 x1=0.3 c1=0",
+    "New Line.L_671_675   bus1=671 bus2=675 length=0.5 units=km r1=0.1 x1=0.3 c1=0",
+    "New Line.L_671_692   bus1=671 bus2=692 length=0.05 units=km r1=0.1 x1=0.3 c1=0",
+    "New Load.L634   bus1=634 phases=3 kV=4.16 kW=160 kvar=110 model=1"
+  ],
+  "recorded_at": "2026-05-05T15:49:53.537358+00:00"
+}

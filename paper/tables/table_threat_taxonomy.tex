@@ -1,0 +1,80 @@
+% Derivation table for Sec. 4.7 (revision ijcip_revision_r1r2_20260805).
+% Full procedure: code/docs/ai_pipeline_threat_taxonomy.md
+\begin{table*}[t]
+\centering
+\caption{Derivation of the AI-pipeline threat categories: from published
+source taxonomies to the fourteen perturbation families actually implemented.
+Threats were retained only where an adversary can act on this system's attack
+surface (ingested alert/telemetry text, the prompt, incident memory, the
+decision object, or the operator approval step) and were grouped by attack
+channel, because the channel determines the containment mechanism. Published
+threats deliberately not covered (training-time poisoning and supply chain,
+model theft, system-prompt leakage, unbounded consumption, agent-identity
+attacks) are listed in \texttt{code/docs/ai\_pipeline\_threat\_taxonomy.md}.}
+\label{tab:threat-taxonomy}
+\scriptsize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.115\textwidth}
+ >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.115\textwidth}
+ >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X
+ >{\raggedright\arraybackslash}p{0.095\textwidth}@{}}
+\toprule
+Source taxonomy & High-level threat (category) & Perturbation family & Attack channel & Containment mechanism & Metric \\
+\midrule
+\cite{Microsoft2025AgenticFailure} XPIA; agent injection \newline
+\cite{OWASP2025LLMTop10} LLM01 &
+C1 Prompt injection through ingested logs &
+F1 log injection \newline F2 role-play \newline F3 encoded payload \newline F4 adaptive jailbreak &
+Text inside syslog / alarm / command payload fields read into the prompt &
+Deterministic FeatureView grounding; fixed-enum output schema; class-aware avoidance; Caution veto &
+Policy-violation rate; safe-fallback rate \\
+\midrule
+\cite{OWASP2025LLMTop10} LLM05 \newline
+\cite{Narajala2025MCPSecurity} tool invocation &
+C2 Command/parameter injection into structured fields &
+F5 command injection \newline F6 tool-call spoofing &
+\texttt{asset\_id}, \texttt{rationale}, protocol parameter fields &
+Actions are enum values from a fixed five-primitive registry, never strings handed to a shell; Coordinator owns the final action &
+Forbidden-action rate \\
+\midrule
+\cite{OWASP2025LLMTop10} LLM05 \newline
+\cite{NIST-800-61} incident data quality &
+C3 Malformed and missing input &
+F7 malformed alert \newline F8 missing field \newline F9 wrong-type field &
+Parser / schema boundary at alert ingestion &
+Per-call JSON-validity and schema checks; \texttt{no\_op} fallback below the confidence floor; Caution missing-asset rule &
+JSON validity; schema compliance; fallback rate \\
+\midrule
+\cite{MITRE_ATTCK_ICS_v15} T0856, T0830 \newline
+\cite{Alhelou2023PowerSystemsCyber} &
+C4 Conflicting evidence across channels &
+F10 conflicting telemetry \newline F11 benign-but-suspicious &
+Event channel vs.\ telemetry channel (adversary spoofs one, not both) &
+Lowest-worst-case-impact selection; Caution rationale/action consistency rule; severity threshold and abstention &
+Correct-refusal rate; abstention rate \\
+\midrule
+\cite{Microsoft2025AgenticFailure} memory / knowledge-base poisoning \newline
+\cite{OWASP2025LLMTop10} LLM04 &
+C5 Memory poisoning &
+F12 single-turn \newline F13 multi-turn &
+Retrieved IncidentMemory block inserted into the prompt &
+Memory is prior context only --- the Coordinator's selection never reads it; class-aware avoidance still applies &
+Proposed-vs-final divergence; policy-violation rate \\
+\midrule
+\cite{OWASP2025LLMTop10} LLM09 \newline
+\cite{NIST-800-61} classification discipline &
+C6 Out-of-distribution attack labels &
+F14 OOD attack label &
+Upstream classifier label asserted in the alert &
+Enum rejects out-of-vocabulary classes; map to \texttt{none} and abstain; HITL routing below threshold &
+Abstention rate; unsafe-forced-action rate \\
+\midrule
+\cite{Microsoft2025AgenticFailure} HitL bypass / approval fatigue &
+(identified; no perturbation family) &
+--- &
+Operator approval step &
+HITL gate --- but an operator who approves everything defeats it &
+Unsafe-command rate by operator behaviour (HITL study) \\
+\bottomrule
+\end{tabularx}
+\end{table*}

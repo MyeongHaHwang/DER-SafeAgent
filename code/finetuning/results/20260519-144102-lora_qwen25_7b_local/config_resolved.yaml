@@ -1,0 +1,38 @@
+bf16: true
+data:
+  test: ../finetuning_dataset/processed/test.jsonl
+  train: ../finetuning_dataset/processed/train.jsonl
+  val: ../finetuning_dataset/processed/val.jsonl
+lora:
+  bias: none
+  lora_alpha: 32
+  lora_dropout: 0.05
+  r: 16
+  target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+  task_type: CAUSAL_LM
+max_len: 512
+model: Qwen/Qwen2.5-7B-Instruct
+quantization: 4bit
+seed: 0
+training:
+  eval_strategy: epoch
+  gradient_accumulation_steps: 8
+  gradient_checkpointing: true
+  learning_rate: 0.0002
+  logging_steps: 5
+  lr_scheduler_type: cosine
+  num_train_epochs: 3
+  optim: paged_adamw_8bit
+  per_device_eval_batch_size: 1
+  per_device_train_batch_size: 1
+  save_strategy: epoch
+  save_total_limit: 1
+  warmup_ratio: 0.03
+  weight_decay: 0.0

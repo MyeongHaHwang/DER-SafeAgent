@@ -1,0 +1,113 @@
+\section{Related Work}
+\label{sec:relatedwork}
+
+\subsection{OT / critical-infrastructure incident response}
+\label{sec:rw-ot}
+AI/ML for critical-infrastructure protection has concentrated on
+\emph{detection}: SCADA anomaly detection, intrusion classification on
+substation traffic, and grid-state estimation under adversarial
+conditions~\cite{Banad2025_AI_ML_SG,Aslam2025_AI_ICS,Hasan2024_ML_SG_CPS,Berghout2022_ML_SG_Cyber}.
+The response side is less automated but not unstudied: Software-Defined
+Networking approaches reconfigure ICS networks as an automated intrusion
+response~\cite{Etxezarreta2023_SDN_IR}, deterministic and immutable
+enforcement architectures constrain what may cross the OT--IT
+boundary~\cite{Yenikaya2026_OTIT_Enforcement}, and provenance-aware
+detectors make their evidence auditable at
+runtime~\cite{Zhang2026_GridPRISM}. These lines act on the network and
+boundary layers, however; response that touches the DER control surface
+itself still falls to manual playbooks executed by SOC analysts --- an
+assumption that breaks at DERMS scale and inverter timescales. The
+current policy and standards trajectory sharpens this gap rather than
+closing it: DOE/CESER's DER cybersecurity assessment identifies the
+aggregation layer as the coming risk surface~\cite{DOE_CESER_DER2022};
+IEEE 1547.3-2023 provides end-to-end DER cybersecurity guidance but no
+response mechanism~\cite{IEEE15473_2023}; NERC CIP-015-1 mandates
+monitoring \emph{inside} the electronic security perimeter, increasing
+the volume of OT alerts that must be acted on~\cite{NERC_CIP015_2024};
+and NIST SP 800-61r3 frames incident response as a continuous
+risk-management activity while explicitly acknowledging that alert
+volume now exceeds human capacity~\cite{NIST80061r3}. None of these
+prescribes how an automated component may safely touch the physical
+control surface --- the question this paper addresses under the OT
+constraints stated in NIST SP 800-82r3~\cite{NIST80082r3}.
+
+\subsection{LLM and agent security}
+\label{sec:rw-llm}
+LLM-based security operations range from single-agent triage assistants
+to multi-agent SOC
+decompositions~\cite{Yao2024_LLM_SecPrivacy,Zhang2025_LLM_Cybersecurity,Li2024MAS,Li2024_MIR_MAS}.
+These systems are evaluated on IT-style corpora with classification and
+summarisation metrics, and their known failure modes --- prompt
+injection through attacker-controlled content, hallucinated tool calls,
+schema violations, memory poisoning --- are catalogued systematically in
+MITRE ATLAS~\cite{MITRE_ATLAS}. Proposed defences (structured-output
+constraints, tool-call monitors, HITL gates) are typically evaluated as
+filters on text, not as guards on physical consequence. Our evaluation
+treats these attack families as inputs to a cyber-physical loop and
+measures what \emph{executes}, which is the quantity that matters on a
+feeder; it also surfaces a defence anti-pattern (confidence-gated
+autonomy) that text-level evaluation cannot expose, because its failure
+is only visible in the executed-action distribution.
+
+\subsection{Runtime assurance and the research gap}
+\label{sec:rw-ra}
+Runtime assurance separates an unverified high-performance controller
+from a simple verified safety mechanism: Simplex switches control
+authority to a baseline controller when the advanced controller
+endangers the plant~\cite{Sha2001Simplex}, and shielding synthesises a
+monitor that corrects an unverified learner's actions against a
+specification~\cite{Alshiekh2018Shielding}. Both lines assume a
+state-space controller and a formalisable safety property.
+
+A recent line applies runtime enforcement directly to LLM agents.
+AgentSpec (accepted at ICSE~2026) enforces user-specified rules on
+tool-using agents~\cite{Wang2025AgentSpec}, and NEXUS (2026 preprint)
+adds a runtime monitor that allows, blocks, confirms, or revises tool
+calls under a calibrated risk score~\cite{Hossain2026NEXUS}; both target
+general agent safety rather than a physical plant. For cyber-physical
+systems, MORTAR (2024 preprint) repairs unsafe control actions of an
+AI-enabled CPS against a learned model~\cite{Wang2024MORTAR}, and
+SafePilot (2026 preprint) assures LLM-enabled CPS with a hierarchical
+neuro-symbolic planner and formal checks~\cite{Xu2026SafePilot}. These
+systems establish that runtime enforcement of an untrusted model is both
+feasible and necessary. \ours{} differs in target and construction
+(Table~\ref{tab:positioning}): it addresses DER/OT incident response
+specifically, computes its safety-relevant evidence only from
+wire-observable telemetry with a feature-level provenance audit, and adds
+a \emph{symmetric} protection --- model output may neither authorise an
+unsafe irreversible action nor veto a deterministically evidenced
+incident. We are not aware of prior DER incident-response work that
+combines these properties; the comparison is scoped to the reported
+capabilities in Table~\ref{tab:positioning}, not an exhaustive survey,
+and includes the negative result that a shield admitting an irreversible
+action on a model-stated quantity inverts the construction's safety
+premise.
+
+\begin{table*}[t]
+  \centering
+  \footnotesize
+  \caption{Positioning of \ours{} against named runtime-assurance systems.
+    Y = reported as a primary feature; N = not a feature; \texttildelow~=
+    partial / out of scope; NR = not reported. Cells reflect each work's
+    stated scope, not a quality judgement.}
+  \label{tab:positioning}
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{llcccccccl}
+    \toprule
+    System & Status & Runtime & LLM- & Cyber-phys. & DER/OT- & Evidence
+           & Inaction & Human & Evaluation \\
+    & & enforce & specific & consequence & specific & provenance
+           & protect & escalate & scope \\
+    \midrule
+    SDN ICS response~\cite{Etxezarreta2023_SDN_IR} & survey & \texttildelow & N & \texttildelow & Y & N & N & \texttildelow & ICS network layer \\
+    OT--IT enforcement~\cite{Yenikaya2026_OTIT_Enforcement} & journal & Y & N & \texttildelow & Y & N & N & NR & OT--IT boundary \\
+    Simplex~\cite{Sha2001Simplex}          & journal   & Y & N & Y & N & N & N & N & control theory \\
+    Shielding~\cite{Alshiekh2018Shielding} & conf.\    & Y & N & \texttildelow & N & N & N & N & RL benchmarks \\
+    AgentSpec~\cite{Wang2025AgentSpec}     & ICSE'26   & Y & Y & \texttildelow & N & N & N & \texttildelow & code/embodied/AV agents \\
+    NEXUS~\cite{Hossain2026NEXUS}          & preprint  & Y & Y & N & N & N & N & Y & synthetic tool benchmark \\
+    MORTAR~\cite{Wang2024MORTAR}           & preprint  & Y & N & Y & N & N & N & N & AI-CPS simulation \\
+    SafePilot~\cite{Xu2026SafePilot}       & preprint  & Y & Y & Y & N & N & NR & NR & LLM-CPS simulation \\
+    \textbf{\ours{}}                       & this paper& Y & Y & Y & Y & Y & Y & Y & DER simulation + adversarial + exhaustive property test \\
+    \bottomrule
+  \end{tabular}}
+\end{table*}

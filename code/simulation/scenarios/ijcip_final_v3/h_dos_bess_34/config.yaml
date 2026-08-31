@@ -1,0 +1,41 @@
+name: h_dos_bess_34
+description: DoS IEEE-34 storage
+feeder: ../../ieee34_command_spoof_derms/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '808'
+- '824'
+- '834'
+- '840'
+- '848'
+ders:
+- id: INV_840
+  type: pv
+  bus: '840'
+  max_kw: 240.0
+- id: BESS_848
+  type: bess
+  bus: '848'
+  max_kw: 180.0
+- id: INV_824
+  type: pv
+  bus: '824'
+  max_kw: 260.0
+base_load_kw: 1000.0
+attacks:
+- type: dos
+  target: BESS_848
+  start_s: 150
+  end_s: 450
+ground_truth:
+  attack_class: dos
+  affected_asset: BESS_848
+  start_s: 150
+  end_s: 450
+stub_params: {}
+revision_meta:
+  tag: ijcip_final_v3
+  split: end_to_end_holdout
+  feeder_family: ieee34

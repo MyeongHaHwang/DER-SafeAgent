@@ -1,0 +1,26 @@
+\begin{table}[t]
+\centering\small
+\caption{Horizon-aware estimator (EH) robustness: tie-aware top-1 optimal-action
+rate and regret under horizon misspecification, delayed/partial execution, and
+alternative cost weights, on the 12-configuration frozen estimator holdout. EH's
+ranking is stable because the five-action choice is structurally determined;
+point magnitudes remain imprecise (MAE $\approx$26\,kWh), so no
+magnitude-prediction claim is made.}
+\label{tab:eh-v3}
+\begin{tabular}{lcccc}
+\toprule
+Condition & EH top-1 & EH med.\ regret & EH worst & E60 top-1 \\
+\midrule
+Nominal            & 1.00 & 0.00 & 0.0 & 0.33 \\
+Horizon $-50\%$    & 1.00 & 0.00 & 0.0 & 0.33 \\
+Horizon $-25\%$    & 1.00 & 0.00 & 0.0 & 0.33 \\
+Horizon $+25\%$    & 1.00 & 0.00 & 0.0 & 0.33 \\
+Horizon $+50\%$    & 1.00 & 0.00 & 0.0 & 0.33 \\
+Delayed 10\,s      & 1.00 & 0.00 & 0.0 & 0.33 \\
+Delayed 30\,s      & 1.00 & 0.00 & 0.0 & 0.33 \\
+Partial failure    & 1.00 & 0.00 & 0.0 & 1.00 \\
+$w_{\text{ENS}}=3$ & 1.00 & 0.00 & 0.0 & 0.33 \\
+$w_{\text{ENS}}=8$ & 1.00 & 0.00 & 0.0 & 0.33 \\
+\bottomrule
+\end{tabular}
+\end{table}

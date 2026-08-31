@@ -1,0 +1,18 @@
+{
+  "p_hard": 2,
+  "p_soft": 10000,
+  "z_soft": 3.0,
+  "runtime_safe": true,
+  "dev_attack_misses_hard_only": 3,
+  "dev_benign_open_frac": 0.125,
+  "soft_enabled_alt": {
+    "p_hard": 2,
+    "p_soft": 5,
+    "z_soft": 3.0,
+    "dev_misses": 0,
+    "dev_benign_open_frac": 0.875
+  },
+  "frozen_at": "2026-08-11",
+  "rule": "runtime-safe HARD-ONLY gate; calibrated on dev only; frozen before test; soft-enabled alternative recorded for the honest coverage/false-alarm tradeoff",
+  "sha256": "3849cb73217019670e86f82a43f3f0398e5ebc19d26162fdb1b1e98d7e3238e0"
+}

@@ -1,0 +1,41 @@
+name: ieee34_command_spoof_derms
+description: |
+  IEEE-34-style long-radial 24.9 kV feeder with three DER assets (PV at 824
+  and 840, BESS at 848). A spoofed DERMS dispatch pushes the most-distal PV
+  inverter (INV_840) to 30 kW for 120 s, causing a measurable voltage sag
+  along the radial; a correct freeze_setpoint mitigation reverts it.
+
+feeder: feeder.dss
+
+dt_s: 1.0
+duration_s: 600
+
+monitored_buses: [SOURCEBUS, "808", "824", "834", "840", "848"]
+
+ders:
+  - id: INV_840
+    type: pv
+    bus: "840"
+    max_kw: 240.0
+  - id: BESS_848
+    type: bess
+    bus: "848"
+    max_kw: 180.0
+  - id: INV_824
+    type: pv
+    bus: "824"
+    max_kw: 260.0
+
+attacks:
+  - type: command_spoof
+    target: INV_840
+    start_s: 200
+    end_s: 320
+    forged_setpoint_kw: 30.0
+    period_s: 5.0
+
+ground_truth:
+  attack_class: command_spoof
+  affected_asset: INV_840
+  start_s: 200
+  end_s: 320

@@ -1,0 +1,138 @@
+{
+  "raw_alert": {
+    "ids_signature": "fdi.dnp3.analog_input_drift_v2",
+    "transport": "DNP3",
+    "object_group": 30,
+    "variation": 5,
+    "fc": 1,
+    "index": 12,
+    "reported_p_kw": 200.0,
+    "physical_truth_p_kw": 140.0,
+    "src_ip": "10.20.7.42",
+    "dst_ip": "10.20.0.18",
+    "timestamp_iso": "2026-05-08T14:11:31Z"
+  },
+  "harness_event": {
+    "t": 180.0,
+    "source": "dnp3",
+    "kind": "telemetry",
+    "payload": {
+      "asset": "INV_634",
+      "fc": 1,
+      "object": "g30v5",
+      "index": 12,
+      "p_kw": 200.0,
+      "flags": 1
+    },
+    "tampered": true
+  },
+  "feature_view": {
+    "t": 180.0,
+    "asset_zscores": {
+      "INV_634": 60000000.0
+    },
+    "asset_p_kw": {
+      "INV_634": 200.0
+    },
+    "asset_p_avail_kw": {
+      "INV_634": 200.0
+    },
+    "voltage_excursion_frac": 0.0,
+    "voltage_min_pu": 0.993,
+    "voltage_max_pu": 0.993,
+    "freq_dev_hz": 0.0,
+    "n_command_events": 0,
+    "n_tampered_events": 1,
+    "n_dup_events": 0,
+    "persistent_freeze": false,
+    "dominant_asset": "INV_634",
+    "dominant_signal": "tampered",
+    "severity_score": 1.0
+  },
+  "hypothesis": {
+    "attack_class": "fdi",
+    "affected_asset": "INV_634",
+    "confidence": 0.66,
+    "rationale": "Telemetry payload flagged as tampered (FDI signature).",
+    "proposed_action": "freeze_setpoint",
+    "proposed_action_target": "INV_634",
+    "expected_impact_tier": "medium",
+    "vote_share": 1.0,
+    "consensus_size": 3,
+    "n_samples": 3
+  },
+  "impact_estimates": [
+    {
+      "action": "no_op",
+      "tier": "negligible",
+      "expected_curt_kwh": 0.0,
+      "expected_ens_kwh": 0.0,
+      "rationale": "No mitigation; passes through any active attack."
+    },
+    {
+      "action": "freeze_setpoint",
+      "tier": "medium",
+      "expected_curt_kwh": 1.05,
+      "expected_ens_kwh": 0.0,
+      "rationale": "Reverts asset to last validated setpoint; bounded curtailment."
+    },
+    {
+      "action": "throttle_ramp",
+      "tier": "low",
+      "expected_curt_kwh": 0.1,
+      "expected_ens_kwh": 0.0,
+      "rationale": "Caps fast swings; minor energy impact."
+    },
+    {
+      "action": "request_ied_revalidation",
+      "tier": "negligible",
+      "expected_curt_kwh": 0.02,
+      "expected_ens_kwh": 0.0,
+      "rationale": "IED re-attest; transient telemetry gap only."
+    },
+    {
+      "action": "isolate_inverter",
+      "tier": "high",
+      "expected_curt_kwh": 3.3333333333333335,
+      "expected_ens_kwh": 0.0,
+      "rationale": "Cuts the asset; full curtailment over response window."
+    }
+  ],
+  "caution": {
+    "caution": false,
+    "caution_reason": "heuristic"
+  },
+  "coordinator": {
+    "decision": "auto",
+    "reason": "cost-aware pick: freeze_setpoint (Reverts asset to last validated setpoint; bounded curtailment.)",
+    "final_action": "freeze_setpoint",
+    "final_action_target": "INV_634",
+    "final_impact_tier": "medium"
+  },
+  "executed_actions": [
+    {
+      "name": "freeze_setpoint",
+      "target": "INV_634",
+      "params": {
+        "rationale": "Telemetry payload flagged as tampered (FDI signature).",
+        "impact_tier": "medium",
+        "coordinator_reason": "cost-aware pick: freeze_setpoint (Reverts asset to last validated setpoint; bounded curtailment.)"
+      }
+    }
+  ],
+  "mitigation_script": {
+    "tool": "iec61850-cli",
+    "argv": [
+      "iec61850-cli",
+      "--device",
+      "INV_634",
+      "control",
+      "DPCSO1.SetPoint",
+      "--mode",
+      "freeze",
+      "--restore-from",
+      "last_validated"
+    ],
+    "rationale": "Telemetry-layer FDI: physical state is correct, telemetry is biased. Freeze the dispatch path so a deceived operator cannot push a corrective command derived from bad data."
+  }
+}

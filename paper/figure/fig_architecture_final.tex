@@ -1,0 +1,67 @@
+% Figure 1 — DER-SafeAgent final runtime-assurance architecture
+% (tag ijcip_final_safeagent_20260810). The visual claim: the LLM does NOT
+% own the action surface; a deterministic fast path exists in parallel.
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\small,
+  node distance=5mm and 8mm,
+  box/.style={draw, rounded corners=1pt, align=center, inner sep=4pt,
+              minimum height=8mm},
+  det/.style={box, fill=blue!8},
+  llm/.style={box, fill=red!10, dashed, thick},
+  shield/.style={box, fill=green!10, thick},
+  phys/.style={box, fill=gray!12},
+  lbl/.style={font=\scriptsize\itshape},
+  arr/.style={-latex, thick},
+]
+% ---- left spine: deterministic decision path -------------------------
+\node[det] (ids)  {IDS / SIEM alerts\\+ DER telemetry};
+\node[det, below=of ids] (fv)   {Deterministic FeatureView\\
+  \scriptsize z-scores, command packets / auth.\ status if available,\\
+  \scriptsize sequence regression, staleness, integrity residual\\
+  \scriptsize (observable only; no generator ground truth)};
+\node[det, below=of fv] (gate) {\textbf{Incident Evidence Gate}\\
+  \scriptsize observable protocol evidence, sustained\\
+  \scriptsize (frozen thresholds; no model input)};
+\node[det, left=22mm of gate] (noop) {monitor / no\_op\\
+  \scriptsize no LLM consulted};
+% ---- untrusted slow path ---------------------------------------------
+\node[llm, right=16mm of fv] (qlora) {\textbf{UNTRUSTED ADVISORY}\\
+  QLoRA Hypothesis Agent\\ \scriptsize class + proposed action + rationale\\
+  \scriptsize (Qwen2.5-7B / Llama-3.1-8B, $K{=}1$)};
+% ---- shield -----------------------------------------------------------
+\node[shield, below=14mm of gate, xshift=20mm, text width=7.4cm] (shield)
+ {\textbf{RUNTIME-ASSURANCE SHIELD} (deterministic)\\
+  \scriptsize fixed 5-primitive registry \; $\cdot$ \; class-aware projection\\
+  \scriptsize irreversible proposal $\Rightarrow$ always HITL (action veto)\\
+  \scriptsize \textsc{no\_op} vs.\ evidenced incident $\Rightarrow$ act (inaction veto)\\
+  \scriptsize emergency fallback ranked by validated estimator (EH)};
+\node[box, right=6mm of shield, fill=orange!15] (hitl)
+ {Human\\operator};
+% ---- bottom: physical layer ------------------------------------------
+\node[phys, below=9mm of shield] (act) {Bounded DER action\\
+  \scriptsize no\_op / freeze\_setpoint / throttle\_ramp /\\
+  \scriptsize request\_ied\_revalidation / (isolate: HITL only)};
+\node[phys, below=5mm of act] (grid) {DERMS / feeder\\
+  \scriptsize StubFeeder + OpenDSS power flow};
+\node[det, left=8mm of act] (fast) {\textbf{Deterministic}\\\textbf{fast path}\\
+  \scriptsize immediate bounded\\ \scriptsize response on detection};
+% ---- audit ------------------------------------------------------------
+\node[box, right=6mm of act, fill=gray!8] (audit) {Append-only\\audit chain};
+% ---- edges ------------------------------------------------------------
+\draw[arr] (ids) -- (fv);
+\draw[arr] (fv) -- (gate);
+\draw[arr] (gate) -- node[lbl, left, pos=0.6]{insufficient evidence} (noop);
+\draw[arr] (gate.south) -- node[lbl, right, pos=0.35]{evidence threshold met}
+  (shield.north west);
+\draw[arr, dashed, red!60!black] (gate.east) -| node[lbl, right, pos=0.75]
+  {consult} (qlora.south);
+\draw[arr, dashed, red!60!black] (qlora.south west) --
+  node[lbl, above, sloped]{proposal (untrusted)} (shield.north east);
+\draw[arr] (shield) -- (act);
+\draw[arr] (shield) -- node[lbl, above]{escalate} (hitl);
+\draw[arr] (act) -- (grid);
+\draw[arr] (fast) -- (act);
+\draw[arr] (fv.west) -| node[lbl, left, pos=0.85]{parallel} (fast.north);
+\draw[arr, gray] (act.east) -- (audit.west);
+\end{tikzpicture}}

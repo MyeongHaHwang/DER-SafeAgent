@@ -1,0 +1,75 @@
+{
+  "invariance_test": {
+    "description": "For each (scenario,seed), across gated arms, the gate-open decision at every attack-window tick strictly before the earliest first-action tick must be identical (deterministic, model-independent gate on identical pre-action observation).",
+    "ticks_compared": 11020,
+    "violations": 0,
+    "PASS": true,
+    "sample_violations": []
+  },
+  "per_arm_summary": [
+    {
+      "arm": "D0",
+      "closed_loop_gate_coverage": 0.949,
+      "initial_detector_gate_recall": 0.0,
+      "time_to_gate_open_s": 20.198,
+      "gate_event_count": 180.141,
+      "n_config": 33
+    },
+    {
+      "arm": "L1",
+      "closed_loop_gate_coverage": 0.657,
+      "initial_detector_gate_recall": 0.0,
+      "time_to_gate_open_s": 111.181,
+      "gate_event_count": 19.596,
+      "n_config": 33
+    },
+    {
+      "arm": "LPROJ",
+      "closed_loop_gate_coverage": 0.495,
+      "initial_detector_gate_recall": 0.01,
+      "time_to_gate_open_s": 81.611,
+      "gate_event_count": 19.03,
+      "n_config": 33
+    },
+    {
+      "arm": "OPROJ",
+      "closed_loop_gate_coverage": 0.96,
+      "initial_detector_gate_recall": 0.96,
+      "time_to_gate_open_s": 10.526,
+      "gate_event_count": 206.545,
+      "n_config": 33
+    },
+    {
+      "arm": "Q1",
+      "closed_loop_gate_coverage": 0.657,
+      "initial_detector_gate_recall": 0.0,
+      "time_to_gate_open_s": 23.538,
+      "gate_event_count": 83.798,
+      "n_config": 33
+    },
+    {
+      "arm": "QPROJ",
+      "closed_loop_gate_coverage": 0.657,
+      "initial_detector_gate_recall": 0.313,
+      "time_to_gate_open_s": 23.538,
+      "gate_event_count": 83.929,
+      "n_config": 33
+    },
+    {
+      "arm": "bareL",
+      "closed_loop_gate_coverage": 0.0,
+      "initial_detector_gate_recall": 0.0,
+      "time_to_gate_open_s": NaN,
+      "gate_event_count": 0.0,
+      "n_config": 33
+    },
+    {
+      "arm": "bareQ",
+      "closed_loop_gate_coverage": 0.0,
+      "initial_detector_gate_recall": 0.0,
+      "time_to_gate_open_s": NaN,
+      "gate_event_count": 0.0,
+      "n_config": 33
+    }
+  ]
+}

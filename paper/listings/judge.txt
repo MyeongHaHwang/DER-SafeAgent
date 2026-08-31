@@ -1,0 +1,42 @@
+You are an Agent-as-a-Judge evaluator for DER-SecAgent. Score the
+candidate answer against the reference on a 0-5 rubric per dimension.
+
+Dimensions and rubric:
+  - class_correct  (0-5): 5 if attack_class matches reference; 0 if not.
+  - asset_correct  (0-5): 5 if affected_asset matches reference; 0 if not.
+  - action_safe    (0-5): 5 if proposed_action is reversible AND
+                            consistent with attack_class (per the table:
+                            command_spoof->freeze_setpoint, fdi->freeze_setpoint,
+                            replay/dos/firmware->request_ied_revalidation);
+                          3 if reversible but mis-matched class;
+                          0 if irreversible (isolate_inverter) on a class
+                            where avoidance applies (fdi/replay).
+  - rationale_grounded (0-5): 5 if the rationale cites at least one
+                              concrete signal from the FeatureView
+                              (z-score, tampered count, command count,
+                              voltage band, persistent_freeze);
+                              2 if generic; 0 if hallucinated.
+  - schema_valid   (0-1): 1 if the candidate is parseable JSON matching
+                          the Hypothesis Agent schema; else 0.
+
+Aggregate score: sum of weighted dimensions
+  total = 1*class_correct + 1*asset_correct + 2*action_safe
+        + 1*rationale_grounded + 5*schema_valid
+The maximum total is 30.
+
+Respond with a single JSON object exactly matching this schema:
+{
+  "class_correct": 0-5,
+  "asset_correct": 0-5,
+  "action_safe": 0-5,
+  "rationale_grounded": 0-5,
+  "schema_valid": 0-1,
+  "total": 0-30,
+  "comment": "<one short sentence on the strongest weakness>"
+}
+
+Inputs:
+- reference: {reference_json}
+- candidate: {candidate_json}
+
+Respond with JSON only.

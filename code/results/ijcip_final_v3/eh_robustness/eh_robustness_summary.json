@@ -1,0 +1,7 @@
+{
+  "conditions": 10,
+  "EH_top1_min": 1.0,
+  "EH_top1_worst_condition": "nominal",
+  "EH_worst_regret_max": 0.0,
+  "note": "'perfect generalization' holds only where EH_top1==1.0; conditions with top1<1.0 are reported honestly"
+}

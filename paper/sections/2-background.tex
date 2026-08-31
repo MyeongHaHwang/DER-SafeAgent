@@ -1,0 +1,141 @@
+\section{Background and Threat Model}
+\label{sec:background}
+
+\subsection{DER Operations and Standards}
+\label{sec:bg-der}
+A modern Distributed Energy Resource installation comprises a smart inverter
+and its associated controller, a Battery Energy Storage System (BESS) where
+present, and a Remote Terminal Unit (RTU) or Intelligent Electronic Device
+(IED) bridging field-area communications to the upstream DER Management
+System (DERMS) and Energy Management System (EMS). The control surface is
+defined by IEEE Std~1547-2018, which specifies normal operating ranges for
+voltage and frequency, ride-through requirements, and ramp-rate limits, and
+by IEC~61850 (GOOSE/MMS) and DNP3 outstation profiles, which carry
+telemetry and dispatch commands at the protocol level; IEEE Std
+1547.3-2023 extends this surface with end-to-end DER cybersecurity
+guidance~\cite{IEEE15473_2023}, and NIST SP 800-82r3 states the
+OT-specific constraints (availability first, bounded latency, physical
+consequence) under which any response mechanism must
+operate~\cite{NIST80082r3}. Because each surface implies a different
+attacker capability, our threat model and our scenario library both key
+off these standards rather than off generic IT taxonomies.
+
+\subsection{Threat Model}
+\label{sec:bg-threat}
+\textbf{Scope.} In scope are cyber attacks against the DER cyber-physical
+control loop reachable from the utility-side network or from a compromised
+aggregator account, including manipulated telemetry, forged commands, and
+replayed sessions over IEC~61850 or DNP3. Out of scope are physical
+hardware tampering, GPS-timing spoofing, pure ransomware impacting only
+IT systems, and supply-chain firmware compromise of the firmware-attestation
+pipeline (treated separately).
+
+\textbf{Asset / surface matrix.} Five primary asset classes (smart inverter,
+BESS controller, RTU/IED, DERMS/EMS, and the communications bus itself) are
+exposed via different protocol surfaces; if owned, an attacker may
+respectively manipulate reported $P/Q$ and trip thresholds, distort SOC
+schedules, hijack telemetry aggregation, push spoofed dispatch, or replay
+and reorder messages.
+
+\textbf{STRIDE \texttimes{} {ATT\&CK} for ICS.} We map each STRIDE category
+to the most relevant MITRE ATT\&CK for ICS technique IDs against each asset
+class. Spoofing maps primarily to \emph{Valid Accounts} (T0859) and
+\emph{Spoof Reporting Message} (T0856); Tampering to \emph{Manipulation of
+View} (T0832) and \emph{Manipulation of Control} (T0831); Denial of Service
+to T0814; and Elevation of Privilege to \emph{Exploit Public-Facing
+Application} (T0890). The condensed mapping table is reproduced in
+\texttt{docs/threat\_model.md} and feeds the attack-class taxonomy used
+throughout this paper, namely \{\textsf{none}, \textsf{fdi}, \textsf{replay},
+\textsf{command\_spoof}, \textsf{dos},
+\textsf{firmware}\}~\cite{Zografopoulos2023_DER_CybersecurityOutlook,Hasan2024_ML_SG_CPS,Aslam2025_AI_ICS}.
+
+\subsection{Trust Boundary and Assumptions}
+\label{sec:bg-trust}
+We state the trust boundary explicitly because it determines what the
+architecture can and cannot claim.
+\emph{Trusted computing base (implemented deterministically and tested):} the
+FeatureView, the Evidence Gate, the fixed action registry, the safe-action
+projection,
+the irreversible-action escalation rule, the deadline fallback, and the
+audit chain. \emph{Untrusted:} the LLM (and its adapter, prompt, memory,
+and stated confidence), and any upstream IDS that supplies alerts.
+\emph{Attacker knowledge/access:} the attacker may craft telemetry and
+protocol frames reaching the detector, inject text into any field the LLM
+reads (log lines, alert bodies, memory), and knows the architecture; the
+attacker cannot alter the deterministic layer's code or the defender's
+grid model. \emph{Evidence assurance is layered, and we state the layers
+explicitly rather than conflating them.} Every gate feature is (i)
+\emph{independent of LLM output} --- computed deterministically, so a
+manipulated model cannot move it. It is (ii) \emph{wire-observable} ---
+derived from packets, timestamps, sequence numbers, and reported power, or
+from the defender's rated-capacity model. Observability is \emph{not}
+authentication: on an unauthenticated bus an attacker who can inject or
+modify network traffic can forge much of this evidence (a spoofed command
+packet, a plausible reported-power series), so wire-observable evidence is
+robust to a \emph{compromised model} but not to a \emph{compromised
+network}. Only where a MAC, signature, or redundant physical measurement
+is present is the evidence (iii) \emph{authenticated}; we implement no
+cryptographic check and therefore claim only (i) and, for the
+rating-plausibility residual, a physics cross-check that a purely
+message-layer attacker cannot satisfy. We model the upstream IDS as an
+\emph{imperfect} component and evaluate the Gate under detector
+false-positive, false-negative, and latency perturbations. \emph{Human boundary:} HITL approval transfers authority to
+a human operator; ``zero autonomous irreversible execution'' means the
+system never executes an irreversible action \emph{without} human
+approval --- it does \emph{not} guarantee that a human-approved action is
+safe. \emph{Unsafe} means an irreversible or class-inappropriate physical
+action executed autonomously, or an out-of-registry action.
+\emph{Out of scope:} physical hardware tampering, cryptographic key
+compromise, an adaptive white-box attacker that co-optimizes against the
+deterministic layer, and a stealthy attacker able to forge internally
+consistent protocol evidence (sequence numbers, timestamps, and physical
+response all mutually consistent).
+
+\subsection{Runtime-Assurance Objective}
+\label{sec:bg-objective}
+Given this threat model, the system objective is deliberately not
+``classify attacks accurately.'' It is: (i)~no unsafe action may reach
+the feeder even when the advisory model is wrong or adversarially
+steered; (ii)~unnecessary mitigation on benign operating days must be bounded and
+kept low (the measured false-open rate is nonzero, not zero); (iii)~a
+bounded response must be available within OT deadlines regardless of
+model latency; and (iv)~every decision must be auditable. The architecture is
+designed so that autonomous policy containment does not depend on model
+classification accuracy; service and reliability outcomes still depend on
+evidence availability and gate detection. \emph{Safety in this study denotes
+action-policy containment within the stated registry and threat model, not formal
+invariance of feeder physical states.} We therefore distinguish throughout:
+action-policy containment (what may execute), cyber-physical performance (ENS,
+curtailment, voltage), detection coverage (gate behaviour), and formal safety
+guarantees (which we do not claim).
+
+\subsection{Physical-Impact Metrics}
+\label{sec:bg-metrics}
+We score every detector-error against a vector of physical-impact
+metrics, all reported in their native units. We deliberately do
+\emph{not} aggregate them into a monetary score: monetary weights vary
+by jurisdiction, by tariff structure, and by the operator's posture,
+and any single weighting gives the impression of a precision the
+underlying weights do not have. Each component metric is a pure
+function over the time-series emitted by the harness; the energy
+values are computed by trapezoidal integration with units of kWh.
+
+\begin{itemize}
+  \item Energy Not Supplied (ENS) [kWh] --- integral of unmet demand
+    over the run window; the headline reliability metric.
+  \item Curtailed energy ($E_{\mathrm{curt}}$) [kWh] --- integral of
+    available-but-not-dispatched generation; the headline
+    over-mitigation metric.
+  \item Voltage band excursion ($\phi_{\mathrm{volt}}$) [fraction of
+    (bus,\,time) samples outside ANSI~C84.1].
+  \item Frequency deviation $\max|\Delta f|$ [Hz] --- the safety-margin
+    metric against IEEE~1547 ride-through bounds.
+  \item IEEE~1547 ramp-rate violations [count].
+\end{itemize}
+Detection metrics (per-class precision/recall/F1, macro-F1) are
+reported alongside the physical metrics and have a precise, separate
+interpretation: they describe \emph{whether} an attack was correctly
+classified, while the physical metrics describe the
+\emph{consequence} of the action that followed. Sec.~\ref{sec:eval}
+reports both, with paired bootstrap confidence intervals on the
+ENS-headline metric.

@@ -1,0 +1,41 @@
+name: rv13_benign_none_none_nom_medpen_none
+description: CALIBRATION CONTROL, excluded from primary significance analysis; measures
+  false-positive action rate under quiet conditions.
+feeder: ../../ieee13_fdi_inverter/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '634'
+- '671'
+- '675'
+ders:
+- id: INV_634
+  type: pv
+  bus: '634'
+  max_kw: 200.0
+- id: BESS_675
+  type: bess
+  bus: '675'
+  max_kw: 150.0
+base_load_kw: 1000.0
+attacks: []
+ground_truth:
+  attack_class: none
+  affected_asset: null
+  start_s: 0
+  end_s: 0
+revision_meta:
+  revision_tag: ijcip_revision_r1r2_20260805
+  attack_type: none
+  attack_magnitude: none
+  attack_duration: none
+  load_level: nominal
+  der_penetration: med
+  affected_asset: none
+  affected_bus: '-'
+  expected_safety_issue: 'no attack: any emitted mitigation is a false positive with
+    real curtailment cost'
+  rationale: CALIBRATION CONTROL, excluded from primary significance analysis; measures
+    false-positive action rate under quiet conditions.
+  is_calibration_control: true

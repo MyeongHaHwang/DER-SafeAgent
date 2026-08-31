@@ -1,0 +1,36 @@
+name: h_fdi_med_13
+description: FDI med bias 55.0 kW, dur 240s
+feeder: ../../ieee13_fdi_inverter/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '634'
+- '671'
+- '675'
+ders:
+- id: INV_634
+  type: pv
+  bus: '634'
+  max_kw: 200.0
+- id: BESS_675
+  type: bess
+  bus: '675'
+  max_kw: 150.0
+base_load_kw: 1000.0
+attacks:
+- type: fdi
+  target: INV_634
+  start_s: 130
+  end_s: 370
+  bias_kw: 55.0
+ground_truth:
+  attack_class: fdi
+  affected_asset: INV_634
+  start_s: 130
+  end_s: 370
+stub_params: {}
+revision_meta:
+  tag: ijcip_final_v3
+  split: end_to_end_holdout
+  feeder_family: ieee13

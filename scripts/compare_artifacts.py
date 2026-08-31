@@ -17,7 +17,7 @@ Checks (any failure exits non-zero):
 
 Two manuscript tables are intentionally absent from the generated set:
 ``table_provenance.tex`` (Table 2) is a descriptive trust-boundary table and
-``table_gate_auth.tex`` (Table 6) was typeset by hand from
+``table_gate_auth.tex`` (Table 7) was typeset by hand from
 ``code/results/ijcip_final/gate_auth/gate_auth_summary.csv``; both are shipped
 as reference files and covered by checksums (see docs/PAPER_ARTIFACT_MAP.md).
 """
@@ -40,6 +40,7 @@ GENERATED_TABLES = [
     "table_gate_v3.tex", "table_eh_v3.tex", "table_holdout_v3.tex",
     "table_adversarial_v3_qwen.tex", "table_adversarial_v3_llama.tex",
     "table_stats_primary.tex", "table_latency_v3.tex",
+    "table_action_policy.tex",   # scripts/export_action_policy.py
 ]
 HAND_AUTHORED = ["table_provenance.tex", "table_gate_auth.tex"]
 FIGURES = ["fig_containment_v3", "fig_gate_v3", "fig_holdout_ens_diff"]

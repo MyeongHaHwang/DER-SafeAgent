@@ -1,0 +1,15 @@
+{
+  "backend": "qwen2_5_7b_lora",
+  "base_model": "Qwen/Qwen2.5-7B-Instruct",
+  "adapter": "code/finetuning/results/20260519-144102-lora_qwen25_7b_local/adapter",
+  "adapter_sha": "0c9dec242e2f",
+  "substrate": "cuda-4bit-nf4",
+  "k": 1,
+  "n_prompts": 146,
+  "max_new_tokens": 160,
+  "corpus": "code/finetuning_dataset/revision_eval/eval_corpus.jsonl",
+  "strict_mode": true,
+  "n_real_calls": 146,
+  "n_fallback_calls": 0,
+  "completed_at": "2026-08-06T01:12:17"
+}

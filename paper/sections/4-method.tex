@@ -1,0 +1,226 @@
+\section{DER-SafeAgent}
+\label{sec:architecture}
+
+\begin{figure*}[t]
+  \centering
+  \input{figure/fig_architecture_final}
+  \caption{\ours{} final architecture. Solid blue components are
+    deterministic and own every decision that can reach the feeder; the
+    dashed red component is the untrusted QLoRA advisory path, consulted
+    only after the Incident Evidence Gate authorizes response under its
+    frozen observable-evidence thresholds, and only able to select within the
+    admissible candidate set the shield
+    computes. A model-proposed irreversible primitive is never
+    auto-executed. The deterministic fast path responds immediately in
+    parallel; every executed action lands in an append-only audit chain.}
+  \label{fig:architecture}
+\end{figure*}
+
+\subsection{Design rule and trust boundary}
+\label{sec:method-layering}
+\ours{} follows the runtime-assurance construction of
+Simplex~\cite{Sha2001Simplex} and action
+shielding~\cite{Alshiekh2018Shielding}: an unverified, high-capability
+component may propose; a small deterministic, directly testable layer decides
+what may execute. Three consequences structure the whole design
+(Fig.~\ref{fig:architecture}). First, the LLM never emits executable
+commands --- it selects from a fixed five-primitive registry
+\{\textsc{no\_op}, \textsc{freeze\_\allowbreak setpoint},
+\textsc{throttle\_\allowbreak ramp},
+\textsc{request\_\allowbreak ied\_\allowbreak revalidation},
+\textsc{isolate\_\allowbreak inverter}\}, so a
+wrong output is a selection error, not arbitrary code execution. Second,
+every quantity that can \emph{relax} a constraint is computed
+deterministically from telemetry, never taken from model output; the
+adversarial evaluation (\S\ref{sec:rq1}) shows why this rule is
+load-bearing. Third, a deterministic fast path produces a bounded
+response immediately, so consulting the model never delays containment.
+
+\paragraph{Notation and invariants}
+At tick $t$ the detector observes telemetry/packets $o_t$; a deterministic
+FeatureView $\phi(o_{1:t})$ yields evidence state $e_t$ (\S\ref{sec:method-featureview}).
+The Evidence Gate is a predicate $g(e_{1:t})\in\{0,1\}$
+(\S\ref{sec:method-gate}). The registry is a fixed set
+$\mathcal{A}=\{\textsc{no\_op},\textsc{freeze},\textsc{throttle},
+\textsc{revalidate},\textsc{isolate}\}$ with irreversible subset
+$\mathcal{I}=\{\textsc{isolate}\}$. The shield computes an admissible candidate set
+$S(e_t)\subseteq\mathcal{A}$; the untrusted model proposes
+$a^M_t\in\mathcal{A}\cup\{\bot\}$. The executed action is
+$$
+a^{\text{exec}}_t=\Pi\big(g(e_{1:t}),\,S(e_t),\,a^M_t,\,\tau_t\big),
+$$
+where $\Pi$ is the deterministic projection and $\tau_t$ the deadline state.
+The design enforces, and we test, the following invariants (unit tests in
+\texttt{test\_\allowbreak runtime\_\allowbreak safe\_\allowbreak gate.py} and
+\texttt{test\_\allowbreak safety\_\allowbreak projection.py}):
+\begin{enumerate}
+\item[(I1)] $a^{\text{exec}}_t\in\mathcal{A}$ (only registry primitives execute);
+\item[(I2)] $g(e_{1:t})=0 \Rightarrow a^{\text{exec}}_t=\textsc{no\_op}$ (gate closed $\Rightarrow$ monitor only);
+\item[(I3)] $a^M_t\in\mathcal{I} \Rightarrow a^{\text{exec}}_t\notin\mathcal{I}$ without human approval (a model-proposed irreversible action is never autonomously executed);
+\item[(I4)] if independent evidence $e_t$ establishes an incident, $a^M_t=\textsc{no\_op}$ cannot force $a^{\text{exec}}_t=\textsc{no\_op}$ (model inaction cannot veto evidenced response);
+\item[(I5)] a late or failed model call leaves the deterministic fast-path action in force (the model can never \emph{prevent} the bounded response);
+\item[(I6)] every proposal, veto, fallback, escalation, and execution is appended to the audit chain.
+\end{enumerate}
+I3 and I4 are the two-sided rule that model output may gate neither action
+nor inaction; the evidence in $g$ and $S$ is computed deterministically,
+so an attacker who controls the model's \emph{input or output} cannot
+change it \emph{through the model}. This is independence from the LLM, not
+robustness to a compromised network: an attacker able to inject or forge
+unauthenticated protocol traffic can still move the gate by manufacturing
+observable evidence (\S\ref{sec:bg-trust}), which is why the architecture
+escalates irreversible actions to a human rather than trusting any single
+evidence source. These invariants are deterministic and directly testable;
+we do not claim a formal proof.
+
+``Trustworthy'' in this paper denotes implemented, measured properties
+--- bounded action generation, schema compliance, containment within the
+tested adversarial suite, human oversight, auditability, consequence
+awareness, conservative fallback --- not a formal guarantee. The supplementary
+material maps each property to its mechanism, the experiment that evaluates it,
+and its remaining limitation.
+
+\subsection{Deterministic FeatureView}
+\label{sec:method-featureview}
+A deterministic first stage converts the rolling telemetry/event window
+into a structured FeatureView. Every feature is computed from quantities
+observable on the wire or from the defender's grid model, never from
+attacker-set ground truth. Table~\ref{tab:provenance} lists each feature,
+its observable source, and the attacker's influence over it. The features
+are: per-asset z-scores against a 60-step baseline; voltage-band
+excursion; a forged-command-packet count; a duplicate-payload signature;
+a persistent-freeze flag; a SCADA staleness signature (consecutive
+samples whose reported timestamps fail to advance --- the fingerprint of
+replay and denial-of-service, which re-emit captured frames); a protocol
+sequence-number regression (a frame carrying a sequence number below the
+running high-water mark --- the wire-visible signature of replay); and a
+telemetry-integrity residual (a reported power above the asset's rated
+capacity, physically impossible and therefore a corrupted reading ---
+the observable signature of a high-magnitude false-data-injection
+attack). No feature is read from attacker-set ground truth; a provenance
+audit (Table~\ref{tab:provenance}) records, for each feature, its
+observable source and the attacker's influence over it, and we report the
+detectability this observable-only discipline permits --- and the FDI
+limit it exposes --- in \S\ref{sec:rq2}\@. Every downstream stage, including the LLM prompt,
+consumes this single numeric grounding; severity is a bounded
+deterministic score, not a model output.
+
+\input{tables/final_v3/table_provenance}
+
+\subsection{Incident Evidence Gate}
+\label{sec:method-gate}
+The shield constrains \emph{which} action may execute, but our earlier
+evaluation showed it had no mechanism for deciding that \emph{no}
+incident exists: on benign stochastic days, cloud transients and
+measurement noise pushed the pipeline into unnecessary mitigation on
+every episode (\S\ref{sec:rq2}). The Evidence Gate closes this gap
+deterministically. It opens only when \emph{sustained protocol-level
+evidence} --- itself wire-observable and, absent authentication, forgeable
+by a network attacker (\S\ref{sec:bg-threat}): a forged command packet, a
+duplicate-payload/sequence
+regression (replay), non-advancing timestamps or a persistent zero-freeze
+(DoS), or a rating-plausibility integrity residual (high-magnitude FDI),
+all observable (Table~\ref{tab:provenance}) --- is sustained for the
+calibrated persistence window. A physical-only (z-score/voltage) path
+exists but its calibrated persistence threshold effectively disables it:
+on the development split, no physical-only setting separated attacks from
+benign PV transients without either missing attacks or admitting benign
+days, which is itself a finding about DER telemetry --- and, after the
+observable-only evidence set, is the reason a \emph{sub-capacity} FDI (whose only trace
+is such a physical deviation) is not reliably separable from benign
+operation without redundant sensing (\S\ref{sec:rq2}). While the gate is
+closed the system monitors; no mitigation executes and \emph{the LLM is
+not consulted}, which also removes the model's exposure to benign-day
+prompt content. Thresholds are calibrated on a development split and
+frozen before the held-out evaluation; the gate reads no model output.
+
+\subsection{Untrusted advisory path}
+\label{sec:method-advisory}
+When the gate opens, a QLoRA-adapted~\cite{Dettmers2023_QLoRA} open-weights
+backbone (Qwen2.5-7B~\cite{Hu2024_Qwen25} or
+Llama-3.1-8B~\cite{Dubey2024_Llama31}, NF4 4-bit on a single RTX~3080) receives the compact
+FeatureView prompt and returns a JSON hypothesis: attack class, affected
+asset, confidence, rationale, proposed action. Serving is strict: a run
+aborts if the intended backbone or adapter is not loaded, and every call
+records the adapter SHA-256, prompt hash, raw output, parse status and
+latency, so no deterministic fallback can masquerade as a model result:
+a silent fallback would invalidate any claim about model behaviour, so it
+is made impossible by construction rather than assumed absent.
+At each eligible gated decision tick the advisory path draws one greedy
+generation ($K{=}1$); a sustained incident may therefore trigger repeated
+consultations across ticks (the per-configuration call counts in
+Table~\ref{tab:holdout-v3}). Here $K$ is the number of generations \emph{per
+consultation} for self-consistency, not the number of consultations per
+incident: $K{=}1$ draws one generation, $K{=}3$ draws three. The default is
+$K{=}1$; $K{=}3$ was removed after measurement showed it tripled latency without
+a decision-quality gain that survives the shield. Fine-tuning uses a 200-example
+DER/ICS corpus with assistant-turn loss masking (supplementary material).
+
+\subsection{Runtime-assurance shield}
+\label{sec:method-shield}
+The shield computes, deterministically, the \emph{admissible candidate set}
+for the current situation and lets the model choose only within it.
+Removals are recorded per decision: actions inappropriate for the
+evidence class (a telemetry-layer compromise must not be answered by
+physically disconnecting a healthy asset), actions ineffective against
+the mechanism, and all non-\textsc{no\_op} actions when severity is
+below threshold. Two rules are absolute. (i)~A model-proposed
+\emph{irreversible} primitive (\textsc{isolate\_inverter}) is never
+auto-executed: where the evidence class admits it as a candidate at all it
+escalates to a human operator, and where the class forbids it the shield
+vetoes it and falls back deterministically
+(Table~\ref{tab:action-policy}). An earlier
+variant gated this on model-stated confidence and was falsified by
+adversarial evaluation --- injected prompts manufacture exactly the
+confidence the gate keyed on, making that variant worse than no shield
+(\S\ref{sec:rq1}). Attacker-influenceable quantities do not
+relax constraints. (ii)~When the model's proposal is unusable ---
+invalid, out of registry, below the confidence floor, or vetoed --- the
+shield falls back deterministically, ranking the admissible candidate set with the
+horizon-aware impact estimator described next.
+Table~\ref{tab:action-policy} states the complete frozen policy per evidence
+class --- which actions may execute autonomously, which are escalation-only,
+which are removed and why, and the deterministic fallback order --- together
+with the testbed action semantics and recovery condition. The policy is
+author-specified: the evaluation establishes conformance to this stated
+policy, not an independent validation of its operational correctness or
+completeness.
+
+\input{tables/final_v3/table_action_policy}
+
+\subsection{Horizon-aware impact estimator (EH)}
+\label{sec:method-estimator}
+The original estimator integrated per-action cost over a fixed 60\,s
+window. Counterfactual validation --- branching the simulator at the
+decision instant and executing every candidate under identical exogenous
+trajectories --- showed it selected a tie-optimal action in only a third of
+configurations (Table~\ref{tab:eh-v3}): over the true incident horizon,
+candidates differ by two orders of magnitude more than over 60 seconds, so a
+60\,s ranking is usually wrong. The repaired estimator EH uses only
+decision-time information: a deterministic class-family hypothesis from
+protocol evidence (spoof-like, FDI-like, or stale, the latter because
+replay and DoS are indistinguishable at decision time), a
+remaining-horizon estimate from a development-calibrated mean-residual-life prior,
+and restoration-horizon accounting for absorbing actions such as
+isolation. The true attack end time is never an input. EH is retained in
+the architecture only because it passed a hash-frozen held-out
+holdout (\S\ref{sec:rq3}); its point predictions remain
+imprecise, so it is used to \emph{rank} the admissible candidate set, never to claim
+impact magnitudes.
+
+\subsection{Fast path, slow path, oversight, audit}
+\label{sec:method-deployment}
+The deterministic fast path (FeatureView $\rightarrow$ evidence class
+$\rightarrow$ bounded primitive) responds within one control tick. The
+model path is a slow path under an explicit service-level objective:
+measured consultation latency (${\approx}5.5$\,s at $K{=}1$ on the reference GPU)
+means the model contributes within a 15\,s SLO and is skipped ---
+without loss of containment --- under tighter deadlines
+(\S\ref{sec:rq4}). Escalations carry the model's proposal,
+rationale and the shield's veto reasons to the operator. Every decision
+appends to a SHA-256 hash-chained audit record. Relative to a trusted stored
+chain head, verification detects modification, deletion, and reordering of
+records; it does not provide origin authentication, trusted timestamping, or
+protection against complete recomputation by an attacker who controls the entire
+log. Full prompts, schemas,
+state-machine contracts, and protocol examples are in the supplementary
+material.

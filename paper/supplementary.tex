@@ -1,0 +1,142 @@
+%% ------------------------------------------------------------------------
+%% DER-SafeAgent — Supplementary Material (IJCIP final revision)
+%% Compile independently:  tectonic supplementary.tex
+%% ------------------------------------------------------------------------
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{verbatim}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{xltabular}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage[hidelinks]{hyperref}
+
+\providecommand{\ours}{\textsc{DER-SafeAgent}}
+% macros used by the reused revision tables
+\input{tables/revision_numbers}
+
+\title{Supplementary Material for\\
+\emph{DER-SafeAgent: A Runtime-Assurance Architecture for Safe
+LLM-Assisted Cyber-Physical Incident Response in Distributed Energy
+Resources}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent This supplement contains material referenced from the main
+manuscript. The main manuscript is self-contained; nothing here is
+required to follow its argument. Naming note: the system was renamed from
+\textsc{DER-SecAgent} to \textsc{DER-SafeAgent} at the final revision;
+the code repository, module paths, and historical result directories
+retain the legacy name for reproducibility, and all repository paths
+cited below are unchanged.
+
+\tableofcontents
+
+\renewcommand{\thesection}{S\arabic{section}}
+% The reused appendix sources begin with \appendix; make it harmless here
+% so S-numbering is preserved.
+\renewcommand{\appendix}{}
+
+%% S1–S2 reuse the previous appendix sources verbatim.
+\input{sections/A-prompts}
+\input{sections/B-state-schema}
+
+\section{Operational definition of trustworthiness}
+\label{sec:supp-trustworthy}
+Table~\ref{tab:trustworthy} gives the full operational definition of
+``trustworthy'' as used in the main text: for each property, the implementation
+mechanism, how it is evaluated and the supporting evidence, and the remaining
+limitation.
+\input{tables/table_trustworthy_characteristics}
+
+\section{Complete scenario and configuration manifests}
+The frozen 25-configuration cyber-physical library is defined by
+\texttt{code/configs/ijcip\_revision\_r1r2\_20260805/scenario\_manifest.csv}
+(SHA-256 per configuration). The final-revision additions
+(tag \texttt{ijcip\_final\_safeagent\_20260810}) are:
+the 12-configuration estimator holdout
+(\texttt{impact\_estimator\_holdout.csv}),
+the 32-configuration Evidence-Gate test set
+(\texttt{evidence\_gate\_test.csv}),
+and the 12-configuration pre-registered OpenDSS subset
+(\texttt{opendss\_llm\_subset.csv});
+each manifest carries per-file SHA-256 hashes and a freeze note recording
+that it was written before the corresponding evaluation.
+\input{tables/table_scenario_matrix}
+
+\section{Full QLoRA evaluation}
+Expanded QLoRA corpus results (146 leakage-controlled prompts per
+backbone), calibration and confusion detail, and the $K{=}1$ vs $K{=}3$
+comparison.
+\input{tables/table_lora_eval_expanded}
+\input{tables/table_k1_vs_k3}
+\begin{figure}[h]\centering
+\includegraphics[width=0.8\textwidth]{figure/fig_lora_confusion.pdf}
+\caption{Class confusion, both backbones, leakage-controlled corpus.}
+\end{figure}
+\begin{figure}[h]\centering
+\includegraphics[width=0.55\textwidth]{figure/fig_lora_calibration.pdf}
+\caption{Confidence calibration.}
+\end{figure}
+
+\section{Full adversarial-family breakdown}
+\input{sections/C-adversarial}
+
+\section{Historical evaluations superseded in the main text}
+\label{sec:supp-historical}
+The originally published three-scenario $\times$ five-seed evaluation is
+retained here for continuity. The harness is deterministic given a
+configuration, so the five ``seeds'' were byte-identical replicates; the
+expanded configuration-level evaluation in the main text supersedes this
+protocol, and these numbers describe the deterministic policy
+configuration (the submitted manuscript's silent-fallback defect meant no
+LLM participated in them).
+\input{tables/table_det_vs_llm}
+\input{tables/table_opendss_smoke}
+\input{tables/table_external_benchmark}
+\input{tables/table_objective_sensitivity}
+\input{tables/table_hitl_triggered}
+\input{tables/table_ablation_sensitive}
+\input{tables/table_latency}
+
+\section{Full OpenDSS configuration sweep}
+The 20-configuration OpenDSS sweep (3 non-LLM detectors, all real
+solves, zero non-converged) from which the main text's pre-registered
+LLM subset was drawn.
+\input{tables/table_opendss_sweep}
+
+\section{Byte-level protocol examples}
+\input{sections/D-protocols}
+
+\section{Reproducibility}
+\label{sec:supp-repro}
+Environment manifests (dependency versions, adapter SHA-256 hashes, GPU
+state) are recorded per revision tag under \texttt{code/manifests/}. All
+headline numbers regenerate from raw results via
+\texttt{code/evaluation/final\_safeagent/build\_final\_artifacts.py} and
+\texttt{code/evaluation/build\_revision\_artifacts.py}. Strict LLM
+serving (\texttt{DER\_LLM\_STRICT=1}) aborts any run whose backbone or
+adapter cannot be verified; per-call provenance (adapter SHA, prompt
+hash, raw output, parse status, latency) is stored in each run's
+\texttt{decisions.jsonl}. The repository directory name
+(\texttt{DER-SecAgent}) and Python package names retain the legacy
+system name; renaming them would invalidate recorded configuration
+hashes and historical manifests, so the publication name maps to the
+legacy identifier as documented in \texttt{README.md}.
+
+\section{Additional statistics}
+Hierarchical-bootstrap intervals for the stochastic-episode arms,
+sensitivity analyses excluding non-discriminative configurations, and
+the full contrast tables are provided as CSV/JSON under
+\texttt{code/results/ijcip\_final\_safeagent\_20260810/statistics/}.
+\input{tables/table_config_stats}
+
+\end{document}

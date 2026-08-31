@@ -1,6 +1,62 @@
 # Changelog
 
-## Unreleased
+## 1.1.0 — 2026-08-29 — release-candidate audit and manuscript sync
+
+Full claim-by-claim audit against the manuscript (`docs/CLAIM_LEDGER.md`);
+no raw result files were modified. One derived statistics protocol was
+amended (below), and the manuscript was synchronized with the release.
+
+### Changed (statistics re-analysis; no new experiments)
+- `run_stats_v3.py`: the sign-flip permutation and bootstrap resampling
+  draws are now a deterministic function of the family seed (20260811) and
+  sample size, shared across all contrasts (common random numbers). The
+  original 2026-08-11 run consumed one sequential RNG stream, so the
+  byte-identical ModelOnly-Q/L difference vectors received different
+  bootstrap samples and near-identical-but-unequal CIs in Table 9. Identical
+  vectors now receive identical CIs; every qualitative conclusion (Holm
+  significance pattern) is unchanged. `F1_physical.csv`, the Table 9
+  reference, and the three body-text p-values were updated accordingly.
+
+### Added
+- `docs/CLAIM_LEDGER.md`: 35 principal manuscript claims traced to raw
+  sources with executed verification commands and statuses.
+- `scripts/export_action_policy.py` + `code/configs/action_policy.yaml` +
+  manuscript Table 3 (`table_action_policy.tex`): single-source-of-truth
+  export of the shield's class-aware action policy, guarded by
+  `tests/test_action_policy.py` (5 tests, incl. an exhaustive
+  model-proposed-irreversible sweep and adversarial must-not-set checks).
+- `paper/`: the manuscript LaTeX source (main + supplementary + tables +
+  figures + listings) is now tracked; `make latex` builds it, and the
+  claim-consistency tests now run against it in CI instead of skipping.
+- `code/results/ijcip_final_revision/e7_trustworthiness/`: the groundedness
+  audit CSVs behind the 70–73% / 23–30% discussion figures (previously
+  cited but not shipped).
+- `scripts/repo_hygiene.py` + `make hygiene`: secret / stale-wording /
+  absolute-path / oversize-file scan.
+- `make release-check`: single CPU gate (deps, compile, tests, smoke,
+  verify, reproduce-paper, latency, hygiene, LaTeX build when available).
+- CI: hygiene step and a manuscript-build job.
+- `DER-SafeAgent_Logo.png` and the README logo header (from the initial
+  GitHub upload).
+
+### Fixed / synchronized
+- Manuscript: de-anonymized author block (IJCIP review is
+  single-anonymized); Code and Data Availability now cites the verified
+  repository URL; three verified IJCIP references added to Related Work and
+  the positioning table; irreversible-action wording made exact (vetoed
+  where class-inappropriate, escalated where admitted — matching
+  `safety_projection.py`); explicit statement that RQ1 arms generate model
+  output independently (no frozen-output replay); Table 3 insertion shifts
+  the old Tables 3–10 to 4–11 (all repository docs renumbered).
+- Removed stale double-blind wording from README, CITATION.cff, LICENSE,
+  and SECURITY.md; CITATION.cff now carries the real author list and
+  repository URL.
+- Resolved the merge-conflicted LICENSE on the initial GitHub upload to
+  **Apache-2.0** (author-confirmed) with the third-party scope note
+  retained; CITATION.cff, pyproject.toml, README, and all release-manifest
+  license fields updated consistently.
+
+## 1.0.1 — 2026-08-17
 
 ### Fixed
 - `scripts/smoke_test.sh`, `scripts/reproduce_paper_artifacts.sh`, and

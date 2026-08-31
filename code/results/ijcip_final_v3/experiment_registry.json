@@ -1,0 +1,123 @@
+{
+  "schema": "ijcip_final_v3 experiment registry",
+  "unit_of_inference": "configuration (episodes averaged within configuration)",
+  "experiments": [
+    {
+      "id": "ADV70",
+      "rq": "RQ1 containment",
+      "status": "EXECUTED (prior session, real LLM)",
+      "backbones": [
+        "qwen 0c9dec242e2f",
+        "llama 9a2b8436ce9c"
+      ],
+      "real_llm": true,
+      "fallbacks": 0,
+      "n": "70 cases x 8 arms x 2 backbones",
+      "result": "code/results/ijcip_final_v3/adversarial/adversarial_raw_{qwen,llama}.csv"
+    },
+    {
+      "id": "HOLDOUT",
+      "rq": "RQ3 physical cost",
+      "status": "EXECUTED (prior session, real LLM)",
+      "real_llm": true,
+      "fallbacks": 0,
+      "n": "49 cfg x 3 ep x 8 arms",
+      "adapter_sha": "per-arm, verified",
+      "result": "code/results/ijcip_final_v3/holdout_e2e/holdout_e2e_raw.csv"
+    },
+    {
+      "id": "GATE_ROBUST",
+      "rq": "RQ2 detector-side gate",
+      "status": "EXECUTED (prior session)",
+      "result": "code/results/ijcip_final_v3/gate_robustness/gate_v3_summary.csv"
+    },
+    {
+      "id": "GATE_AUTH",
+      "rq": "RQ2 authentication",
+      "status": "EXECUTED (prior session)",
+      "result": "code/results/ijcip_final/gate_auth/gate_auth_summary.csv"
+    },
+    {
+      "id": "EH_ROBUST",
+      "rq": "estimator",
+      "status": "EXECUTED (prior session)",
+      "n": "12 cfg x 10 conditions",
+      "result": "code/results/ijcip_final_v3/eh_robustness/eh_robustness.csv"
+    },
+    {
+      "id": "OPENDSS_CHECK",
+      "rq": "physical validation (static)",
+      "status": "EXECUTED (prior session, real OpenDSS)",
+      "n": "12 cfg, 0 non-converged",
+      "result": "code/results/ijcip_final/opendss_check/opendss_check_summary.csv"
+    },
+    {
+      "id": "LATENCY",
+      "rq": "RQ4 timing",
+      "status": "EXECUTED (prior session)",
+      "result": "code/results/ijcip_final/latency/latency_distributions.csv"
+    },
+    {
+      "id": "P0A_GATE_FORENSICS",
+      "rq": "P0-A",
+      "status": "EXECUTED THIS SESSION (trace analysis of real logs)",
+      "result": "code/results/ijcip_final_v3/p0_forensics/p0a_result.json",
+      "finding": "deterministic gate invariance PASS (11020 pre-action ticks, 0 violations); Table 8 gate_open_covered is closed-loop, arm-dependent (mislabeled)."
+    },
+    {
+      "id": "P0BCD_FORENSICS",
+      "rq": "P0-B/C/D",
+      "status": "EXECUTED THIS SESSION",
+      "result": "code/results/ijcip_final_v3/p0_forensics/p0bcd_result.json",
+      "finding": "call-count unit clarified; HITL asymmetry = backbone+mode dependent (genuine); bareQ==bareL genuine (zero executed actions, lineage assertion PASS 99/99)."
+    },
+    {
+      "id": "PROP_TESTS",
+      "rq": "P1-Exp2 property-based safety",
+      "status": "EXECUTED THIS SESSION",
+      "n": "40824 exhaustive combinations",
+      "result": "code/results/ijcip_final_v3/property_tests/property_test_result.json",
+      "finding": "0 property violations; 3/3 mutation guards caught (1008/144/3930)."
+    },
+    {
+      "id": "P0E_ESTIMATOR",
+      "rq": "P0-E",
+      "status": "RESOLVED (reporting bug)",
+      "finding": "E60 tie-aware top-1 = 0.33 (nominal), mean 0.40, mean regret 76.3; text 'never selects optimal' overstated -> corrected to numbers."
+    },
+    {
+      "id": "P0F_AUDIT_CHAIN",
+      "rq": "P0-F",
+      "status": "RESOLVED (already accurate)",
+      "finding": "code+manuscript scope the hash chain narrowly (append-only integrity, not signature/timestamp/full-rewrite proof); matches verified property."
+    },
+    {
+      "id": "GATE_BENCH_EXPANDED",
+      "rq": "P1-Exp1 (>=220 configs)",
+      "status": "NOT EXECUTED",
+      "reason": "Large new config generation + runs; deterministic (no LLM) so feasible in principle. Not run this session due to scope. Existing 32-cfg gate benchmark + magnitude FDI sweep + auth study stand.",
+      "command": "python3 -m code.evaluation.ijcip_final_v3.run_expanded_gate_bench (to be authored)"
+    },
+    {
+      "id": "QSTS_LLM_ARMS",
+      "rq": "P1-Exp3 dynamic QSTS, LLM arms",
+      "status": "BLOCKED",
+      "reason": "Requires real Qwen/Llama inference; base weights absent (HF cache refs-only, Llama gated). Deterministic arms (D0/OPROJ) already validated on static OpenDSS (OPENDSS_CHECK).",
+      "command": "HF_TOKEN=... huggingface-cli download meta-llama/Llama-3.1-8B-Instruct; then python3 -m code.evaluation.ijcip_final_v3.run_qsts --arms D0,bareQ,bareL,Q1,L1,QPROJ,LPROJ,OPROJ"
+    },
+    {
+      "id": "LLM_ADVISORY_QUALITY",
+      "rq": "P1-Exp4 base vs adapted advisory",
+      "status": "BLOCKED",
+      "reason": "Requires base + adapted Qwen/Llama inference; base weights absent (see environment.json).",
+      "command": "HF_TOKEN=... download base weights; then python3 -m code.evaluation.ijcip_final_v3.run_advisory_quality"
+    },
+    {
+      "id": "EXPERT_STUDY",
+      "rq": "P1-Exp4 human expert eval",
+      "status": "PENDING (no fabrication)",
+      "reason": "Requires real expert raters + IRB determination. Blinded package prepared; no responses fabricated.",
+      "package": "paper/submission/ijcip_final_v3/expert_eval_package/"
+    }
+  ]
+}

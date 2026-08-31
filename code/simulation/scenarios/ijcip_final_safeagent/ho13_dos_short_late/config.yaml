@@ -1,0 +1,34 @@
+name: ho13_dos_short_late
+description: '45 s outage: stale-family case where over-committing is cheap.'
+feeder: ../../ieee13_fdi_inverter/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '634'
+- '671'
+- '675'
+ders:
+- id: INV_634
+  type: pv
+  bus: '634'
+  max_kw: 200.0
+- id: BESS_675
+  type: bess
+  bus: '675'
+  max_kw: 150.0
+base_load_kw: 1000.0
+attacks:
+- type: dos
+  target: INV_634
+  start_s: 240
+  end_s: 285
+ground_truth:
+  attack_class: dos
+  affected_asset: INV_634
+  start_s: 240
+  end_s: 285
+revision_meta:
+  revision_tag: ijcip_final_safeagent_20260810
+  split: impact_estimator_holdout
+  feeder_family: ieee13

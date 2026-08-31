@@ -8,8 +8,10 @@ Incident Response in Distributed Energy Resources.**
 Reproducibility package for the manuscript submitted to the *International
 Journal of Critical Infrastructure Protection* (IJCIP). It contains the
 implementation, the frozen experiment protocols, the synthetic datasets, the
-released QLoRA adapters, the canonical result files, and the scripts that
-regenerate every numeric table and figure in the manuscript.
+released QLoRA adapters, the canonical result files, the manuscript LaTeX
+source, and the scripts that regenerate every numeric table and figure in
+the manuscript. A claim-by-claim audit connecting each reported number to
+its raw source is kept in [`docs/CLAIM_LEDGER.md`](docs/CLAIM_LEDGER.md).
 
 > **What this system claims — and what it does not.** DER-SafeAgent treats a
 > locally served LLM (Qwen2.5-7B-Instruct or Llama-3.1-8B-Instruct with
@@ -47,11 +49,12 @@ regenerate every numeric table and figure in the manuscript.
 │   └── docs/                #   threat model, AI-pipeline taxonomy
 ├── artifacts/               # reference (manuscript-exact) + regenerated tables/figures
 ├── data/manifests/          # SHA-256 release manifests
-├── docs/                    # REPRODUCIBILITY, EXPERIMENTS, DATA/MODEL provenance, artifact map
-├── scripts/                 # bootstrap, smoke, verify, reproduce, environment capture
-├── tests/                   # repo-level tests (manifests, artifact regeneration, smoke)
+├── docs/                    # REPRODUCIBILITY, EXPERIMENTS, provenance, artifact map, CLAIM_LEDGER
+├── paper/                   # manuscript LaTeX source (build: tectonic main.tex)
+├── scripts/                 # bootstrap, smoke, verify, reproduce, policy export, environment
+├── tests/                   # repo-level tests (manifests, artifacts, action policy, smoke)
 ├── Makefile                 # all entry points (`make help`)
-└── REPRODUCIBILITY_REPORT.md / RELEASE_CHECKLIST.md
+└── REPRODUCIBILITY_REPORT.md / RELEASE_CHECKLIST.md / RELEASE_AUDIT.md
 ```
 
 ## Installation
@@ -72,9 +75,17 @@ provided. GPU stack for full re-execution: `make setup-llm`.
 ## Five-minute smoke test (CPU)
 
 ```bash
-make test     # full unit + safety-invariant suite (172 tests, ~10 s)
+make test     # full unit + safety-invariant suite (179 tests, ~10 s)
 make smoke    # imports, frozen configs, gate/shield invariants, mini episode
-make verify   # SHA-256 of all released artifacts (227 checks)
+make verify   # SHA-256 of all released artifacts (236 checks)
+```
+
+The single all-in-one gate (tests, smoke, checksums, paper-artifact
+regeneration, hygiene scan, and — when a TeX engine is available — the
+manuscript build) is:
+
+```bash
+make release-check
 ```
 
 ## Regenerate the paper's tables and figures (CPU, no LLM)
@@ -83,13 +94,14 @@ make verify   # SHA-256 of all released artifacts (227 checks)
 make reproduce-paper
 ```
 
-Regenerates Tables 3–5 and 7–10 and Figures 2–4 from the canonical raw
-result files and compares against `artifacts/reference/` (byte-exact copies
-of the manuscript's files). Verified for this release: **all seven generated
-tables byte-identical; all three figure PNGs byte-identical; statistics
-regenerate hash-identically** (fixed RNG seed 20260811). Tables 1–2 and
-Figure 1 have no numeric content; Table 6's underlying CSV regenerates with
-`make gate-auth`. Full mapping: `docs/PAPER_ARTIFACT_MAP.md`.
+Regenerates Table 3 (action policy), Tables 4–6, and Tables 8–11 plus
+Figures 2–4 from the canonical raw result files and compares against
+`artifacts/reference/` (byte-exact copies of the manuscript's files).
+Verified for this release: **all eight generated tables byte-identical; all
+three figure PNGs byte-identical; statistics regenerate hash-identically**
+(fixed RNG seed 20260811). Tables 1–2 and Figure 1 have no numeric content;
+Table 7's underlying CSV regenerates with `make gate-auth`. Full mapping:
+`docs/PAPER_ARTIFACT_MAP.md`.
 
 ## Full model-in-the-loop experiments (GPU)
 
@@ -128,14 +140,14 @@ canonical results, enforced by tests). Stage-by-stage guide:
 ```bash
 make verify                                   # everything (non-zero exit on failure)
 python3 scripts/verify_artifacts.py --strict  # + flag unexpected files in frozen dirs
-python3 scripts/derive_latency_v3.py          # Table 10 re-derivation check
+python3 scripts/derive_latency_v3.py          # Table 11 re-derivation check
 make environment                              # record your environment for comparison
 ```
 
 ## Reproducibility scope and known limitations
 
 Verified: CPU regeneration of all main-text numeric artifacts
-(byte-identical), checksum integrity of all 200+ released artifacts, the
+(byte-identical), checksum integrity of all 236 released artifact checks, the
 full test suite, and value-identical re-derivation of the latency summary.
 Not guaranteed: bit-identical LLM outputs across GPU/CUDA/driver stacks
 (greedy decoding is used, but cross-platform bitwise identity has not been
@@ -147,18 +159,20 @@ Full discussion and the complete verification record:
 
 ## Citation
 
-See [`CITATION.cff`](./CITATION.cff). The manuscript is under double-blind
-review; author details and the archival reference will be added on
-publication.
+See [`CITATION.cff`](./CITATION.cff). The manuscript (Hwang, Kim, Kim,
+Kwon, Lee) is under review at IJCIP; the archival reference will be added
+on publication.
 
 ## License
 
-MIT for the project's own code, configurations, synthetic data, and results
-— see [`LICENSE`](./LICENSE) for the explicit scope carve-out covering
-third-party models and datasets that are referenced but not distributed.
+Apache-2.0 for the project's own code, configurations, synthetic data, and
+results — see [`LICENSE`](./LICENSE) for the explicit scope note covering
+third-party models and datasets that are referenced but not distributed
+(the Llama QLoRA adapter is additionally subject to the Llama 3.1
+Community License; the synthetic corpus is CC0-1.0).
 
 ## Contact
 
-During double-blind review, contact is via the journal's submission system.
-A maintainer contact will be added here on de-anonymisation (tracked in
-`RELEASE_CHECKLIST.md`).
+Maintainer: Myeong-Ha Hwang (KEPRI) — <raphael9290@gmail.com>. Please use
+GitHub issues for reproduction problems; see `SECURITY.md` for reporting
+safety-relevant defects.

@@ -1,0 +1,9 @@
+arm,n,consulted,irrev_exec,policy_viol
+bare_llm,70,61,61,46
+deterministic_only,70,70,0,0
+final,70,64,0,0
+minus_caution_hitl,70,64,0,0
+minus_class_avoidance,70,64,36,31
+minus_eh_fallback,70,64,0,0
+minus_evidence_gate,70,55,0,0
+minus_projection,70,64,0,0

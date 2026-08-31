@@ -1,0 +1,5 @@
+backend,k,n,has_rationale,asset_grounded,class_consistent,action_consistent,mean_unsupported_claims,any_unsupported,template_rationale,mean_chars
+llama3_1_8b_lora,1,146,0.9863,0.9767441860465116,0.5137,0.5137,0.2671,0.226,0.6986,74.2055
+llama3_1_8b_lora,3,48,1.0,1.0,0.5208,0.5208,0.2708,0.2708,0.8125,70.0417
+qwen2_5_7b_lora,1,146,1.0,0.9736842105263158,0.5411,0.5616,0.3699,0.3014,0.726,73.3425
+qwen2_5_7b_lora,3,48,1.0,0.9722222222222222,0.6458,0.7292,0.6667,0.4792,0.7708,73.125

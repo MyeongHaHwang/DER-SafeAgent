@@ -1,0 +1,38 @@
+name: ieee13_command_spoof
+description: |
+  IEEE-13-style feeder. A forged DERMS dispatch command pushes INV_634's actual
+  kW from its nominal 140 kW to 25 kW for 120 s (180-300 s). This causes a
+  measurable voltage drop and counts as a ramp violation. A correct detector
+  + freeze_setpoint mitigation reverts the inverter to nominal output;
+  inaction propagates into ENS / curtailment.
+
+feeder: feeder.dss
+
+dt_s: 1.0
+duration_s: 600
+
+monitored_buses: [SOURCEBUS, "634", "671", "675"]
+
+ders:
+  - id: INV_634
+    type: pv
+    bus: "634"
+    max_kw: 200.0
+  - id: BESS_675
+    type: bess
+    bus: "675"
+    max_kw: 150.0
+
+attacks:
+  - type: command_spoof
+    target: INV_634
+    start_s: 180
+    end_s: 300
+    forged_setpoint_kw: 25.0
+    period_s: 5.0
+
+ground_truth:
+  attack_class: command_spoof
+  affected_asset: INV_634
+  start_s: 180
+  end_s: 300

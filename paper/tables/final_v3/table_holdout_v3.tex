@@ -1,0 +1,33 @@
+\begin{table}[t]
+\centering\small
+\caption{Held-out end-to-end evaluation: 49 configurations (33 attack, 16
+benign) $\times$ 3 stochastic episodes, observable-only runtime.
+Configuration is the inference unit; episodes averaged within configuration.
+\emph{Closed-loop coverage} is whether the incident is flagged at any tick of
+the attack window in the closed loop; it is arm-dependent because each arm's
+action feeds back into telemetry and the sustained-evidence gate (e.g.\ time to
+first gate-open is $20$\,s for D0 vs.\ $111$\,s for L1), and is \emph{N/A} for
+the ungated bare arms. It is \emph{not} the deterministic pre-action gate, which
+is model-independent and identical across arms for identical input (verified:
+$11{,}020$ pre-action ticks, $0$ violations); the detector-side gate recall is
+Table~\ref{tab:gate-v3}. \emph{LLM calls} = sum over the 33 attack configs of
+per-config mean calls (a sustained incident re-consults across ticks). Benign
+false-action (FA) is physical-side. LLM arms run under strict serving (zero
+fallbacks). Paired statistics in Table~\ref{tab:stats-primary}.}
+\label{tab:holdout-v3}
+\begin{tabular}{lcccccc}
+\toprule
+Arm & ENS & Curt. & Closed-loop & Benign & LLM & HITL \\
+ & (kWh) & (kWh) & coverage & FA rate & calls & \\
+\midrule
+D0 & 0.352 & 11.52 & 0.949 & 0.250 & 0 & 0 \\
+ModelOnly-Q & 8.484 & 17.05 & N/A & 0.000 & 66 & 0 \\
+ModelOnly-L & 8.484 & 17.05 & N/A & 0.000 & 66 & 0 \\
+ClassOnly-Q & 4.006 & 13.48 & 0.657 & 0.000 & 167 & 0 \\
+ClassOnly-L & 4.749 & 13.84 & 0.657 & 0.062 & 167 & 0 \\
+SafeProj-Q & 0.537 & 11.85 & 0.657 & 0.062 & 143 & 44 \\
+SafeProj-L & 0.750 & 12.01 & 0.495 & 0.062 & 143 & 0 \\
+OracleClass-Proj & 0.067 & 11.65 & 0.960 & 0.000 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}

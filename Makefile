@@ -6,7 +6,8 @@ PY ?= python3
 export PY
 
 .PHONY: help setup setup-llm setup-dss test smoke verify reproduce-paper \
-        reproduce-stats derive-latency environment \
+        reproduce-stats derive-latency environment policy-export hygiene \
+        latex release-check \
         gate-calibrate gate-evaluate gate-auth eh-robustness deadline \
         holdout-freeze holdout-cpu holdout-llm adversarial opendss-check \
         full-experiment clean-artifacts
@@ -64,6 +65,29 @@ derive-latency:
 
 environment:
 	$(PY) scripts/collect_environment.py
+
+policy-export:  ## regenerate action_policy.yaml + the manuscript policy table
+	$(PY) scripts/export_action_policy.py
+
+hygiene:  ## secret / stale-wording / large-file / absolute-path scan
+	$(PY) scripts/repo_hygiene.py
+
+latex:  ## build the manuscript from the tracked source (needs a TeX engine)
+	cd paper && tectonic main.tex
+
+release-check:  ## full CPU release gate: everything must pass (non-zero on failure)
+	$(PY) -c "import numpy, pandas, scipy, matplotlib, yaml; print('deps ok')"
+	$(PY) -m compileall -q code tests scripts
+	$(PY) -m pytest code/ tests/ -q
+	bash scripts/smoke_test.sh
+	$(PY) scripts/verify_artifacts.py
+	bash scripts/reproduce_paper_artifacts.sh
+	$(PY) scripts/derive_latency_v3.py
+	$(PY) scripts/repo_hygiene.py
+	@if command -v tectonic >/dev/null 2>&1; then \
+	    (cd paper && tectonic main.tex >/dev/null) && echo "latex: PASS"; \
+	else echo "latex: SKIPPED (no tectonic on PATH — install or run 'make latex' elsewhere)"; fi
+	@echo "RELEASE CHECK PASSED"
 
 # ---- CPU experiment stages ------------------------------------------------
 

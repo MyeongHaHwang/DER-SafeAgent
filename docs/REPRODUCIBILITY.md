@@ -34,7 +34,7 @@ make reproduce-paper   # stats -> tables/figures -> comparison
 ```
 
 Regenerates the manuscript's numeric artifacts from the canonical raw result
-files (~300 KB of CSVs) — Tables 3–5 and 7–10 and Figures 2–4 — and compares
+files (~300 KB of CSVs) — Tables 3–6 and 8–11 and Figures 2–4 — and compares
 them against `artifacts/reference/`. This mode does **not** re-run any LLM
 inference; it proves the mapping raw results → published numbers.
 Verified: all 7 generated tables byte-identical; all 3 figure PNGs

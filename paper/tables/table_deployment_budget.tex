@@ -1,0 +1,113 @@
+% Deployment timing budget (revision ijcip_revision_r1r2_20260805).
+% Evidence status is stated per row; nothing here is an unmeasured
+% server-GPU claim.
+\begin{table*}[t]
+\centering
+\caption{Deployment timing budget for a fast-path/slow-path deployment.
+``Measured'' rows are wall-clock values recorded by the instrumented harness on
+the evaluation host (consumer RTX-3080, 4-bit NF4 quantisation); ``simulated''
+rows are produced by the deadline-aware evaluation, which replays each measured
+inference latency against the physical model; ``assumed'' rows are engineering
+assumptions carried into the analysis and are not evidence; ``target'' rows are
+future goals with no measurement behind them. We make no claim about
+server-class GPU performance, which we have not measured.}
+\label{tab:deployment-budget}
+\scriptsize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.16\textwidth}
+ >{\raggedright\arraybackslash}p{0.085\textwidth} >{\raggedright\arraybackslash}p{0.085\textwidth}
+ >{\raggedright\arraybackslash}p{0.062\textwidth} >{\raggedright\arraybackslash}X
+ >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.062\textwidth}@{}}
+\toprule
+Pipeline stage & Latency & Substrate & Blocking? & Fallback behaviour & Operational implication & Evidence \\
+\midrule
+IDS alert $\rightarrow$ FeatureView (Telemetry Analyst) &
+$\ll 1$\,ms &
+CPU, in process &
+Blocking &
+None needed --- deterministic &
+Grounding is always available before any model call &
+Measured \\
+\midrule
+Deterministic policy decision (fast path) &
+$\ll 1$\,ms &
+CPU, in process &
+Blocking &
+Is itself the fallback &
+The action surface is never unattended: a bounded action exists within one control tick &
+Measured \\
+\midrule
+Hypothesis Agent, $K{=}1$ &
+\HypLatKOne &
+RTX-3080, 4-bit NF4 &
+Asynchronous &
+Fast-path action stands until the result arrives &
+Consultation is per escalated incident, not per tick &
+Measured \\
+\midrule
+Hypothesis Agent, $K{=}3$ self-consistency &
+\HypLatKThree &
+RTX-3080, 4-bit NF4 &
+Asynchronous &
+As above &
+Three sequential calls; the extra latency must be justified by a decision-quality gain &
+Measured \\
+\midrule
+Caution Agent review &
+\CautionLat &
+RTX-3080, 4-bit NF4 &
+Asynchronous &
+Deterministic caution floor applies regardless of model output &
+The veto does not depend on the model being reachable &
+Measured \\
+\midrule
+Coordinator selection + class-aware avoidance &
+$\ll 1$\,ms &
+CPU, in process &
+Blocking &
+Is itself the fallback &
+The final action is chosen deterministically even when the model output is malformed &
+Measured \\
+\midrule
+End-to-end model-informed decision under SLO &
+See Table~\ref{tab:slo-outcomes} &
+RTX-3080 + harness &
+Asynchronous &
+SLO expiry $\rightarrow$ fast-path action stands for the remainder of the incident &
+Determines whether the model layer influences the physical outcome at all &
+Simulated (replay of measured latencies) \\
+\midrule
+Model cold start (weights load + adapter attach) &
+\ColdStart &
+RTX-3080 &
+Blocking (first call only) &
+Fast path serves all incidents until the model is resident &
+Argues for a resident process, not per-incident model loading &
+Measured \\
+\midrule
+ChatOps round trip to operator &
+$30$\,s response, $60$\,s SLO (configured) &
+External &
+Asynchronous &
+SLO expiry $\rightarrow$ \texttt{freeze\_setpoint} and page on-call &
+Human latency dominates model latency by an order of magnitude &
+Assumed (configured values; simulated operators) \\
+\midrule
+Command authentication and dispatch to DERMS/SCADA &
+Not measured &
+Utility infrastructure &
+Blocking &
+Out of scope of this study &
+A real deployment adds authn/authz and command-confirmation latency we do not model &
+Assumed \\
+\midrule
+Server-class GPU serving &
+Not measured &
+--- &
+--- &
+--- &
+Would reduce inference latency, but we deliberately make no numerical claim &
+Target \\
+\bottomrule
+\end{tabularx}
+\end{table*}

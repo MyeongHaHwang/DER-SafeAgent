@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering\small
+\caption{Real QLoRA $\rightarrow$ real OpenDSS power flow on the
+pre-registered 12-configuration subset (11 attack + 1 benign control;
+frozen before any model run). Every row aggregates real solves (zero
+non-converged ticks); LLM rows abort on any serving fallback and record the
+adapter SHA per call. ENS and the voltage-violation fraction are zero on
+every row of this subset (healthy feeders) and are reported
+descriptively; curtailment and $V_{\min}$ carry the evidence.}
+\label{tab:opendss-llm}
+\begin{tabular}{lccccccc}
+\toprule
+System & Curt. & ENS & $V_{\min}$ & V-viol & Mit.\ lat. & Shield & HITL \\
+ & (kWh) & (kWh) & (pu) & frac & (s) & interv. & \\
+\midrule
+OD0 & 17.6 & 0.00 & 0.975 & 0.000 & 0 & 0 & 0 \\
+OQ1 & 18.7 & 0.00 & 0.975 & 0.000 & 0 & 3 & 0 \\
+OL1 & 18.7 & 0.00 & 0.975 & 0.000 & 0 & 11 & 0 \\
+OQP & 17.7 & 0.00 & 0.975 & 0.000 & 0 & 3 & 0 \\
+OLP & 17.7 & 0.00 & 0.975 & 0.000 & 0 & 11 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}

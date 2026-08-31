@@ -1,0 +1,50 @@
+name: rv34_dos_med_persistent_nom_medpen_bess848
+description: "RTU/IED-level persistent freeze on a BESS; deficit 0.26 \u2014 recovery\
+  \ behaviour matters more than raw ENS."
+feeder: ../../ieee34_command_spoof_derms/feeder.dss
+dt_s: 1.0
+duration_s: 600
+monitored_buses:
+- SOURCEBUS
+- '808'
+- '824'
+- '834'
+- '840'
+- '848'
+ders:
+- id: INV_840
+  type: pv
+  bus: '840'
+  max_kw: 240.0
+- id: BESS_848
+  type: bess
+  bus: '848'
+  max_kw: 180.0
+- id: INV_824
+  type: pv
+  bus: '824'
+  max_kw: 260.0
+base_load_kw: 1000.0
+attacks:
+- type: dos
+  target: BESS_848
+  start_s: 200
+  end_s: 500
+ground_truth:
+  attack_class: dos
+  affected_asset: BESS_848
+  start_s: 200
+  end_s: 500
+revision_meta:
+  revision_tag: ijcip_revision_r1r2_20260805
+  attack_type: dos
+  attack_magnitude: med
+  attack_duration: persistent
+  load_level: nominal
+  der_penetration: med
+  affected_asset: BESS_848
+  affected_bus: '848'
+  expected_safety_issue: persistent storage outage on the radial
+  rationale: "RTU/IED-level persistent freeze on a BESS; deficit 0.26 \u2014 recovery\
+    \ behaviour matters more than raw ENS."
+  is_calibration_control: false

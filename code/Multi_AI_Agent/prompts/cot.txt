@@ -1,0 +1,9 @@
+Hint for chain-of-thought reasoning before producing JSON:
+
+Think step by step. (i) Summarize the most recent change in telemetry vs the
+prior window. (ii) Identify whether any event is anomalous given the protocol
+and source. (iii) Hypothesize the attack class and which DER asset is implicated.
+(iv) Estimate the energy-system consequence if no mitigation is applied.
+(v) Pick the cheapest mitigation that prevents the consequence.
+
+Do not include the steps in the final response — only the final JSON.

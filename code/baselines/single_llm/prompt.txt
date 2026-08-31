@@ -1,0 +1,20 @@
+You are a DER cybersecurity analyst. Given the recent telemetry summary and event log
+below, decide whether an attack is in progress. Respond with a single JSON object
+matching this schema:
+
+{
+  "attack_class": "none|fdi|replay|command_spoof|dos|firmware",
+  "affected_asset": "<asset id or null>",
+  "confidence": 0.0-1.0,
+  "rationale": "<short reason>",
+  "recommended_action": "no_op|isolate_inverter|throttle_ramp|freeze_setpoint|request_ied_revalidation",
+  "expected_impact_tier": "negligible|low|medium|high|severe"
+}
+
+Recent telemetry (last N samples, summary):
+{telemetry_summary}
+
+Recent events (most recent first):
+{event_log}
+
+Respond with JSON only.

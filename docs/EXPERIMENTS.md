@@ -66,7 +66,7 @@ make gate-auth            #   -> code/results/ijcip_final/gate_auth/
 ```bash
 make eh-robustness        # 12-config holdout x 10 stress conditions
 make deadline             # SLO admission from archived strict-serving predictions
-make derive-latency       # verifies Table 10's summary re-derives value-identically
+make derive-latency       # verifies Table 11's summary re-derives value-identically
 ```
 
 ### End-to-end holdout (CPU arms, then GPU arms)
@@ -144,3 +144,19 @@ in the paper.
 | OpenDSS check | `code/results/ijcip_final/opendss_check/` |
 | statistics | `code/results/ijcip_final_v3/statistics/` |
 | tables/figures | `artifacts/tables/`, `artifacts/figures/` |
+
+## Closed-loop coverage (Table 8) — exact definition
+
+`Closed-loop coverage` is a per-arm, closed-loop quantity, not the
+detector-side gate recall of Table 6. Per episode the harness records
+`gate_open_covered` = "the Evidence Gate opened at at least one tick inside
+the attack window of *that arm's own trajectory*". Episodes are averaged
+within a configuration and then over the 33 attack configurations
+(denominator 33; benign configurations excluded; N/A for the ungated bare
+arms). The metric is arm-dependent because executed actions feed back into
+telemetry and the sustained-evidence window. The *pre-action* gate decision
+is model-independent and identical across arms on identical input:
+`code/results/ijcip_final_v3/p0_forensics/p0a_result.json` records the
+invariance check (11,020 pre-action attack-window ticks compared across
+gated arms, 0 violations) and the per-arm coverage values that appear in
+Table 8.
